@@ -1,0 +1,1 @@
+import{_ as e}from"./_plugin-vue_export-helper-c27b6911.js";import{o as t,c,b as o}from"./index-05193bee.js";const s={},_={class:"about"},a=o("h1",null,"Pagina Datos empresa",-1),n=[a];function r(i,d){return t(),c("div",_,n)}const m=e(s,[["render",r]]);export{m as default};
