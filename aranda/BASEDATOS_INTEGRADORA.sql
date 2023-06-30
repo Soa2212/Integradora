@@ -32,9 +32,11 @@ insert into COLORES(talla)values('Ninguno');
 alter table COLORES auto_increment=12010022;
 
 create table ARTICULOS(id int primary key auto_increment,cantidad int,
+producto int,
 talla_calzado int,
 talla_ropa int,
 color int,
+CONSTRAINT FK_articulos_productos FOREIGN KEY (producto) REFERENCES PRODUCTOS(id),
 CONSTRAINT FK_articulos_talla_calzado FOREIGN KEY (talla_calzado) REFERENCES TALLA_CALZADO(id),
 CONSTRAINT FK_articulos_talla_ropa FOREIGN KEY (talla_ropa) REFERENCES TALLA_ROPA(id),
 CONSTRAINT FK_articulos_colores FOREIGN KEY (color) REFERENCES COLORES(id));
@@ -47,7 +49,7 @@ email varchar(50) not null,
 contraseña varchar(30) not null);
 alter table CLIENTES auto_increment=	11000001;
 
-create table ORDEN_VENTA(id int,
+create table ORDEN_VENTA(id int primary key,
 fecha_orden_venta date,
 articulo int,
 cantidad int,
@@ -58,5 +60,6 @@ CONSTRAINT FK_orden_venta_articulos FOREIGN KEY (articulo) REFERENCES ARTICULOS(
 create table DETALLE_ORDEN_VENTA(id int primary key auto_increment,
 orden_venta int,
 fecha_detalle_orden_venta date,
-tipo_de_pago varchar(30));
+tipo_de_pago varchar(30),
+CONSTRAINT FK_detalle_orden_venta_orden FOREIGN KEY (orden_venta) REFERENCES ORDEN_VENTA(id));
 alter table DETALLE_ORDEN_VENTA auto_increment=	01000100;
