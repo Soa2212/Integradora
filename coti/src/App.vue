@@ -55,9 +55,7 @@ let productos = ref()
 
 let rules = [
         value => {
-          if (value) {
-            enviar.value = false;
-          }
+          if (value) return true
           return 'Este campo es obligatorio'
         },
       ];
