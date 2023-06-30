@@ -1,0 +1,50 @@
+Posibles Proposiciones para procesos almacenados, views y trigger 
+
+//Crear trigger que al realisar compra disminuya la cantidad de stok en el articulo que se compro//
+
+//Crear bitacora de las actualizaciones de stok//
+
+//Crear bitacora de altas de productos//
+
+//Crear bitacora de altas de clienets// 
+
+//Crear bitacora de las altas de categorias//
+
+//Crear bitacora de las altas de talla_calzado//
+//Crear bitacora de las altas de talla_ropa//
+//Crear bitacora de las altas de colores//
+
+//crear trigger que al dar de alta un cliente se cree una orden_venta para este//
+
+//crear proceso almacenado que devuelva la cantidad de clienets que compran x articulo//
+
+//crear proceso que devuelda la cantidad de articulos vendidos por x talla_calzado y x articulo//
+
+
+//crear proceso que devuelda la cantidad de articulos vendidos por x talla_ropa y x articulo//
+
+//crear proceso que devuelda la cantidad de articulos vendidos por x color y x articulo//
+
+//crear un procedimiento que muestre los articulos mas vendidos en x periodo de tiempo//
+
+//crear un procedimeinto que calcule las ventas totales por x categoria//
+
+//craer view que muestre los clientes con compras//
+
+//crear view de reporte de ventas//
+
+//crear view de reporte de ventas//
+
+//crear proceso que haga un reporte de ventas x categoria//
+
+//crear proceso que haga un reporte de ventas x producto//
+
+//crear proceso que haga un reporte de ventas x fecha x//
+
+//crear trigger que haga bitacora de las actualizaciones de precios//
+
+
+//crear view de articulos que hayan sido vendidos//
+
+//crear view de articulos que no hayan sido vendidos//
+
