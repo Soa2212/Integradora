@@ -1,1 +1,0 @@
-import{_ as o}from"./_plugin-vue_export-helper-c27b6911.js";import{o as e,c as s,p as _,a as t,b as a}from"./index-05193bee.js";const n={},i=c=>(_("data-v-5b492c0a"),c=c(),t(),c),d={class:"Inicio"},p=i(()=>a("h1",null,"Inicio",-1)),r=[p];function l(c,I){return e(),s("div",d,r)}const u=o(n,[["render",l],["__scopeId","data-v-5b492c0a"]]);export{u as default};

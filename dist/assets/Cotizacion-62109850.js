@@ -1,1 +1,0 @@
-import{_ as o}from"./_plugin-vue_export-helper-c27b6911.js";import{o as e,c as t,b as c}from"./index-05193bee.js";const _={},s={class:"about"},n=c("h1",null,"Cotizacion Formulario",-1),a=[n];function i(r,l){return e(),t("div",s,a)}const f=o(_,[["render",i]]);export{f as default};
