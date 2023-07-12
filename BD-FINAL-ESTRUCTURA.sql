@@ -68,7 +68,7 @@ id int primary key auto_increment,
 FechaOrden  date,
 ClienteID int,
     Estado_Venta enum('En Proceso','Cancelada','Completada'),
-    Estado_Envio enum('En Proceso','Entregada'),
+    Estado_Envio enum('En Proceso','Entregada','Cancelada'),
 constraint FK_ordenventa_cliente foreign key (ClienteID) references clientes(id));
 
 create table detalle_orden(
