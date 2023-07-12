@@ -36,7 +36,7 @@ create table TALLA_ROPA(
 
 create table COLORES(
     id int primary key auto_increment,
-    talla varchar(16)
+    color varchar(16)
 );
 
 
