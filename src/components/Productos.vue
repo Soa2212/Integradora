@@ -8,7 +8,7 @@
     <div class="categorias">
     </div>
     <div class="productos">
-      <h1 style="display: flex; justify-content: center;">Productos</h1>
+      <h1 style="display: flex; justify-content: center; font-size: 24px;">Productos</h1>
       <v-row class="mt-3">
           <v-col
             v-for="n in 12"
@@ -32,6 +32,11 @@
 </div>
 </template>
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+*{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 17px;
+}
 .contenedor{
   background-color: beige;
   display: flex;

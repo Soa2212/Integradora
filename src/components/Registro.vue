@@ -51,7 +51,7 @@ import { ref } from 'vue'
 <template>
 <div class="cont">
 <form @submit.prevent="submit">
-<h2 class="form__title">Registro</h2>
+<h2 class="form__title" style="display: flex; justify-content: center; font-size: 27px; margin-block-end: 20px;">Registro</h2>
 <v-text-field
 v-model="name.value.value"
 :counter="10"
@@ -81,7 +81,7 @@ label="Contraseña"
 <v-text-field
 v-model="confcontraseña.value.value"
 :error-messages="contraseña.errorMessage.value"
-label="Comfirma Contraseña"
+label="Confirma Contraseña"
 ></v-text-field>
 
 <v-checkbox
@@ -107,9 +107,12 @@ type="checkbox"
 </div>
 </template>
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 *{
     padding: 0;
     margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 17px;
 }
 .v-text-field{
     background-color: rgb(255, 255, 255);
@@ -122,7 +125,7 @@ type="checkbox"
 }
 .btnsc{
     display: flex; 
-    align-content:center; 
+    align-items:center; 
 }
 .form__submit1{
     display: flex;

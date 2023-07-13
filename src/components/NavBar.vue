@@ -26,7 +26,7 @@ const selectNavItemF = (index) => {
 <header>
 <nav :class="{ active: isNavActive }" class="nav">     
   <ul class="menu" :class="{ menuDD: isNavActive }">
-    <RouterLink to="HomeView" :class="{ IMGD: isNavActive }" ><img src="../assets/Protecc_Seg.png" alt="Logo" style="height: 70px; width: 195px; margin-left: 40px; "></RouterLink>
+    <RouterLink to="HomeView" :class="{ IMGD: isNavActive }" ><img src="../assets/Protecc_Seg.png" alt="Logo" style="height: 65px; width: 215px; margin-left: 40px; "></RouterLink>
       <div style="width: 80%; display: flex; align-items: center; justify-content: flex-start; gap: 20px;">
         <li><RouterLink to="HomeView" :class="{ 'selected': selectedIndex === 0 }" @click.native="selectNavItemF(0)">Inicio</RouterLink></li>
         <li>
@@ -43,7 +43,7 @@ const selectNavItemF = (index) => {
     <div style="width: 30%; display: flex; align-items: center; justify-content: space-evenly;">
       <img src="../assets/carrito.png" alt=""  style="height: 30px; width: 40px;"> 
       <li>
-        <li id="ImgUser" ><RouterLink to="#"><img src="../assets/user.png" alt="" style="height: 30px; width: 30px;" class="user-icon" /></RouterLink></li>
+        <li ><RouterLink to="#"><img src="../assets/user.png" alt="" style="height: 30px; width: 30px;" /></RouterLink></li>
           <ul class="menu-drop" style="font-size: 20px; width: 250px; margin-left: -80px;">
               <li><RouterLink to="LoginView">Iniciar Sesion</RouterLink></li>
               <li><RouterLink to="#">Cerrar Sesion</RouterLink></li>
@@ -58,17 +58,17 @@ const selectNavItemF = (index) => {
 
 </template>
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 17px;
 }
 
 /*Barra nav conf*/ 
-template{
-  font-family:sans-serif;
-}
 header{
   width: 100%;
   background-size: cover;
@@ -82,7 +82,7 @@ header ul{
   justify-content: center;
   align-items: center;
   
-  }
+}
 header ul li{
   list-style: none;
   color: black;
@@ -109,7 +109,7 @@ header .active ul li{
   cursor: auto;
   width: 300px;
   transition: .5s;
-
+  
 }
 .selected {
   position: relative;
@@ -125,7 +125,8 @@ header .active ul li{
   width: 105%;
   height: 3px;
   border-radius: 10px;
-  background-color: rgba(76, 170, 237, 0.3);}
+  background-color: rgba(76, 170, 237, 0.3);
+}
 /*Color de la barra de navegacion*/
 .nav{
   position: fixed;
@@ -138,6 +139,7 @@ header .active ul li{
   margin-block-end: -10px;
   height: 65px;
   background-color: #ffffff;
+  
 }
 .nav.active{
   width: 100vw;
@@ -152,7 +154,7 @@ header .active ul li{
     color: black;
 }
 .nav.active a:hover{
-  color: rgb(255, 219, 61);
+ color: rgb(54, 166, 183);
 }
 .menu-drop{
   position: absolute;
@@ -180,7 +182,8 @@ header .active ul li{
   margin-top: -10px;
   box-shadow: inset 0 -5px 15px -5px rgba(0, 0, 0, 0.2); 
   margin-bottom: -57px;
-  transition: 0.0010s;
+  transition: 0.20s;
+  background-color: #ffffff;
 }
 .menuDD{
   display: flex;

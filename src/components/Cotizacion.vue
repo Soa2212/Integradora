@@ -7,7 +7,7 @@
         <!-- Hoja del formulario -->
         <v-sheet width="500" class="mx-auto pa-6 rounded-lg" style="  box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 1.9);">
         <v-form @submit.prevent="submit">
-          <h1 class="title">Formulario de cotización</h1>
+          <h1 class="title" style="display: flex; justify-content: center; font-size: 24px; margin-block-end:16px;">Formulario de cotización</h1>
           <p class="message">Ingresa tus datos y nos pondremos en contacto contigo</p>
           <v-text-field
             v-model="name.value.value"
@@ -151,6 +151,11 @@ const { handleSubmit } = useForm({
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+*{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 17px;
+}
 .container {
   padding-top: 50px;
   height: 910px;

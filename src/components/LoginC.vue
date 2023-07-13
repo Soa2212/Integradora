@@ -21,7 +21,7 @@ import { useField, useForm } from 'vee-validate'
 <div class="container">
 
   <form  class="form">
-  <h2 class="form__title">Inicio Sesion</h2>
+  <h2 class="form__title" style="display: flex; justify-content: center; font-size: 24px;">Inicio Sesion</h2>
   <p class="form__paragraph">Aun no tienes una cuenta?<RouterLink to="Registro"> Entra aqui</RouterLink></p>
 
   <div class="form__container">
@@ -45,16 +45,12 @@ import { useField, useForm } from 'vee-validate'
 </div>
 </template>
 <style scoped>
-.title {
-  font-family: 'Nunito Sans', sans-serif;
-}
-
-.text {
-  font-family: 'Roboto', sans-serif;
-}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 *{
   box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 17px;
 }
 
 .container{
@@ -88,6 +84,8 @@ import { useField, useForm } from 'vee-validate'
 .custom-btn {
   background-color: #3866f2;
   transition: 0.3s;
+  border-radius: 20px;
+  color: #fff;
 }
 .custom-btn:hover {
   background-color: rgb(30, 139, 30);

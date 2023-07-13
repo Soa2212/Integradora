@@ -9,8 +9,8 @@ import NavBar from './components/NavBar.vue';
     <NavBar></NavBar>
   </v-system-bar>
   
- <div style="margin-top: 100px;">
-  <div ><RouterView></RouterView></div>
+ <div style="margin-top: 70px; background-color:beige ;">
+  <div style="margin-top: 30px;"><RouterView></RouterView></div>
  </div>
 </v-app>
 
