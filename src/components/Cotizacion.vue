@@ -5,7 +5,7 @@
     <div class="formulario" >
       <div class="form">
         <!-- Hoja del formulario -->
-        <v-sheet width="500" class="mx-auto pa-6 rounded-lg" >
+        <v-sheet width="500" class="mx-auto pa-6 rounded-lg" style="  box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 1.9);">
         <v-form @submit.prevent="submit">
           <h1 class="title">Formulario de cotización</h1>
           <p class="message">Ingresa tus datos y nos pondremos en contacto contigo</p>
@@ -152,7 +152,7 @@ const { handleSubmit } = useForm({
 
 <style scoped>
 .container {
-  padding-top: 40px;
+  padding-top: 50px;
   height: 910px;
   width: 100vw;
   background-color: beige;

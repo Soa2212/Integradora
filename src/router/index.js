@@ -7,9 +7,9 @@ const routes = [
     component: () => import('@/layouts/default/Default.vue'),
     children: [
       {
-        path: '/Home',
-        name: 'Home',
-        component: () => import('@/views/Home.vue'),
+        path: '/HomeView',
+        name: 'HomeView',
+        component: () => import('@/views/HomeView.vue'),
       },
       { 
         path:'/ProductosView',
@@ -20,13 +20,23 @@ const routes = [
         path:'/CotizacionView',
         name:'CotizacionView',
         component:()=>import('@/views/CotizacionView.vue')
-      }
-      ,
+      },
       {
         path:'/LoginView',
         name:'LoginView',
         component:()=>import('@/views/LoginView.vue')
+      },
+      {
+        path:'/AcercaView',
+        name:'AcercaView',
+        component:()=>import('@/views/AcercaView.vue')
+      },
+      {
+        path:'/Registro',
+        name:'Registro',
+        component:()=>import('@/views/RegistroView.vue')
       }
+
     ],
   },
 ]

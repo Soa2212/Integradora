@@ -14,44 +14,44 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", handleScroll);
 });
+const selectedIndex  = ref(0);
+
+const selectNavItemF = (index) => {
+  selectedIndex .value = index;
+};
 </script>
 
 <template>
 
 <header>
 <nav :class="{ active: isNavActive }" class="nav">     
-  <ul class="menu">
-  <div class="logo"><img src="../assets/Protecc_Seg.png" alt="Logo" style="height: 60px; width: 230px;"></div>
-  <li><RouterLink to="Home">Inicio</RouterLink></li>
-  <li>
-      <li><RouterLink to="ProductosView">Catalogo</RouterLink></li>
-      <ul class="menu-drop">
-          <li><a href="#">Cat1</a></li>
-          <li><a href="#">Cat2</a></li>
-          <li><a href="#">Cat3</a></li>
-      </ul>
-  </li>
-  <li><RouterLink to="CotizacionView">Cotiza</RouterLink></li>
-  <li><a>Acerca</a></li>
-
-
-<div style="display: flex; gap: 60px; justify-content: flex-end; align-items: center; width: 400px;">
-
-  <img src="../assets/carrito.png" alt=""  style="height: 30px; width: 40px;">
-
-<li>
-    <li><RouterLink to="#"><img src="../assets/user.png" alt="" style="height: 30px; width: 30px; margin: 0%; padding: 0%;" class="user-icon" /></RouterLink></li>
-    <ul class="menu-drop" style="font-size: 15px; width: 150px; margin-left: -30px;">
-        <li><RouterLink to="LoginView">Login</RouterLink></li>
-        <li><a href="#">Log out</a></li>
-    </ul>
-</li>
-
-<img src="../assets/ajustes.png" alt="" style="height: 30px; width: 35px;">
-</div>
-
-
-</ul>
+  <ul class="menu" :class="{ menuDD: isNavActive }">
+    <RouterLink to="HomeView" :class="{ IMGD: isNavActive }" ><img src="../assets/Protecc_Seg.png" alt="Logo" style="height: 70px; width: 195px; margin-left: 40px; "></RouterLink>
+      <div style="width: 80%; display: flex; align-items: center; justify-content: flex-start; gap: 20px;">
+        <li><RouterLink to="HomeView" :class="{ 'selected': selectedIndex === 0 }" @click.native="selectNavItemF(0)">Inicio</RouterLink></li>
+        <li>
+            <li><RouterLink to="ProductosView"  :class="{ 'selected': selectedIndex === 1 }" @click.native="selectNavItemF(1)">Catalogo</RouterLink></li>
+              <ul class="menu-drop" style="margin-left: -10px;width: 170px;">
+                  <li><a href="#">Cat1</a></li>
+                  <li><a href="#">Cat2</a></li>
+                  <li><a href="#">Cat3</a></li>
+              </ul>
+        </li>
+        <li><RouterLink to="CotizacionView" :class="{ 'selected': selectedIndex === 2 }" @click.native="selectNavItemF(2)">Cotiza</RouterLink></li>
+        <li><RouterLink to="AcercaView" :class="{ 'selected': selectedIndex === 3 }" @click.native="selectNavItemF(3)">Acerca</RouterLink></li>
+    </div>
+    <div style="width: 30%; display: flex; align-items: center; justify-content: space-evenly;">
+      <img src="../assets/carrito.png" alt=""  style="height: 30px; width: 40px;"> 
+      <li>
+        <li id="ImgUser" ><RouterLink to="#"><img src="../assets/user.png" alt="" style="height: 30px; width: 30px;" class="user-icon" /></RouterLink></li>
+          <ul class="menu-drop" style="font-size: 20px; width: 250px; margin-left: -80px;">
+              <li><RouterLink to="LoginView">Iniciar Sesion</RouterLink></li>
+              <li><RouterLink to="#">Cerrar Sesion</RouterLink></li>
+          </ul>
+      </li>
+      <img src="../assets/ajustes.png" alt="" style="height: 30px; width: 35px; margin-right: 20px ;">
+    </div>
+  </ul>
 </nav>
 </header>
 
@@ -64,6 +64,7 @@ onBeforeUnmount(() => {
   padding: 0;
   box-sizing: border-box;
 }
+
 /*Barra nav conf*/ 
 template{
   font-family:sans-serif;
@@ -72,18 +73,22 @@ header{
   width: 100%;
   background-size: cover;
   background-position: center;
+
 }
+
 header ul{
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-}
+  
+  }
 header ul li{
   list-style: none;
   color: black;
+  
 }
-header ul li a{
+header ul li {
   position: relative;
   margin: 0 2px;
   text-decoration: none;
@@ -92,34 +97,54 @@ header ul li a{
   font-weight: 600;
 }
 header .active .logo,
-header.active ul li a{
+header .active ul li{
   color: black;
-  font-size: 10px;
-  margin: 0;
-  padding: 0;
-  font-size: 20px;
+  font-size: small;
+  font-size: small;
+    
 }
+.IMGD{
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  cursor: auto;
+  width: 300px;
+  transition: .5s;
+
+}
+.selected {
+  position: relative;
+}
+
+.selected::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-left: -2px;
+  width: 105%;
+  height: 3px;
+  border-radius: 10px;
+  background-color: rgba(76, 170, 237, 0.3);}
 /*Color de la barra de navegacion*/
 .nav{
   position: fixed;
-  width: 100%;
+  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 10px;
   margin-left: -10px;
   margin-block-start: -10px;
-  height: 130px;
+  margin-block-end: -10px;
+  height: 65px;
   background-color: #ffffff;
 }
 .nav.active{
-  width: 100%;
+  width: 100vw;
   display: flex;
+  height: 70px;
   align-items: center;
   justify-content: space-around;
-  margin-left: -10px;
-  padding: 20px;
-  height: 100px;
   background-color: #ffffff;
 }
 .nav.active .logo,
@@ -133,20 +158,44 @@ header.active ul li a{
   position: absolute;
   display: none;
   list-style: none;
-  width: 170px;
-  border-radius: 5px;
+  margin-top: -5px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   background-color: rgba(255, 255, 255, 0.748);
+  box-shadow: inset 0 -5px 15px -5px rgba(0, 0, 0, 0.2); 
+
 }
 
-.menu{
+.menu:not(.menuDD){
   display: flex;
   justify-content: center;
   gap: 40px;
   height: 85px;
   width: 100%;
   font-family: sans-serif;
-  font-size:medium;
+  font-size:small;
   list-style: none;
+  margin-top: -10px;
+  box-shadow: inset 0 -5px 15px -5px rgba(0, 0, 0, 0.2); 
+  margin-bottom: -57px;
+  transition: 0.0010s;
+}
+.menuDD{
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  height: 70px;
+  width: 100%;
+  font-family: sans-serif;
+  font-size:small;
+  list-style: none;
+  margin-top: -50px;
+  box-shadow: inset 0 -5px 15px -5px rgba(0, 0, 0, 0.4); 
+  margin-bottom: -52px;
+  transition: .2s;
+
 }
 .menu li{
   list-style: none;
@@ -163,7 +212,7 @@ header.active ul li a{
 /*Letras de hover barra */
 .menu li a:hover{
   display: flex;
-  color: rgb(255, 219, 61);
+  color: rgb(28, 172, 216);
 }
 .menu li:hover .menu-drop{
   display: flex;
@@ -177,8 +226,7 @@ header.active ul li a{
   height: 85px;
   width: 100%;
   gap: 40px;
-  margin-left: 60px;
-  margin-right:60px;
   background-color: #000000;
 }
+
 </style>

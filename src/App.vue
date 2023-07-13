@@ -5,12 +5,12 @@ import NavBar from './components/NavBar.vue';
 
 <template>
 <v-app id="inspire">
-  <v-system-bar>
+  <v-system-bar style="height: -24px;">
     <NavBar></NavBar>
   </v-system-bar>
   
- <div style="margin-top: 160px;">
-  <div style="margin-block-start: -20px;"><RouterView></RouterView></div>
+ <div style="margin-top: 100px;">
+  <div ><RouterView></RouterView></div>
  </div>
 </v-app>
 

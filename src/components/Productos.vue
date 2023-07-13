@@ -1,47 +1,73 @@
+<script setup>
+
+</script>
+
 <template>
-    <v-app id="inspire" class="container">
-  
-      <v-main>
-        <v-container>
-          <v-row>
-            <v-col
-              v-for="n in 24"
-              :key="n"
-              cols="4"
-            >
-            <v-col>
-                <v-card
-                class="mx-auto"
-                max-width="344"
-                style="border-radius: 15px;">
-                <div style="display: flex;
-                justify-content: center;">
-                    <img src=""/>
-                </div>
-                    <img src="">
-                    <v-card-subtitle style="color: rgb(84, 84, 84);">Categoria</v-card-subtitle>
-                    <v-card-title>Nombre Product</v-card-title>
-                    <v-card-actions>
-                        <v-btn color="orange-lighten-2" variant="text">
-                            Comprar
-                        </v-btn>
-                        <v-btn size="small" color="indigo-darken-4" style="background-color: #8C9EFF; border: 1px solid #2137b1; border-radius: 15px;">Agregar al Carrito</v-btn>
-                    <v-spacer></v-spacer>
-                    </v-card-actions>
-                    <v-divider></v-divider>
-                    <v-card-text>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam, dolorum minus nam eaque veniam voluptas dolor consequuntur quibusdam debitis nihil earum voluptatem soluta esse, architecto officiis temporibus natus rem dolore.
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-main>
-    </v-app>
-  </template>
-  <style>
-.container{
+<div class="contenedor">
+  <div class="vista">
+    <div class="categorias">
+    </div>
+    <div class="productos">
+      <h1 style="display: flex; justify-content: center;">Productos</h1>
+      <v-row class="mt-3">
+          <v-col
+            v-for="n in 12"
+            :key="n"
+            cols="4"
+          >
+            <v-card height="400" class="d-flex flex-column">
+              <v-img height="100" src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg" cover>
+              </v-img>
+              <div class="informacion">
+                <p>Bonita flor</p>
+                <h3>Bonita flor de color morado</h3>
+                <h2>$1399</h2>
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
+    </div>
+
+  </div>
+</div>
+</template>
+<style scoped>
+.contenedor{
   background-color: beige;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  width: 100%;
+  height: min-content;
+}
+
+.vista{
+  display: flex;
+  width: 80vw;
+  height: 90%;
+  background-color: red;
+}
+
+.categorias{
+  width: 25%;
+  height: 100px;
+  background-color: aqua;
+}
+
+.productos{
+  width: 75%;
+  height: 100%;
+  background-color: white;
+  padding: 2em 1em;
+}
+
+.informacion {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
 }
 </style>
