@@ -1,15 +1,4 @@
 
-insert into detalle_orden(OrdenID,ArticuloID,CantidadProducto)values(1,'ART1',10);
-insert into detalle_orden(OrdenID,ArticuloID,CantidadProducto)values(1,'ART2',1);
-insert into detalle_orden(OrdenID,ArticuloID,CantidadProducto)values(1,'ART3',6);
-insert into detalle_orden(OrdenID,ArticuloID,CantidadProducto)values(1,'ART4',5);
-
-
-
-
-
-
-
 INSERT INTO `actividad_segura`.`categorias` (`id`, `categoria`) VALUES ('1', 'Anti Caidas');
 INSERT INTO `actividad_segura`.`categorias` (`id`, `categoria`) VALUES ('2', 'Cascos y Accesorios');
 INSERT INTO `actividad_segura`.`categorias` (`id`, `categoria`) VALUES ('3', 'Senalitica');
