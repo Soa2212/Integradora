@@ -1,10 +1,17 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
 import NavBar from './components/NavBar.vue';
+import AdminView from './views/AdminView.vue';
+
+// Cambiar el valor de esta variable a 'false' cuando quieran visualizar la otra pagina
+let admin = true;
 </script>
 
 <template>
-<v-app id="inspire">
+<v-app v-if="admin" id="administrador">
+  <AdminView></AdminView>
+</v-app>
+<v-app v-if="!admin" id="inspire">
   <v-system-bar style="height: -24px;">
     <NavBar></NavBar>
   </v-system-bar>
