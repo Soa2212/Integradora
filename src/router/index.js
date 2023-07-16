@@ -35,6 +35,16 @@ const routes = [
     path:'/Registro',
     name:'Registro',
     component:()=>import('@/views/RegistroView.vue')
+  },
+  {
+    path:'/AdminProductos',
+    name:'AdminPro',
+    component:()=>import('@/components/ProductosAdmin.vue')
+  },
+  {
+    path:'/AdminCategorias',
+    name:'AdminCat',
+    component:()=>import('@/components/CategoriasAdmin.vue')
   }
 
 ]

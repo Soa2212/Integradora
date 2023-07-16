@@ -4,8 +4,8 @@ import { ref } from 'vue';
 const drawer = ref(null);
 
 const links = [
-    ['mdi-inbox-arrow-down', 'Inbox'],
-    ['mdi-send', 'Send'],
+    ['mdi-store', 'Productos', 'AdminPro'],
+    ['mdi-tag', 'Categorias', 'AdminCat'],
     ['mdi-delete', 'Trash'],
     ['mdi-alert-octagon', 'Spam'],
   ]
@@ -31,7 +31,7 @@ const links = [
 
       <v-list>
         <v-list-item
-          v-for="[icon, text] in links"
+          v-for="[icon, text, link] in links"
           :key="icon"
           link
         >
@@ -39,19 +39,19 @@ const links = [
             <v-icon>{{ icon }}</v-icon>
           </template>
 
-          <v-list-item-title>{{ text }}</v-list-item-title>
+          <v-list-item-title><router-link :to="{name: link}">{{ text }}</router-link></v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <v-app-bar>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-toolbar-title>Application</v-toolbar-title>
+  
+      <v-toolbar-title>Dashboard</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
-      <!--  -->
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
