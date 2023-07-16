@@ -3,12 +3,13 @@ use actividad_segura;
 
 create table CATEGORIAS(
     id  int primary key auto_increment,
-    categoria varchar(100)
+    categoria varchar(100),
+    estado enum('activo','inactivo')
 );
 
 
 create table PRODUCTOS(
-    codigo_barras bigint primary key,
+    id bigint primary key,
     nombre varchar(100),
     precio decimal(10, 3),
     imagen1 Blob,
@@ -18,6 +19,7 @@ create table PRODUCTOS(
     imagen5 Blob,
     descripcion varchar(1000),
     categoria int,
+    estado enum('activo','inactivo'),
     constraint FK_productos_categoria foreign key (categoria) references CATEGORIAS(id)
 );
 
@@ -48,33 +50,34 @@ create table ARTICULOS(
     talla_numerica int,
     talla_ropa int,
     color int,
-    constraint FK_articulos_productos foreign key (producto) references PRODUCTOS(codigo_barras),
+    constraint FK_articulos_productos foreign key (producto) references PRODUCTOS(id),
     constraint FK_articulos_talla_numerica foreign key (talla_numerica) references TALLA_NUMERICA(id),
     constraint FK_articulos_talla_ropa foreign key (talla_ropa) references TALLA_ROPA(id),
     constraint FK_articulos_colores foreign key (color) references COLORES(id)
 );
 
 
-create table CLIENTES(
+create table USUARIOS(
     id int primary key auto_increment,
     nombre varchar(100) not null,
     apellido varchar(25) not null,
     email varchar(50) not null,
-    contraseña varchar(30) not null
+    contraseña varchar(30) not null,
+    tipo enum('normal','admin') not null
 );
 
 create table orden_venta(
 id int primary key auto_increment,
 FechaOrden  date,
-ClienteID int,
+Cliente int,
     Estado_Venta enum('En Proceso','Cancelada','Completada'),
     Estado_Envio enum('En Proceso','Entregada','Cancelada'),
-constraint FK_ordenventa_cliente foreign key (ClienteID) references clientes(id));
+constraint FK_ordenventa_cliente foreign key (Cliente) references usuarios(id));
 
 create table detalle_orden(
-OrdenID int,
-ArticuloID varchar(10),
-CantidadProducto int,
-constraint FK_detalleorden_articulo foreign key (ArticuloID) references articulos(id),
-constraint FK_detalleorden_orden_venta foreign key (OrdenID) references  orden_venta(id)
+Orden int,
+Articulo varchar(10),
+Cantidad int,
+constraint FK_detalleorden_articulo foreign key (Articulo) references articulos(id),
+constraint FK_detalleorden_orden_venta foreign key (Orden) references  orden_venta(id)
 );
