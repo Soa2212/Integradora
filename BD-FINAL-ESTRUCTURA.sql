@@ -60,7 +60,6 @@ create table ARTICULOS(
 create table USUARIOS(
     id int primary key auto_increment,
     nombre varchar(100) not null,
-    apellido varchar(25) not null,
     email varchar(50) not null unique,
     contraseña varchar(30) not null,
     tipo enum('normal','admin') not null
