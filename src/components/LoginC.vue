@@ -7,11 +7,6 @@ import { useField, useForm } from 'vee-validate'
   
           return 'Tu nombre debe tener al menos 2 letras.'
         },
-        contraseña (value) {
-          if (value === 'Hola') return true
-  
-          return 'Las contraseñas son diferentes'
-        },
       },
     })
     const name = useField('name')

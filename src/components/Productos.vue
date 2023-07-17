@@ -61,7 +61,7 @@ const productos = ref([
   {
     id: 1,
     cantidad: 1,
-    talla_numerica: "NULL",
+    talla_numerica: "No tiene",
     talla_ropa: "XL",
     color: "Rojo",
     nombre: "Amortiguador de impacto con cable de nylon Marca LICA",
