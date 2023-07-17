@@ -80,3 +80,10 @@ Cantidad int,
 constraint FK_detalleorden_articulo foreign key (Articulo) references articulos(id),
 constraint FK_detalleorden_orden_venta foreign key (Orden) references  orden_venta(id)
 );
+
+
+create table carrito(
+Orden int,
+Articulo varchar(10),
+Cantidad int,
+);
