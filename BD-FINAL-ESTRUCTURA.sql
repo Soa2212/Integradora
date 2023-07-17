@@ -3,7 +3,7 @@ use actividad_segura;
 
 create table CATEGORIAS(
     id  int primary key auto_increment,
-    categoria varchar(100),
+    categoria varchar(100) unique,
     estado enum('activo','inactivo')
 );
 
@@ -25,20 +25,20 @@ create table PRODUCTOS(
 
 create table TALLA_NUMERICA(
     id int primary key auto_increment,
-    talla varchar(10)
+    talla varchar(10)unique
 );
 
 
 create table TALLA_ROPA(
     id int primary key auto_increment,
-    talla varchar(10)
+    talla varchar(10)unique
 );
 
 
 
 create table COLORES(
     id int primary key auto_increment,
-    color varchar(16)
+    color varchar(16) unique
 );
 
 
@@ -61,7 +61,7 @@ create table USUARIOS(
     id int primary key auto_increment,
     nombre varchar(100) not null,
     apellido varchar(25) not null,
-    email varchar(50) not null,
+    email varchar(50) not null unique,
     contraseña varchar(30) not null,
     tipo enum('normal','admin') not null
 );
