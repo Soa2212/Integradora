@@ -37,6 +37,11 @@ const routes = [
     component:()=>import('@/views/RegistroView.vue')
   },
   {
+    path: "/Carrito",
+    name: "Carrito",
+    component: () => import("@/views/CarritoView.vue"),
+  },
+  {
     path:'/AdminHome',
     name:'AdminHome',
     component:()=>import('@/components/AdminHome.vue')

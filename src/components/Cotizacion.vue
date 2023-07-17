@@ -170,6 +170,7 @@ const { handleSubmit } = useForm({
 
 .form {
   border: 2px solid yellow;
+  border-radius: 10px;
   padding: 4em;
   background-color: rgb(228, 223, 223);
   margin-bottom: 3em;
