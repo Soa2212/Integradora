@@ -4,10 +4,9 @@ import { ref } from 'vue';
 const drawer = ref(null);
 
 const links = [
+    ['mdi-home-circle-outline', 'Inicio', 'AdminHome'],
     ['mdi-store', 'Productos', 'AdminPro'],
-    ['mdi-tag', 'Categorias', 'AdminCat'],
-    ['mdi-delete', 'Trash'],
-    ['mdi-alert-octagon', 'Spam'],
+    ['mdi-tag', 'Categorias', 'AdminCat']
   ]
 </script>
 
@@ -39,7 +38,7 @@ const links = [
             <v-icon>{{ icon }}</v-icon>
           </template>
 
-          <v-list-item-title><router-link :to="{name: link}">{{ text }}</router-link></v-list-item-title>
+          <router-link :to="{name: link}" style="text-decoration: none; color: black;"><v-list-item-title>{{ text }}</v-list-item-title></router-link>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -51,7 +50,7 @@ const links = [
     </v-app-bar>
 
     <v-main>
-      <router-view></router-view>
+      <router-view class="ma-5"></router-view>
     </v-main>
   </v-app>
 </template>
