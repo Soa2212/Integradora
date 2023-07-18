@@ -50,7 +50,7 @@ const links = [
     </v-app-bar>
 
     <v-main>
-      <router-view class="ma-5"></router-view>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
