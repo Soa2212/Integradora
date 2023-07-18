@@ -8,21 +8,37 @@ const showPopup = ref(false);
 let unidad = ref(1); //Siempre sera uno ya que esta pensado para el menu individual
 const carrito = ref([]); //Variable que se va ir a la base de datos
 
+const productoPP = (id) => {
+  showPopup.value = true;
+  Articulos(id);
+};
+
+let Articulos2 = ref([]);
+const Articulos = (id) => {
+  fetch("http://localhost/articulos/" + id)
+    .then((res) => res.json())
+    .then((datos) => {
+      Articulos2.value = datos.data;
+      console.log(Articulos2.value);
+    });
+};
+
 function setHovered(index, value) {
   isHovered.value[index] = value;
 }
 
-const mostrarBoton = (producto) => { //Funcion que se encarga de mostrar el menu individual solo a productos que mantengan ciertas propiedades
-  return producto.talla_numerica === "No tiene" && producto.talla_ropa === "No tiene" && producto.color === "No tiene";
+const mostrarBoton = (producto) => {
+  //Funcion que se encarga de mostrar el menu individual solo a productos que mantengan ciertas propiedades
+  return (
+    producto.talla_numerica === "No tiene" &&
+    producto.talla_ropa === "No tiene" &&
+    producto.color === "No tiene"
+  );
 };
 
 const productosConStock = computed(() => {
-  return productos.value.filter(
-    (producto) => producto.estado === "activo"
-  ); // Filtrador para evitar mostrar productos sin stock o si no estan activos
+  return productos.value.filter((producto) => producto.estado === "activo"); // Filtrador para evitar mostrar productos sin stock o si no estan activos
 });
-
-
 
 function guardarProducto(Articulo, CantidadProducto, precioProducto) {
   const producto = { Articulo, CantidadProducto, precioProducto };
@@ -63,15 +79,14 @@ const totalCarrito = computed(() => {
   }, 0);
 });
 
-const prod=ref({})
+const prod = ref({});
 
-fetch('http://localhost/CatalogoProductos')
-.then(res=>res.json())
-.then((datos)=>{
-  productos.value=datos.data
- console.log(productos.value)
-})
-
+fetch("http://localhost/CatalogoProductos")
+  .then((res) => res.json())
+  .then((datos) => {
+    productos.value = datos.data;
+    console.log(productos.value);
+  });
 
 const productos = ref([]);
 
@@ -105,7 +120,7 @@ const Mostrar = () => {
               style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
             >
               <v-img
-                style="cursor: pointer; border-radius: 10px;"
+                style="cursor: pointer; border-radius: 10px"
                 height="100"
                 :src="producto.imagen1"
                 cover
@@ -119,15 +134,16 @@ const Mostrar = () => {
                 <p style="font-size: 15px; text-align: center">
                   {{ producto.categoria }}
                 </p>
-                <h3
-                  style="cursor: pointer; font-size: 15px; text-align: center"
-                >
-                  {{ producto.nombre }}
-                </h3>
+                <button @click="productoPP(producto.id)">
+                  <h3
+                    style="cursor: pointer; font-size: 15px; text-align: center"
+                  >
+                    {{ producto.nombre }}
+                  </h3>
+                </button>
                 <h2 style="font-size: 15px; text-align: center">
                   $ {{ producto.precio }}
                 </h2>
-
               </div>
             </v-card>
           </v-col>
@@ -137,91 +153,7 @@ const Mostrar = () => {
       <div v-if="showPopup" class="popup-container">
         <div class="popup-content">
           <span class="close-button" @click="showPopup = false">✖</span>
-          <div style="width: 100%; display: flex">
-            <div
-              style="
-                width: 50%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-              "
-            >
-              <h2>✔ Producto agregado con</h2>
-              <h2>éxito!</h2>
-              <v-img
-                :src="productoEncontrado.imagen1"
-                style="width: 200px; height: 200px; margin-top: -20px"
-              ></v-img>
-              <b
-                style="
-                  margin-top: -20px;
-                  font-size: 13px;
-                  text-align: center;
-                  color: rgb(86, 86, 86);
-                "
-                >{{ productoEncontrado.nombre }}</b
-              >
-              <h4 style="font-size: 13px; text-align: center">
-                Cantidad Actual: {{ productoCarrito.CantidadProducto }}
-              </h4>
-              <div style="display: flex; align-items: center">
-                <p
-                  style="
-                    font-size: 15px;
-                    font-weight: 600;
-                    margin-right: 5px;
-                    margin-top: 5px;
-                  "
-                >
-                  TOTAL P/Producto: ${{
-                    productoCarrito.CantidadProducto *
-                    productoCarrito.precioProducto
-                  }}
-                </p>
-              </div>
-            </div>
-            <div class="linea"></div>
-            <div
-              style="
-                width: 50%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-              "
-            >
-              <h2 class="CTPP">Hay {{ cantidadTotalPerP }} elementos</h2>
-              <h2 class="CTPP" style="margin-block-end: 10px">en su carrito</h2>
-              <div style="display: flex; align-items: center">
-                <p
-                  style="
-                    font-size: 13px;
-                    font-weight: 600;
-                    margin-right: 5px;
-                    margin-top: 10px;
-                  "
-                >
-                  TOTAL:
-                </p>
-                <p style="font-size: 27px; font-weight: 700; margin-right: 5px">
-                  ${{ totalCarrito }}
-                </p>
-              </div>
-              <button
-                @click="showPopup = false"
-                style="margin-top: 10px"
-                class="botnsEst"
-              >
-                <b class="botnsP">SEGUIR COMPRANDO</b>
-              </button>
-              <button style="margin-top: 10px" class="botnsEst">
-                <b class="botnsP">VER CARRITO</b>
-              </button>
-              <button style="margin-top: 10px" class="botnsEstF">
-                <strong class="botnsP">FINALIZAR COMPRA</strong>
-              </button>
-            </div>
-          </div>
+          <div style="width: 100%; display: flex"></div>
         </div>
       </div>
     </div>
