@@ -35,7 +35,7 @@ class Productos extends Models{
     public function AllProductos(){
         $stmn=self::$pdo->prepare('Select * from '.$this->table);
         $stmn->execute();
-        $res=$stmn->fetchAll(pdo::FETCH_OBJ);
+        $res=$stmn->fetchAll(pdo::FETCH_ASSOC);
         $verificar=new Success($res);
         $verificar->Send();
     }

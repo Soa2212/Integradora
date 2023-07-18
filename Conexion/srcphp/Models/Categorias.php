@@ -19,7 +19,7 @@ class Categorias extends Models{
     public function AllCategorias(){
         $stmn=self::$pdo->prepare('Select * from '.$this->table);
         $stmn->execute();
-        $res=$stmn->fetchAll(PDO::FETCH_OBJ);
+        $res=$stmn->fetchAll(PDO::FETCH_ASSOC);
         $ver=new Success($res);
         $ver->Send();
     }
