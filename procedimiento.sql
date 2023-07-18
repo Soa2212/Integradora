@@ -3,7 +3,7 @@ call info_producto();
 
 delimiter //
 create procedure info_producto ()
-select productos.id as'id producto',articulos.id as'id articulo',talla_numerica.tallaas'talla_numerica',talla_ropa.tallaas'talla_ropa',colores.color,articulos.cantidad from productos
+select productos.id as'id producto',articulos.id as'id articulo',talla_numerica.talla as'talla_numerica',talla_ropa.talla as'talla_ropa',colores.color,articulos.cantidad from productos
 inner join articulos 
 on articulos.producto=productos.id
 inner join talla_numerica
