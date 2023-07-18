@@ -12,13 +12,13 @@ function setHovered(index, value) {
   isHovered.value[index] = value;
 }
 
-const mostrarBoton = (producto) => {
-  return producto.talla_numerica === "no lo tiene" && producto.talla_ropa === "no lo tiene";
+const mostrarBoton = (producto) => { //Funcion que se encarga de mostrar el menu individual solo a productos que mantengan ciertas propiedades
+  return producto.talla_numerica === "No tiene" && producto.talla_ropa === "No tiene" && producto.color === "No tiene";
 };
 
 const productosConStock = computed(() => {
   return productos.value.filter(
-    (producto) => producto.cantidad > 0 && producto.estado === "activo"
+    (producto) => producto.estado === "activo"
   ); // Filtrador para evitar mostrar productos sin stock o si no estan activos
 });
 
@@ -63,96 +63,17 @@ const totalCarrito = computed(() => {
   }, 0);
 });
 
-const productos = ref([
-  {
-    id: 1,
-    cantidad: 1,
-    talla_numerica: "no lo tiene",
-    talla_ropa: "no lo tiene",
-    color: "Rojo",
-    nombre: "Amortiguador de impacto con cable de nylon Marca LICA",
-    precio: "1100.00",
-    imagen1:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen2:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen3:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen4:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen5:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    descripcion: "Flor con colores morados",
-    estado: "activo",
-    categoria: "Amortiguadores",
-  },
-  {
-    id: 2,
-    cantidad: 5,
-    talla_numerica: "22",
-    talla_ropa: "no lo tiene",
-    color: "Rojo",
-    nombre: "Arnés de seguridad anticaídas alta visibilidad Marca LICA",
-    precio: "200.00",
-    imagen1:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen2:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen3:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen4:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen5:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    descripcion: "Flor con colores morados",
-    estado: "activo",
-    categoria: "Arnéses",
-  },
-  {
-    id: 3,
-    cantidad: 30,
-    talla_numerica: "no lo tiene",
-    talla_ropa: "XL",
-    color: "Rojo",
-    nombre: "Amortiguador de impacto con doble brazo Marca LICA",
-    precio: "300.00",
-    imagen1:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen2:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen3:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen4:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen5:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    descripcion: "Flor con colores morados",
-    estado: "activo",
-    categoria: "Amortiguadores",
-  },
-  {
-    id: 4,
-    cantidad: 20,
-    talla_numerica: "no lo tiene",
-    talla_ropa: "XL",
-    color: "Rojo",
-    nombre: "Bota Mod. 125 marca LICA",
-    precio: "1300.00",
-    imagen1:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen2:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen3:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen4:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    imagen5:
-      "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-    descripcion: "Flor con colores morados",
-    estado: "activo",
-    categoria: "Botas",
-  },
-]);
+const prod=ref({})
+
+fetch('http://localhost/CatalogoProductos')
+.then(res=>res.json())
+.then((datos)=>{
+  productos.value=datos.data
+ console.log(productos.value)
+})
+
+
+const productos = ref([]);
 
 const Mostrar = () => {
   //Esto se debera mandar al la bd para poder pasarselo al carrito
@@ -206,60 +127,7 @@ const Mostrar = () => {
                 <h2 style="font-size: 15px; text-align: center">
                   $ {{ producto.precio }}
                 </h2>
-                <button
-                  v-if="mostrarBoton(producto)"
-                  class="accion"
-                  @mouseover="hovered = true"
-                  @mouseleave="hovered = false"
-                  @click="
-                    guardarProducto(producto.id, unidad, producto.precio);
-                    showPopup = true;
-                    mostrarProducto(producto.id);
-                  "
-                  style="transition: 0.6s; margin-right: -30px"
-                >
-                  <div
-                    style="
-                      display: flex;
-                      height: 50px;
-                      width: 250px;
-                      align-items: center;
-                      justify-content: center;
-                      gap: 6px;
-                    "
-                  >
-                    <transition name="fade">
-                      <img
-                        v-if="hovered"
-                        src="../assets/carrito.png"
-                        alt="Carrito 2"
-                        style="
-                          height: 21px;
-                          width: 25px;
-                          position: absolute;
-                          top: 50;
-                          left: 0;
-                          margin-left: 48px;
-                        "
-                      />
-                      <img
-                        v-else
-                        src="../assets/carrito2.png"
-                        alt="Carrito"
-                        style="
-                          height: 26px;
-                          width: 25px;
-                          position: absolute;
-                          top: 50;
-                          left: 0;
-                          margin-left: 49px;
-                          margin-top: -3px;
-                        "
-                      />
-                    </transition>
-                    Agregar al Carrito
-                  </div>
-                </button>
+
               </div>
             </v-card>
           </v-col>
@@ -399,10 +267,11 @@ const Mostrar = () => {
   border-radius: 5px;
   position: relative;
   overflow: hidden;
+  transition: transform 0.5s;
 }
 
 .informacion {
-  transition: transform 0.3s;
+  transition: transform 0.5s;
   background-color: white;
   display: flex;
   flex-direction: column;
