@@ -12,11 +12,17 @@ function setHovered(index, value) {
   isHovered.value[index] = value;
 }
 
+const mostrarBoton = (producto) => {
+  return producto.talla_numerica === "no lo tiene" && producto.talla_ropa === "no lo tiene";
+};
+
 const productosConStock = computed(() => {
   return productos.value.filter(
     (producto) => producto.cantidad > 0 && producto.estado === "activo"
   ); // Filtrador para evitar mostrar productos sin stock o si no estan activos
 });
+
+
 
 function guardarProducto(Articulo, CantidadProducto, precioProducto) {
   const producto = { Articulo, CantidadProducto, precioProducto };
@@ -61,8 +67,8 @@ const productos = ref([
   {
     id: 1,
     cantidad: 1,
-    talla_numerica: "No tiene",
-    talla_ropa: "XL",
+    talla_numerica: "no lo tiene",
+    talla_ropa: "no lo tiene",
     color: "Rojo",
     nombre: "Amortiguador de impacto con cable de nylon Marca LICA",
     precio: "1100.00",
@@ -83,8 +89,8 @@ const productos = ref([
   {
     id: 2,
     cantidad: 5,
-    talla_numerica: "NULL",
-    talla_ropa: "XL",
+    talla_numerica: "22",
+    talla_ropa: "no lo tiene",
     color: "Rojo",
     nombre: "Arnés de seguridad anticaídas alta visibilidad Marca LICA",
     precio: "200.00",
@@ -105,7 +111,7 @@ const productos = ref([
   {
     id: 3,
     cantidad: 30,
-    talla_numerica: "NULL",
+    talla_numerica: "no lo tiene",
     talla_ropa: "XL",
     color: "Rojo",
     nombre: "Amortiguador de impacto con doble brazo Marca LICA",
@@ -127,7 +133,7 @@ const productos = ref([
   {
     id: 4,
     cantidad: 20,
-    talla_numerica: "NULL",
+    talla_numerica: "no lo tiene",
     talla_ropa: "XL",
     color: "Rojo",
     nombre: "Bota Mod. 125 marca LICA",
@@ -201,6 +207,7 @@ const Mostrar = () => {
                   $ {{ producto.precio }}
                 </h2>
                 <button
+                  v-if="mostrarBoton(producto)"
                   class="accion"
                   @mouseover="hovered = true"
                   @mouseleave="hovered = false"

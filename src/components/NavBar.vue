@@ -26,7 +26,7 @@ const selectNavItemF = (index) => {
 <header>
 <nav :class="{ active: isNavActive }" class="nav" >     
   <ul class="menu" :class="{ menuDD: isNavActive }">
-    <RouterLink to="HomeView" :class="{ IMGD: isNavActive }" ><img src="../assets/Protecc_Seg.png" alt="Logo" style="height: 65px; width: 215px; margin-left: 40px; "></RouterLink>
+    <RouterLink to="HomeView" :class="{ IMGD: isNavActive }" ><img src="../assets/Protecc_Seg.png" alt="Logo" style="height: 65px; width: 215px; margin-left: 40px; margin-top: 10px;"></RouterLink>
       <div style="width: 80%; display: flex; align-items: center; justify-content: flex-start; gap: 20px;">
         <li><RouterLink to="HomeView" :class="{ 'selected': selectedIndex === 0 }" @click.native="selectNavItemF(0)">Inicio</RouterLink></li>
         <li>
