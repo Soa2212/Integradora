@@ -1,1 +1,0 @@
-agregar la carpeta DatosProd al htdocs de xampp
