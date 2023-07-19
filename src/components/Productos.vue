@@ -13,28 +13,26 @@ const productoPP = (id) => {
   Articulos(id);
 };
 
-let Articulos2 = ref([]);
+const productos = ref([]);
+fetch("http://localhost/CatalogoProductos") //Me consigue todos los productos para mostrar en el catalogo
+  .then((res) => res.json())
+  .then((datos) => {
+    productos.value = datos.data;
+  });
+
+const ArticulosProd = ref([]);
 const Articulos = (id) => {
-  fetch("http://localhost/articulos/" + id)
+  fetch("http://localhost/articulos/" + id) //En base al producto seleccionado por el parametro id me mostrara todos los articulos relacionados a ese producto
     .then((res) => res.json())
     .then((datos) => {
-      Articulos2.value = datos.data;
-      console.log(Articulos2.value);
+      ArticulosProd.value = datos.data;
+      console.log(ArticulosProd.value);
     });
 };
 
 function setHovered(index, value) {
   isHovered.value[index] = value;
 }
-
-const mostrarBoton = (producto) => {
-  //Funcion que se encarga de mostrar el menu individual solo a productos que mantengan ciertas propiedades
-  return (
-    producto.talla_numerica === "No tiene" &&
-    producto.talla_ropa === "No tiene" &&
-    producto.color === "No tiene"
-  );
-};
 
 const productosConStock = computed(() => {
   return productos.value.filter((producto) => producto.estado === "activo"); // Filtrador para evitar mostrar productos sin stock o si no estan activos
@@ -79,20 +77,37 @@ const totalCarrito = computed(() => {
   }, 0);
 });
 
-const prod = ref({});
-
-fetch("http://localhost/CatalogoProductos")
-  .then((res) => res.json())
-  .then((datos) => {
-    productos.value = datos.data;
-    console.log(productos.value);
-  });
-
-const productos = ref([]);
-
 const Mostrar = () => {
   //Esto se debera mandar al la bd para poder pasarselo al carrito
   console.log(carrito.value);
+};
+
+const productBanner = ref({
+  nombre: "",
+  descripcion: "",
+  precio: "",
+  imagen1: "",
+  imagen2: "",
+  imagen3: "",
+  imagen4: "",
+});
+
+const productShow = (
+  nombre,
+  descripcion,
+  precio,
+  imagen1,
+  imagen2,
+  imagen3,
+  imagen4
+) => {
+  productBanner.value.nombre = nombre;
+  productBanner.value.descripcion = descripcion;
+  productBanner.value.precio = precio;
+  productBanner.value.imagen1 = imagen1;
+  productBanner.value.imagen2 = imagen2;
+  productBanner.value.imagen3 = imagen3;
+  productBanner.value.imagen4 = imagen4;
 };
 </script>
 
@@ -134,7 +149,20 @@ const Mostrar = () => {
                 <p style="font-size: 15px; text-align: center">
                   {{ producto.categoria }}
                 </p>
-                <button @click="productoPP(producto.id)">
+                <button
+                  @click="
+                    productoPP(producto.id);
+                    productShow(
+                      producto.nombre,
+                      producto.descripcion,
+                      producto.precio,
+                      producto.imagen1,
+                      producto.imagen2,
+                      producto.imagen3,
+                      producto.imagen4
+                    );
+                  "
+                >
                   <h3
                     style="cursor: pointer; font-size: 15px; text-align: center"
                   >
@@ -153,7 +181,32 @@ const Mostrar = () => {
       <div v-if="showPopup" class="popup-container">
         <div class="popup-content">
           <span class="close-button" @click="showPopup = false">✖</span>
-          <div style="width: 100%; display: flex"></div>
+          <div>
+            <div style="display: flex; width: 100%">
+              <div style="width: 50%">{{ productBanner.imagen1 }}</div>
+              <div style="width: 50%; text-align: center">
+                <p>{{ productBanner.nombre }}</p>
+                <p>{{ productBanner.precio }}</p>
+                <p>Talla: X</p>
+                <div style="display: flex; justify-content: center; gap: 10px">
+                  <p>Talla</p>
+                  <p>Cantidad</p>
+                </div>
+                <div v-for="articulo in ArticulosProd" :key="articulo.id">
+                  <template 
+                    v-if="articulo.talla_numerica !== 'No tiene'"
+                    style="display: flex"
+                  >
+                    {{ articulo.talla_numerica }}
+                  </template>
+                  <template v-if="articulo.talla_ropa !== 'No tiene'">
+                    {{ articulo.talla_ropa }}
+                  </template>
+                  {{ articulo.cantidad }}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -213,36 +266,14 @@ const Mostrar = () => {
 }
 
 .informacion.hovered {
-  transform: translateY(-30%);
+  transform: translateY(-25%);
   border-radius: 30px;
 }
 
 .informacion.hovered p {
   margin-top: 40px;
 }
-
-button.accion {
-  display: none;
-  transition: 0.3s;
-}
-
-.informacion.hovered button.accion {
-  display: block;
-  transition: 0.3s;
-}
-
-button.accion {
-  cursor: pointer;
-  color: #fcd100;
-  font-weight: 500;
-}
-button.accion:hover {
-  cursor: pointer;
-  color: black;
-  transition: 0.3s;
-}
-
-.fade-enter-active,
+s .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
 }
@@ -266,8 +297,8 @@ button.accion:hover {
 
 .popup-content {
   background-color: white;
-  width: 45%;
-  height: 47%;
+  width: 55%;
+  height: 67%;
   padding: 20px;
   border-radius: 5px;
   position: relative; /* Añadido para posicionar el botón de cierre */
@@ -277,8 +308,8 @@ button.accion:hover {
   position: absolute;
   top: -30px;
   right: -30px;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
