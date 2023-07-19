@@ -38,14 +38,13 @@ const selectNavItemF = (index) => {
               </ul>
         </li>
         <li><a href="https://www.actividadsegura.com/_files/ugd/ebd4b4_b015367e2e184b23808b0addf4860c35.pdf" target="_blank" :class="{ 'selected': selectedIndex === 2 }" @click.native="selectNavItemF(2)">Catalogo PDF</a></li>
-        <li><RouterLink to="CotizacionView" :class="{ 'selected': selectedIndex === 3 }" @click.native="selectNavItemF(3)">Cotiza</RouterLink></li>
         <li><RouterLink to="AcercaView" :class="{ 'selected': selectedIndex === 4 }" @click.native="selectNavItemF(4)">Acerca de</RouterLink></li>
     </div>
-    <div style="width: 30%; display: flex; align-items: center; justify-content: space-evenly; margin-left: 40px;">
+    <div style="width: 20%; display: flex; align-items: center; justify-content: space-evenly; margin-left: 20px;">
       <img src="../assets/carrito.png" alt=""  style="height: 30px; width: 40px;"> 
       <li>
         <li ><RouterLink to="#"><img src="../assets/user.png" alt="" style="height: 30px; width: 30px;" /></RouterLink></li>
-          <ul class="menu-drop" style="font-size: 20px; width: 250px; margin-left: -80px;">
+          <ul class="menu-drop" style="font-size: 20px; width: 250px;">
               <li><RouterLink to="LoginView">Iniciar Sesion</RouterLink></li>
               <li><RouterLink to="#">Cerrar Sesion</RouterLink></li>
           </ul>

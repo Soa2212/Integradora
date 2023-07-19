@@ -82,6 +82,7 @@ const Mostrar = () => {
   console.log(carrito.value);
 };
 
+//El objeto de abajo y la funcion que le sigue es para mostra ciertas caracteristicas cuando se seleccione un producto
 const productBanner = ref({
   nombre: "",
   descripcion: "",
@@ -109,6 +110,37 @@ const productShow = (
   productBanner.value.imagen3 = imagen3;
   productBanner.value.imagen4 = imagen4;
 };
+
+const tallaArticulo = ref("No seleccionada");
+const colorArticulo = ref("0");
+const tallaArt = (talla, color) => {
+  //Funcion que mostrara la talla seleccionada por el usuario
+  tallaArticulo.value = talla;
+  colorArticulo.value = color;
+};
+
+const defTalla = () => {
+  //Funcion que se utiliza para que siempre muestre No seleccionada cuando entre a un producto
+  tallaArticulo.value = "No seleccionada";
+  colorArticulo.value = "0";
+};
+
+const shouldDisplayTalla = computed(() => {
+  //Funcion que nos permite verificar las tallas de los articulos y mostrar la opcion de talla si es que la hay
+  if (
+    ArticulosProd.value &&
+    ArticulosProd.value.length > 0 &&
+    (ArticulosProd.value[0].talla_numerica !== "No tiene" ||
+      ArticulosProd.value[0].talla_ropa !== "No tiene")
+  ) {
+    return true;
+  }
+  return false;
+});
+
+const shouldDisplayColor = computed(() => {
+  return colorArticulo.value !== "No tiene" && colorArticulo.value !== "0";
+});
 </script>
 
 <template>
@@ -180,29 +212,40 @@ const productShow = (
 
       <div v-if="showPopup" class="popup-container">
         <div class="popup-content">
-          <span class="close-button" @click="showPopup = false">✖</span>
+          <span
+            class="close-button"
+            @click="
+              showPopup = false;
+              defTalla();
+            "
+            >✖</span
+          >
           <div>
             <div style="display: flex; width: 100%">
               <div style="width: 50%">{{ productBanner.imagen1 }}</div>
               <div style="width: 50%; text-align: center">
                 <p>{{ productBanner.nombre }}</p>
                 <p>{{ productBanner.precio }}</p>
-                <p>Talla: X</p>
-                <div style="display: flex; justify-content: center; gap: 10px">
-                  <p>Talla</p>
-                  <p>Cantidad</p>
+                <div v-if="shouldDisplayTalla">
+                  <p>Talla: {{ tallaArticulo }}</p>
+                  <p v-if="shouldDisplayColor">Color: {{ colorArticulo }}</p>
                 </div>
-                <div v-for="articulo in ArticulosProd" :key="articulo.id">
-                  <template 
-                    v-if="articulo.talla_numerica !== 'No tiene'"
-                    style="display: flex"
-                  >
-                    {{ articulo.talla_numerica }}
-                  </template>
-                  <template v-if="articulo.talla_ropa !== 'No tiene'">
-                    {{ articulo.talla_ropa }}
-                  </template>
-                  {{ articulo.cantidad }}
+
+                <div style="display: flex; gap: 10px">
+                  <div v-for="articulo in ArticulosProd" :key="articulo.id">
+                    <button
+                      @click="tallaArt(articulo.talla_numerica, articulo.color)"
+                      v-if="articulo.talla_numerica !== 'No tiene'"
+                    >
+                      {{ articulo.talla_numerica }}
+                    </button>
+                    <button
+                      @click="tallaArt(articulo.talla_ropa, articulo.color)"
+                      v-if="articulo.talla_ropa !== 'No tiene'"
+                    >
+                      {{ articulo.talla_ropa }}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
