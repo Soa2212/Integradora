@@ -20,13 +20,24 @@ fetch("http://localhost/productos") //Me consigue todos los productos para mostr
     productos.value = datos.data;
   });
 
+const ArticuloExp = ref([{ cantidad: 0, id: null }]);
 const ArticulosProd = ref([]);
+
 const Articulos = (id) => {
-  fetch("http://localhost/articulos/" + id) //En base al producto seleccionado por el parametro id me mostrara todos los articulos relacionados a ese producto
+  fetch("http://localhost/articulos/" + id)
     .then((res) => res.json())
     .then((datos) => {
       ArticulosProd.value = datos.data;
+
+      // Verificar que ArticulosProd.value tenga al menos un objeto
+      if (ArticulosProd.value.length > 0) {
+        // Asignar las propiedades 'cantidad' e 'id' del primer objeto en ArticulosProd.value a ArticuloExp.value
+        ArticuloExp.value[0].cantidad = ArticulosProd.value[0].cantidad;
+        ArticuloExp.value[0].id = ArticulosProd.value[0].id;
+      }
+
       console.log(ArticulosProd.value);
+      console.log(ArticuloExp.value);
     });
 };
 
@@ -129,8 +140,8 @@ const defArticulo = () => {
   colorArticulo.value = "0";
   idArticulo.value = "";
   amountArticulo.value = "";
-  inputValue.value = 0;
-  lastValidValue.value = 0;
+  inputValue.value = 1;
+  lastValidValue.value = 1;
 };
 
 const shouldDisplayTalla = computed(() => {
@@ -151,21 +162,36 @@ const shouldDisplayColor = computed(() => {
 });
 
 //Variables que me sirven para elegir la cantidad deseada evitando que elija datos erroneos
-const inputValue = ref(0);
-const lastValidValue = ref(0);
+const inputValue = ref(1);
+const lastValidValue = ref(1);
 const onInputChange = () => {
-  // Verificar el valor ingresado para asegurar que sea un número entero
-  const value = inputValue.value.trim();
+  // Verificar el valor ingresado para asegurar que sea un número entero positivo y no 0
+  const value = parseInt(inputValue.value);
 
-  // Si el valor no es un número entero válido, restablecer inputValue a lastValidValue
-  if (!/^\d*$/.test(value)) {
+  // Si el valor no es un número entero positivo o es 0, restablecer inputValue a lastValidValue
+  if (isNaN(value) || value <= 0) {
     inputValue.value = lastValidValue.value;
   } else {
-    // Si es un número entero válido, actualizar lastValidValue y la variable reactiva
+    // Si es un número entero positivo válido, actualizar lastValidValue y la variable reactiva
     lastValidValue.value = value;
     inputValue.value = value;
   }
 };
+
+const IinputValue = () => {
+  inputValue.value = inputValue.value + 1;
+  lastValidValue.value = lastValidValue.value + 1;
+};
+const DinputValue = () => {
+  if (inputValue.value > 1) {
+    inputValue.value = inputValue.value - 1;
+    lastValidValue.value = lastValidValue.value - 1;
+  } else {
+    inputValue.value = inputValue.value;
+    lastValidValue.value = lastValidValue.value;
+  }
+};
+
 </script>
 
 <template>
@@ -258,10 +284,10 @@ const onInputChange = () => {
               >
                 <p>{{ productBanner.nombre }}</p>
                 <p>{{ productBanner.precio }}</p>
+                <p>ID ARTICULO: {{ idArticulo }}</p>
+                <p>Cantidad: {{ amountArticulo }}</p>
                 <div v-if="shouldDisplayTalla">
                   <p>Talla: {{ tallaArticulo }}</p>
-                  <p>ID ARTICULO: {{ idArticulo }}</p>
-                  <p>Cantidad: {{ amountArticulo }}</p>
                   <p v-if="shouldDisplayColor">Color: {{ colorArticulo }}</p>
                 </div>
 
@@ -307,16 +333,27 @@ const onInputChange = () => {
                   <div
                     style="
                       width: 30%;
+                      height: 100px;
                       display: flex;
                       justify-content: end;
-                      align-content: center;
+                      align-items: center;
                     "
                   >
+                    <button @click="IinputValue" class="btnA">+</button>
                     <input
-                      type="text"
+                      type="number"
                       v-model="inputValue"
                       @input="onInputChange"
+                      class="inpQA"
+                      id="miInput"
                     />
+                    <button
+                      @click="DinputValue"
+                      class="btnA"
+                      style="font-size: 30px"
+                    >
+                      -
+                    </button>
                   </div>
                   <div style="width: 70%">
                     <button style="margin-top: 10px" class="botnsEstF">
@@ -487,5 +524,26 @@ s .fade-enter-active,
   color: white;
   background-color: black;
   transition: 0.5s;
+}
+.inpQA {
+  width: 105px;
+  height: 50px;
+  outline: none;
+  text-align: center;
+  background-color: #f7f8fa;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield; /* Para Firefox */
+}
+
+.btnA {
+  font-size: 25px;
+  font-weight: 900;
 }
 </style>
