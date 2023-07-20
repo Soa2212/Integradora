@@ -40,7 +40,7 @@ create table COLORES(
 
 
 create table ARTICULOS(
-    id varchar(10) primary key,
+    id int primary key auto_increment,
     producto bigint,
     cantidad int,
     talla_numerica int,
@@ -71,7 +71,7 @@ constraint FK_ordenventa_cliente foreign key (Cliente) references usuarios(id));
 
 create table detalle_orden(
 Orden int,
-Articulo varchar(10),
+Articulo int,
 Cantidad int,
 constraint FK_detalleorden_articulo foreign key (Articulo) references articulos(id),
 constraint FK_detalleorden_orden_venta foreign key (Orden) references  orden_venta(id)
@@ -81,5 +81,5 @@ constraint FK_detalleorden_orden_venta foreign key (Orden) references  orden_ven
 create table carrito(
 Orden int,
 Articulo varchar(10),
-Cantidad int,
+Cantidad int
 );
