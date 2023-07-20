@@ -14,7 +14,7 @@ const productoPP = (id) => {
 };
 
 const productos = ref([]);
-fetch("http://localhost/CatalogoProductos") //Me consigue todos los productos para mostrar en el catalogo
+fetch("http://localhost/productos") //Me consigue todos los productos para mostrar en el catalogo
   .then((res) => res.json())
   .then((datos) => {
     productos.value = datos.data;
@@ -113,16 +113,24 @@ const productShow = (
 
 const tallaArticulo = ref("No seleccionada");
 const colorArticulo = ref("0");
-const tallaArt = (talla, color) => {
-  //Funcion que mostrara la talla seleccionada por el usuario
+const idArticulo = ref("");
+const amountArticulo = ref("");
+const tallaArt = (talla, color, id, cantidad) => {
+  //Funcion que mostrara la talla seleccionada por el usuario y permitira en base a la talla la seleccion del articulo en si
   tallaArticulo.value = talla;
   colorArticulo.value = color;
+  idArticulo.value = id;
+  amountArticulo.value = cantidad;
 };
 
-const defTalla = () => {
+const defArticulo = () => {
   //Funcion que se utiliza para que siempre muestre No seleccionada cuando entre a un producto
   tallaArticulo.value = "No seleccionada";
   colorArticulo.value = "0";
+  idArticulo.value = "";
+  amountArticulo.value = "";
+  inputValue.value = 0;
+  lastValidValue.value = 0;
 };
 
 const shouldDisplayTalla = computed(() => {
@@ -141,6 +149,23 @@ const shouldDisplayTalla = computed(() => {
 const shouldDisplayColor = computed(() => {
   return colorArticulo.value !== "No tiene" && colorArticulo.value !== "0";
 });
+
+//Variables que me sirven para elegir la cantidad deseada evitando que elija datos erroneos
+const inputValue = ref(0);
+const lastValidValue = ref(0);
+const onInputChange = () => {
+  // Verificar el valor ingresado para asegurar que sea un número entero
+  const value = inputValue.value.trim();
+
+  // Si el valor no es un número entero válido, restablecer inputValue a lastValidValue
+  if (!/^\d*$/.test(value)) {
+    inputValue.value = lastValidValue.value;
+  } else {
+    // Si es un número entero válido, actualizar lastValidValue y la variable reactiva
+    lastValidValue.value = value;
+    inputValue.value = value;
+  }
+};
 </script>
 
 <template>
@@ -216,34 +241,86 @@ const shouldDisplayColor = computed(() => {
             class="close-button"
             @click="
               showPopup = false;
-              defTalla();
+              defArticulo();
             "
             >✖</span
           >
           <div>
             <div style="display: flex; width: 100%">
-              <div style="width: 50%">{{ productBanner.imagen1 }}</div>
-              <div style="width: 50%; text-align: center">
+              <div style="width: 40%">{{ productBanner.imagen1 }}</div>
+              <div
+                style="
+                  width: 60%;
+                  text-align: center;
+                  display: flex;
+                  flex-direction: column;
+                "
+              >
                 <p>{{ productBanner.nombre }}</p>
                 <p>{{ productBanner.precio }}</p>
                 <div v-if="shouldDisplayTalla">
                   <p>Talla: {{ tallaArticulo }}</p>
+                  <p>ID ARTICULO: {{ idArticulo }}</p>
+                  <p>Cantidad: {{ amountArticulo }}</p>
                   <p v-if="shouldDisplayColor">Color: {{ colorArticulo }}</p>
                 </div>
 
-                <div style="display: flex; gap: 10px">
+                <div style="display: flex; gap: 10px; justify-content: center">
                   <div v-for="articulo in ArticulosProd" :key="articulo.id">
                     <button
-                      @click="tallaArt(articulo.talla_numerica, articulo.color)"
+                      @click="
+                        tallaArt(
+                          articulo.talla_numerica,
+                          articulo.color,
+                          articulo.id,
+                          articulo.cantidad
+                        )
+                      "
                       v-if="articulo.talla_numerica !== 'No tiene'"
                     >
                       {{ articulo.talla_numerica }}
                     </button>
                     <button
-                      @click="tallaArt(articulo.talla_ropa, articulo.color)"
+                      @click="
+                        tallaArt(
+                          articulo.talla_ropa,
+                          articulo.color,
+                          articulo.id,
+                          articulo.cantidad
+                        )
+                      "
                       v-if="articulo.talla_ropa !== 'No tiene'"
                     >
                       {{ articulo.talla_ropa }}
+                    </button>
+                  </div>
+                </div>
+                <div
+                  style="
+                    width: 100%;
+                    display: flex;
+                    gap: 10px;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                >
+                  <div
+                    style="
+                      width: 30%;
+                      display: flex;
+                      justify-content: end;
+                      align-content: center;
+                    "
+                  >
+                    <input
+                      type="text"
+                      v-model="inputValue"
+                      @input="onInputChange"
+                    />
+                  </div>
+                  <div style="width: 70%">
+                    <button style="margin-top: 10px" class="botnsEstF">
+                      <strong class="botnsP">AGREGAR AL CARRITO</strong>
                     </button>
                   </div>
                 </div>

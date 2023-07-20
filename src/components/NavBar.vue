@@ -19,6 +19,13 @@ const selectedIndex  = ref(0);
 const selectNavItemF = (index) => {
   selectedIndex .value = index;
 };
+const categorias = ref([]);
+fetch("http://localhost/categorias") //Me consigue todas las categorias para mostrar en la pagina
+  .then((res) => res.json())
+  .then((datos) => {
+    categorias.value = datos.data;
+  });  
+
 </script>
 
 <template>
@@ -32,9 +39,9 @@ const selectNavItemF = (index) => {
         <li>
             <li><RouterLink to="ProductosView"  :class="{ 'selected': selectedIndex === 1 }" @click.native="selectNavItemF(1)">Catalogo</RouterLink></li>
               <ul class="menu-drop" style="margin-left: -10px;width: 170px;">
-                  <li><a href="#">Cat1</a></li>
-                  <li><a href="#">Cat2</a></li>
-                  <li><a href="#">Cat3</a></li>
+              <li v-for="cat in categorias" :key="cat.id">
+                <a href="#">{{ cat.categoria }}</a>
+              </li>
               </ul>
         </li>
         <li><a href="https://www.actividadsegura.com/_files/ugd/ebd4b4_b015367e2e184b23808b0addf4860c35.pdf" target="_blank" :class="{ 'selected': selectedIndex === 2 }" @click.native="selectNavItemF(2)">Catalogo PDF</a></li>
@@ -156,6 +163,8 @@ header .active ul li{
 }
 .menu-drop{
   position: absolute;
+  text-align: center;
+  font-size: 13px;
   display: none;
   list-style: none;
   margin-top: -5px;
