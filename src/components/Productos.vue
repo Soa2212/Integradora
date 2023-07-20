@@ -20,7 +20,6 @@ fetch("http://localhost/productos") //Me consigue todos los productos para mostr
     productos.value = datos.data;
   });
 
-const ArticuloExp = ref([{ cantidad: 0, id: null }]);
 const ArticulosProd = ref([]);
 
 const Articulos = (id) => {
@@ -32,12 +31,9 @@ const Articulos = (id) => {
       // Verificar que ArticulosProd.value tenga al menos un objeto
       if (ArticulosProd.value.length > 0) {
         // Asignar las propiedades 'cantidad' e 'id' del primer objeto en ArticulosProd.value a ArticuloExp.value
-        ArticuloExp.value[0].cantidad = ArticulosProd.value[0].cantidad;
-        ArticuloExp.value[0].id = ArticulosProd.value[0].id;
+        amountArticulo.value = ArticulosProd.value[0].cantidad;
+        idArticulo.value = ArticulosProd.value[0].id;
       }
-
-      console.log(ArticulosProd.value);
-      console.log(ArticuloExp.value);
     });
 };
 
@@ -124,8 +120,8 @@ const productShow = (
 
 const tallaArticulo = ref("No seleccionada");
 const colorArticulo = ref("0");
-const idArticulo = ref("");
-const amountArticulo = ref("");
+const idArticulo = ref(null);
+const amountArticulo = ref(null);
 const tallaArt = (talla, color, id, cantidad) => {
   //Funcion que mostrara la talla seleccionada por el usuario y permitira en base a la talla la seleccion del articulo en si
   tallaArticulo.value = talla;
@@ -191,7 +187,6 @@ const DinputValue = () => {
     lastValidValue.value = lastValidValue.value;
   }
 };
-
 </script>
 
 <template>
