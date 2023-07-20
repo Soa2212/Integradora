@@ -17,11 +17,6 @@ const routes = [
     component:()=>import('@/views/ProductosView.vue')
   },
   {
-    path:'/CotizacionView',
-    name:'CotizacionView',
-    component:()=>import('@/views/CotizacionView.vue')
-  },
-  {
     path:'/LoginView',
     name:'LoginView',
     component:()=>import('@/views/LoginView.vue')

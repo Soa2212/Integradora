@@ -5,7 +5,7 @@ import Footer from './components/Footer.vue';
 import AdminView from './views/AdminView.vue';
 
 // Cambiar el valor de esta variable a 'false' cuando quieran visualizar la otra pagina
-let admin = false;
+let admin = true;
 </script>
 
 <template>

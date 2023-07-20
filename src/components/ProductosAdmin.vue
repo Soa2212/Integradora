@@ -3,13 +3,14 @@ import { ref } from "vue";
 
 const productos = ref({});
 const categorias = ref({});
+const eliminar = ref(false);
 const dialog = ref(false);
 
 fetch("http://localhost/productos")
   .then((res) => res.json())
   .then((datos) => (productos.value = datos.data));
 
-fetch("http://localhost/categorias")
+  fetch("http://localhost/categorias")
   .then((res) => res.json())
   .then((datos) => {
     categorias.value = datos.data;
@@ -52,7 +53,7 @@ fetch("http://localhost/categorias")
                 </v-col>
                 <v-col cols="12" sm="12">
                     <v-combobox
-                        :items="categorias"
+                        :items="['Hola']"
                         label="Categoria"
                     ></v-combobox>
                 </v-col>
@@ -64,15 +65,18 @@ fetch("http://localhost/categorias")
       </v-dialog>
     </v-col>
     <v-col cols="auto">
-      <v-btn block rounded="xl" size="large"
+      <v-btn @click="eliminar=true" block rounded="xl" size="large"
         ><v-icon icon="mdi-minus-circle" class="mr-2"></v-icon>Eliminar
-        producto</v-btn
-      >
+        producto</v-btn>
     </v-col>
   </div>
   <div class="catalogo">
     <h1>Productos</h1>
-    <v-divider thickness="2" color="black"></v-divider>
+    <v-divider class="mb-5" thickness="2" color="black"></v-divider>
+    <div class="opciones">
+      <v-btn @click="eliminar=false" class="ma-3" v-if="eliminar">Cancelar</v-btn>
+      <v-btn class="ma-3" v-if="eliminar">Eliminar</v-btn>
+    </div>
     <div class="productos">
       <v-col v-for="producto in productos" cols="4">
         <v-card
@@ -86,7 +90,10 @@ fetch("http://localhost/categorias")
           <v-card-text style="text-align: center">{{
             producto.nombre
           }}</v-card-text>
-          <v-card-text>Precio: {{ producto.precio }}</v-card-text>
+          <v-card-text>Precio: ${{ producto.precio }}</v-card-text>
+        </v-card>
+        <v-card class="d-flex justify-center align-center">
+          <v-checkbox class="d-flex justify-center align-center" v-if="eliminar" label="Eliminar"></v-checkbox>
         </v-card>
       </v-col>
     </div>
@@ -99,8 +106,11 @@ fetch("http://localhost/categorias")
   display: flex;
   flex-wrap: wrap;
 }
-
 .catalogo {
   margin: 1em;
+}
+.opciones {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

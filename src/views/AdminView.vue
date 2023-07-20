@@ -6,7 +6,8 @@ const drawer = ref(null);
 const links = [
     ['mdi-home-circle-outline', 'Inicio', 'AdminHome'],
     ['mdi-store', 'Productos', 'AdminPro'],
-    ['mdi-tag', 'Categorias', 'AdminCat']
+    ['mdi-tag', 'Categorias', 'AdminCat'],
+    ['mdi-account', 'Agregar usuario', 'AdminPro']
   ]
 </script>
 
