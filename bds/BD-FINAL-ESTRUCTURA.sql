@@ -12,7 +12,7 @@ create table PRODUCTOS(
     id bigint primary key,
     nombre varchar(100),
     precio decimal(10, 3),
-    imagen1 varchar(1500),
+    imagen1 varchar(200000),
     descripcion varchar(1000),
     categoria int,
     estado enum('activo','inactivo'),
