@@ -4,6 +4,10 @@ import { ref } from 'vue';
 const categorias = ref({});
 const eliminar = ref(false);
 const dialog = ref(false);
+const dialogDel = ref(false);
+const alerta = ref(false);
+
+const seleccionados = ref([]);
 
 const categoriaNueva = ref({
   categoria: '',
@@ -18,8 +22,17 @@ const agregarCategoria = () => {
   fetch('http://localhost/insertarCat', {
   method: "POST",
   body: JSON.stringify(categoriaNueva.value)
-})
-};
+})};
+
+const eliminarCategoria = () => {
+  if(seleccionados.value[0] != undefined){
+    fetch('http://localhost/eliminarCat', {
+  method: "POST",
+  body: JSON.stringify(seleccionados.value)})
+  } else {
+    alert('No seleccionaste ninguna categoria')
+  }  
+}
 
 
 </script>
@@ -64,7 +77,28 @@ const agregarCategoria = () => {
       <v-divider class="mb-5" thickness="2" color="black"></v-divider>
       <div class="d-flex justify-end">
         <v-btn @click="eliminar=false" class="ma-3" v-if="eliminar">Cancelar</v-btn>
-        <v-btn class="ma-3" v-if="eliminar">Eliminar</v-btn>
+        <v-dialog
+      v-model="dialogDel"
+      persistent
+      width="1024"
+    >
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" class="ma-3" v-if="eliminar">Eliminar</v-btn>
+      </template>
+      <v-card>
+        <form @submit="eliminarCategoria">
+          <v-card-title>
+          <span class="text-h5">¿Está seguro que desea eliminar las siguientes categorias?</span>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue-darken-1" variant="text" type="submit">Acepto</v-btn>
+          <v-btn color="blue-darken-1" variant="text" @click="dialogDel = false">Cancelar</v-btn>
+        </v-card-actions>
+        </form>
+      </v-card>
+    </v-dialog>
+        
       </div>
       <div class="tabla">
         <v-table>
@@ -87,13 +121,19 @@ const agregarCategoria = () => {
               :key="cat.id"
             >
               <td v-if="eliminar" style="width: 10px;">
-                <v-checkbox class="d-flex justify-center align-center"></v-checkbox>
+                <v-checkbox v-model="seleccionados" class="d-flex justify-center align-center" :value="cat.categoria"></v-checkbox>
               </td>
               <td>{{ cat.categoria }}</td>
               <td>{{ cat.estado }}</td>
             </tr>
           </tbody>
         </v-table>
+        <v-alert v-if="alerta"
+    density="compact"
+    type="warning"
+    title="No ha seleccionado una categoria"
+    text="Por favor, seleccione las categorias que necesita eliminar"
+  ></v-alert>
       </div>
     </div>
 </template>

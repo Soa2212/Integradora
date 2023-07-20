@@ -12,10 +12,7 @@ fetch("http://localhost/productos")
 
   fetch("http://localhost/categorias")
   .then((res) => res.json())
-  .then((datos) => {
-    categorias.value = datos.data;
-    console.log(categorias.value);
-  });
+  .then((datos) => categorias.value = datos.data);
 </script>
 
 <template>
@@ -85,7 +82,7 @@ fetch("http://localhost/productos")
         >
           <v-img
             style="height: 100px"
-            src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg"
+            :src="producto.imagen1"
           ></v-img>
           <v-card-text style="text-align: center">{{
             producto.nombre
