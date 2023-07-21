@@ -7,6 +7,8 @@ const eliminar = ref(false);
 const dialog = ref(false);
 const dialogDel = ref(false);
 const alerta = ref(false);
+const fileInput = ref(null);
+const selectedImage = ref(null);
 
 // Esta propiedad es para mostrar las categorias al momento de agregar un producto
 const categoriasItems = computed(() => categorias.value.map(categoria => categoria.categoria));
@@ -16,17 +18,21 @@ const seleccionados = ref([]);
 const nuevoProducto = ref({
   nombre: '',
   precio: '',
-  imagen1: '',
+  imagen1: null,
   descripcion: '',
   categoria: '',
-  estado: ''
+  estado: 'activo'
 })
+
+const handleFileChange = () => {
+  selectedImage.value = fileInput.value.files[0];
+};
 
 fetch("http://localhost/productos")
   .then((res) => res.json())
   .then((datos) => (productos.value = datos.data));
 
-  fetch("http://localhost/categorias")
+fetch("http://localhost/categorias")
   .then((res) => res.json())
   .then((datos) => categorias.value = datos.data);
 
@@ -41,9 +47,25 @@ const eliminarProducto = () => {
     dialogDel.value = false;
   }
 }
+
+const agregarProducto = () => {
+    if (selectedImage.value) {
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedImage.value);
+      reader.onload = () => {
+        const base64String = reader.result.split(',')[1];
+        nuevoProducto.value.imagen1 ='data:image/jpeg;base64,'+base64String;
+        fetch("http://localhost/insertarProd", {
+        method: "POST",
+        body: JSON.stringify(nuevoProducto.value)});
+      };
+    }
+  };
+
 </script>
 
 <template>
+  {{ nuevoProducto }}
   <div class="botones">
     <v-col cols="auto">
       <v-dialog v-model="dialog" width="auto">
@@ -57,32 +79,39 @@ const eliminarProducto = () => {
           <v-card-title>Agregar producto</v-card-title>
           <v-card-text>
             <v-container>
-              <v-row>
-                <v-col cols="12" sm="6" md="6">
-                  <v-text-field label="Nombre*" required></v-text-field>
+              <form @submit="agregarProducto">
+                <v-row>
+                <v-col cols="12" sm="12" md="12">
+                  <v-text-field v-model="nuevoProducto.nombre" label="Nombre*"></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" md="6">
-                  <v-text-field
+                <v-col cols="12" sm="12" md="12">
+                  <v-text-field v-model="nuevoProducto.precio"
                     label="Precio"
                     hint="Utilice solo 2 decimales"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-file-input label="Imagen"></v-file-input>
+                  <div>
+      <input type="file" ref="fileInput" @change="handleFileChange"/>
+    </div>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field
+                  <v-text-field v-model="nuevoProducto.descripcion"
                     label="Descripcion del producto"
-                    required
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="12">
-                    <v-combobox
+                    <v-combobox v-model="nuevoProducto.categoria"
                         :items="categoriasItems"
                         label="Categoria"
                     ></v-combobox>
                 </v-col>
+                <v-col class="d-flex justify-end">
+                  <v-btn type="submit">Agregar</v-btn>
+                  <v-btn @click="dialog=false" class="ml-3">Cancelar</v-btn>
+                </v-col>
               </v-row>
+              </form>
             </v-container>
             <small>* Indica que es un campo requerido</small>
           </v-card-text>
