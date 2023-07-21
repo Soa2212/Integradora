@@ -1,13 +1,26 @@
 <script setup>
-import { ref } from "vue";
+import { ref,computed } from "vue";
 
 const productos = ref({});
 const categorias = ref({});
 const eliminar = ref(false);
 const dialog = ref(false);
 const dialogDel = ref(false);
-const seleccionados = ref([]);
 const alerta = ref(false);
+
+// Esta propiedad es para mostrar las categorias al momento de agregar un producto
+const categoriasItems = computed(() => categorias.value.map(categoria => categoria.categoria));
+
+const seleccionados = ref([]);
+
+const nuevoProducto = ref({
+  nombre: '',
+  precio: '',
+  imagen1: '',
+  descripcion: '',
+  categoria: '',
+  estado: ''
+})
 
 fetch("http://localhost/productos")
   .then((res) => res.json())
@@ -65,7 +78,7 @@ const eliminarProducto = () => {
                 </v-col>
                 <v-col cols="12" sm="12">
                     <v-combobox
-                        :items="['Hola']"
+                        :items="categoriasItems"
                         label="Categoria"
                     ></v-combobox>
                 </v-col>
