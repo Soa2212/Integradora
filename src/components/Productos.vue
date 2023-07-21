@@ -6,7 +6,7 @@ const hovered = ref(false);
 const isHovered = ref([]);
 const showPopup = ref(false);
 let unidad = ref(1); //Siempre sera uno ya que esta pensado para el menu individual
-const carrito = ref([]); //Variable que se va ir a la base de datos
+const carritoP = ref([]); //Variable que se va ir a la base de datos
 
 const productoPP = (id) => {
   showPopup.value = true;
@@ -14,7 +14,7 @@ const productoPP = (id) => {
 };
 
 const productos = ref([]);
-fetch("http://localhost/productos") //Me consigue todos los productos para mostrar en el catalogo
+fetch("http://localhost/prodcat") //Me consigue todos los productos para mostrar en el catalogo
   .then((res) => res.json())
   .then((datos) => {
     productos.value = datos.data;
@@ -30,9 +30,15 @@ const Articulos = (id) => {
 
       // Verificar que ArticulosProd.value tenga al menos un objeto
       if (ArticulosProd.value.length > 0) {
-        // Asignar las propiedades 'cantidad' e 'id' del primer objeto en ArticulosProd.value a ArticuloExp.value
+        // Asignar las propiedades 'cantidad' y 'articulo' del primer objeto en ArticulosProd.value
         amountArticulo.value = ArticulosProd.value[0].cantidad;
-        idArticulo.value = ArticulosProd.value[0].id;
+        idArticulo.value = ArticulosProd.value[0].articulo;
+        if (ArticulosProd.value[0].tall_ropa != "No tiene") {
+          tallaArticulo.value = ArticulosProd.value[0].tall_ropa;
+        }
+        if (ArticulosProd.value[0].talla_numerica != "No tiene") {
+          tallaArticulo.value = ArticulosProd.value[0].talla_numerica;
+        }
       }
     });
 };
@@ -45,48 +51,35 @@ const productosConStock = computed(() => {
   return productos.value.filter((producto) => producto.estado === "activo"); // Filtrador para evitar mostrar productos sin stock o si no estan activos
 });
 
-function guardarProducto(Articulo, CantidadProducto, precioProducto) {
-  const producto = { Articulo, CantidadProducto, precioProducto };
-  const index = carrito.value.findIndex(
-    (producto) => producto.Articulo === Articulo
-  );
-  if (index !== -1) {
-    carrito.value[index].CantidadProducto += 1; // Actualiza la cantidad del producto existente
+function guardarProducto(id, stockProducto, cantidadD) {
+  if (stockProducto >= cantidadD) {
+    // Buscar si la id ya existe en el array de objetos
+    const index = carritoP.value.findIndex((producto) => producto.id === id);
+
+    if (index !== -1) {
+      // Si la id ya existe, sumar cantidadD a la propiedad cantidad del objeto
+      const cantidadTotal = carritoP.value[index].cantidad + cantidadD;
+      if (cantidadTotal <= stockProducto) {
+        carritoP.value[index].cantidad = cantidadTotal;
+      } else {
+        console.log("La cantidad en el carrito excede el stock disponible");
+      }
+    } else {
+      // Si la id no existe, crear un nuevo objeto y añadirlo al array
+      const nuevoProducto = {
+        id: id,
+        cantidad: cantidadD,
+      };
+      carritoP.value.push(nuevoProducto);
+    }
   } else {
-    carrito.value.push(producto); // Agrega un nuevo objeto al carrito
+    console.log("Ingrese una cantidad menor");
   }
 }
 
-const productoEncontrado = ref([]);
-const productoCarrito = ref([]);
-
-const mostrarProducto = (id) => {
-  //Una variable me da un objeto del arreglo productos con todas sus propiedades y la otra me da ese mismo objeto pero con las caracteristicas del carrito
-  productoEncontrado.value = productos.value.find(
-    (producto) => producto.id === id
-  );
-  productoCarrito.value = carrito.value.find(
-    (carrito) => carrito.Articulo === id
-  );
-};
-
-const cantidadTotalPerP = computed(() => {
-  //Variable que me da la cantidad total de articulos en el carrito
-  return carrito.value.reduce((acumulador, producto) => {
-    return acumulador + producto.CantidadProducto;
-  }, 0);
-});
-
-const totalCarrito = computed(() => {
-  //Variable que me da la el costo total en el carrito
-  return carrito.value.reduce((total, producto) => {
-    return total + producto.CantidadProducto * producto.precioProducto;
-  }, 0);
-});
-
 const Mostrar = () => {
   //Esto se debera mandar al la bd para poder pasarselo al carrito
-  console.log(carrito.value);
+  console.log(carritoP.value);
 };
 
 //El objeto de abajo y la funcion que le sigue es para mostra ciertas caracteristicas cuando se seleccione un producto
@@ -94,28 +87,14 @@ const productBanner = ref({
   nombre: "",
   descripcion: "",
   precio: "",
-  imagen1: "",
-  imagen2: "",
-  imagen3: "",
-  imagen4: "",
+  imagen1: null,
 });
 
-const productShow = (
-  nombre,
-  descripcion,
-  precio,
-  imagen1,
-  imagen2,
-  imagen3,
-  imagen4
-) => {
+const productShow = (nombre, descripcion, precio, imagen1) => {
   productBanner.value.nombre = nombre;
   productBanner.value.descripcion = descripcion;
   productBanner.value.precio = precio;
   productBanner.value.imagen1 = imagen1;
-  productBanner.value.imagen2 = imagen2;
-  productBanner.value.imagen3 = imagen3;
-  productBanner.value.imagen4 = imagen4;
 };
 
 const tallaArticulo = ref("No seleccionada");
@@ -213,7 +192,7 @@ const DinputValue = () => {
               style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
             >
               <v-img
-                style="cursor: pointer; border-radius: 10px"
+                style="border-radius: 10px"
                 height="100"
                 :src="producto.imagen1"
                 cover
@@ -224,9 +203,6 @@ const DinputValue = () => {
                 @mouseover="setHovered(index, true)"
                 @mouseleave="setHovered(index, false)"
               >
-                <p style="font-size: 15px; text-align: center">
-                  {{ producto.categoria }}
-                </p>
                 <button
                   @click="
                     productoPP(producto.id);
@@ -234,22 +210,22 @@ const DinputValue = () => {
                       producto.nombre,
                       producto.descripcion,
                       producto.precio,
-                      producto.imagen1,
-                      producto.imagen2,
-                      producto.imagen3,
-                      producto.imagen4
+                      producto.imagen1
                     );
                   "
                 >
+                  <p style="font-size: 15px; text-align: center">
+                    {{ producto.categoria }}
+                  </p>
                   <h3
                     style="cursor: pointer; font-size: 15px; text-align: center"
                   >
                     {{ producto.nombre }}
                   </h3>
+                  <h2 style="font-size: 15px; text-align: center">
+                    $ {{ producto.precio }}
+                  </h2>
                 </button>
-                <h2 style="font-size: 15px; text-align: center">
-                  $ {{ producto.precio }}
-                </h2>
               </div>
             </v-card>
           </v-col>
@@ -267,95 +243,127 @@ const DinputValue = () => {
             >✖</span
           >
           <div>
-            <div style="display: flex; width: 100%">
-              <div style="width: 40%">{{ productBanner.imagen1 }}</div>
-              <div
-                style="
-                  width: 60%;
-                  text-align: center;
-                  display: flex;
-                  flex-direction: column;
-                "
-              >
-                <p>{{ productBanner.nombre }}</p>
-                <p>{{ productBanner.precio }}</p>
-                <p>ID ARTICULO: {{ idArticulo }}</p>
-                <p>Cantidad: {{ amountArticulo }}</p>
-                <div v-if="shouldDisplayTalla">
-                  <p>Talla: {{ tallaArticulo }}</p>
-                  <p v-if="shouldDisplayColor">Color: {{ colorArticulo }}</p>
-                </div>
-
-                <div style="display: flex; gap: 10px; justify-content: center">
-                  <div v-for="articulo in ArticulosProd" :key="articulo.id">
-                    <button
-                      @click="
-                        tallaArt(
-                          articulo.talla_numerica,
-                          articulo.color,
-                          articulo.id,
-                          articulo.cantidad
-                        )
-                      "
-                      v-if="articulo.talla_numerica !== 'No tiene'"
-                    >
-                      {{ articulo.talla_numerica }}
-                    </button>
-                    <button
-                      @click="
-                        tallaArt(
-                          articulo.talla_ropa,
-                          articulo.color,
-                          articulo.id,
-                          articulo.cantidad
-                        )
-                      "
-                      v-if="articulo.talla_ropa !== 'No tiene'"
-                    >
-                      {{ articulo.talla_ropa }}
-                    </button>
-                  </div>
+            <div
+              style="display: flex; width: 100%; height: 100%; flex-wrap: wrap"
+            >
+              <div style="width: 100%; display: flex">
+                <div style="width: 40%">
+                  <img
+                    :src="productBanner.imagen1"
+                    alt=""
+                    style="width: 300px; height: 300px; border-radius: 20px"
+                  />
                 </div>
                 <div
                   style="
-                    width: 100%;
+                    width: 60%;
+                    text-align: center;
                     display: flex;
-                    gap: 10px;
-                    justify-content: center;
-                    align-items: center;
+                    flex-direction: column;
                   "
                 >
+                  <p>{{ productBanner.nombre }}</p>
+                  <p>{{ productBanner.precio }}</p>
+                  <p>ID ARTICULO: {{ idArticulo }}</p>
+                  <p>Cantidad: {{ amountArticulo }}</p>
+                  <div v-if="shouldDisplayTalla">
+                    <p v-if="tallaArticulo != 'No seleccionada'">
+                      Talla: {{ tallaArticulo }}
+                    </p>
+                    <p v-if="shouldDisplayColor">Color: {{ colorArticulo }}</p>
+                  </div>
+
+                  <div
+                    style="display: flex; gap: 10px; justify-content: center"
+                  >
+                    <div
+                      class="scroll"
+                      v-for="articulo in ArticulosProd"
+                      :key="articulo.articulo"
+                    >
+                      <button
+                        @click="
+                          tallaArt(
+                            articulo.talla_numerica,
+                            articulo.color,
+                            articulo.articulo,
+                            articulo.cantidad
+                          )
+                        "
+                        class="btnTallas"
+                        v-if="articulo.talla_numerica !== 'No tiene'"
+                      >
+                        {{ articulo.talla_numerica }}
+                      </button>
+                      <button
+                        @click="
+                          tallaArt(
+                            articulo.talla_ropa,
+                            articulo.color,
+                            articulo.articulo,
+                            articulo.cantidad
+                          )
+                        "
+                        v-if="articulo.talla_ropa !== 'No tiene'"
+                      >
+                        {{ articulo.talla_ropa }}
+                      </button>
+                    </div>
+                  </div>
                   <div
                     style="
-                      width: 30%;
-                      height: 100px;
+                      width: 100%;
                       display: flex;
-                      justify-content: end;
+                      gap: 10px;
+                      justify-content: center;
                       align-items: center;
                     "
                   >
-                    <button @click="IinputValue" class="btnA">+</button>
-                    <input
-                      type="number"
-                      v-model="inputValue"
-                      @input="onInputChange"
-                      class="inpQA"
-                      id="miInput"
-                    />
-                    <button
-                      @click="DinputValue"
-                      class="btnA"
-                      style="font-size: 30px"
+                    <div
+                      style="
+                        width: 30%;
+                        height: 100px;
+                        display: flex;
+                        justify-content: end;
+                        align-items: center;
+                      "
                     >
-                      -
-                    </button>
-                  </div>
-                  <div style="width: 70%">
-                    <button style="margin-top: 10px" class="botnsEstF">
-                      <strong class="botnsP">AGREGAR AL CARRITO</strong>
-                    </button>
+                      <button @click="IinputValue" class="btnA">+</button>
+                      <input
+                        type="number"
+                        v-model="inputValue"
+                        @input="onInputChange"
+                        class="inpQA"
+                        id="miInput"
+                      />
+                      <button
+                        @click="DinputValue"
+                        class="btnA"
+                        style="font-size: 30px"
+                      >
+                        -
+                      </button>
+                    </div>
+                    <div style="width: 70%">
+                      <button
+                        style="margin-top: 10px"
+                        class="botnsEstF"
+                        @click="
+                          guardarProducto(
+                            idArticulo,
+                            amountArticulo,
+                            inputValue
+                          )
+                        "
+                      >
+                        <strong class="botnsP">AGREGAR AL CARRITO</strong>
+                      </button>
+                    </div>
                   </div>
                 </div>
+              </div>
+              <div style="width: 100%">
+                <p class="descArt">{{ productBanner.descripcion }}</p>
               </div>
             </div>
           </div>
@@ -401,7 +409,7 @@ const DinputValue = () => {
 }
 
 .tarjeta {
-  border-radius: 5px;
+  border-radius: 15px;
   position: relative;
   overflow: hidden;
   transition: transform 0.5s;
@@ -418,6 +426,8 @@ const DinputValue = () => {
 }
 
 .informacion.hovered {
+  box-shadow: 0 -10px 10px rgba(128, 128, 128, 0.5);
+  transition: 0.5s;
   transform: translateY(-25%);
   border-radius: 30px;
 }
@@ -452,7 +462,7 @@ s .fade-enter-active,
   width: 55%;
   height: 67%;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 15px;
   position: relative; /* Añadido para posicionar el botón de cierre */
 }
 
@@ -490,8 +500,8 @@ s .fade-enter-active,
 }
 .botnsP {
   font-size: 15px;
-  margin-top: 5px;
-  margin-block-end: 5px;
+  margin-top: 8px;
+  margin-block-end: 8px;
 }
 
 .botnsEst {
@@ -521,7 +531,7 @@ s .fade-enter-active,
   transition: 0.5s;
 }
 .inpQA {
-  width: 105px;
+  width: 90px;
   height: 50px;
   outline: none;
   text-align: center;
@@ -540,5 +550,52 @@ input[type="number"] {
 .btnA {
   font-size: 25px;
   font-weight: 900;
+  background-color: #f7f8fa;
+  height: 50px;
+  color: #777777;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnA:hover {
+  color: black;
+}
+
+.descArt {
+  text-align: center;
+  font-size: 14px;
+  line-height: 22px;
+  color: #777777;
+}
+
+.btnTallas {
+  width: 40px;
+  height: 40px;
+  margin-left: 5px;
+  background-color: #f7f8fa;
+}
+
+.btnTallas:hover {
+  background-color: black;
+  color: white;
+  transition: 0.5s;
+}
+
+.scroll {
+  /* Estilo para el div que contendrá los botones de las tallas */
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-left: 10px;
+  overflow-y: auto; /* Agregamos el scroll vertical si hay muchas tallas */
+  max-height: 200px; /* Establece una altura máxima para el div */
+  flex-wrap: wrap; /* Permite que los botones se acomoden en varias líneas */
+}
+
+.scroll button {
+  /* Estilo para los botones de las tallas */
+  width: 40px; /* Establece el ancho deseado para los botones */
 }
 </style>
