@@ -5,6 +5,9 @@ const productos = ref({});
 const categorias = ref({});
 const eliminar = ref(false);
 const dialog = ref(false);
+const dialogDel = ref(false);
+const seleccionados = ref([]);
+const alerta = ref(false);
 
 fetch("http://localhost/productos")
   .then((res) => res.json())
@@ -13,6 +16,18 @@ fetch("http://localhost/productos")
   fetch("http://localhost/categorias")
   .then((res) => res.json())
   .then((datos) => categorias.value = datos.data);
+
+const eliminarProducto = () => {
+  if(seleccionados.value[0] != undefined){
+    fetch("http://localhost/eliminarProd", {
+    method: "POST",
+    body: JSON.stringify(seleccionados.value)});
+  } else {
+    event.preventDefault();
+    alerta.value = true;
+    dialogDel.value = false;
+  }
+}
 </script>
 
 <template>
@@ -71,8 +86,38 @@ fetch("http://localhost/productos")
     <h1>Productos</h1>
     <v-divider class="mb-5" thickness="2" color="black"></v-divider>
     <div class="opciones">
+      <v-row class="d-flex ml-1">
+            <v-col cols="auto">
+              <v-alert v-if="alerta"
+                density="compact"
+                type="warning"
+                title="Por favor, seleccione un producto"
+              ></v-alert>
+          </v-col>
+        </v-row>
       <v-btn @click="eliminar=false" class="ma-3" v-if="eliminar">Cancelar</v-btn>
-      <v-btn class="ma-3" v-if="eliminar">Eliminar</v-btn>
+      <v-dialog
+      v-model="dialogDel"
+      persistent
+      width="min-content"
+    >
+      <template v-slot:activator="{ props }">
+        <v-btn :=props class="ma-3" v-if="eliminar">Eliminar</v-btn>
+      </template>
+      <v-card>
+        <form @submit="eliminarProducto">
+          <v-card-title>
+          <div class="text-h5 d-flex mb-2">¿Está seguro que desea eliminarlos?</div>
+          <div>Esto ocasionará que todos los articulos relacionados a este producto se eliminen también</div>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue-darken-1" variant="text" type="submit">Estoy de acuerdo</v-btn>
+          <v-btn color="blue-darken-1" variant="text" @click="dialogDel = false">Cancelar</v-btn>
+        </v-card-actions>
+        </form>
+      </v-card>
+    </v-dialog>
     </div>
     <div class="productos">
       <v-col v-for="producto in productos" cols="4">
@@ -90,7 +135,7 @@ fetch("http://localhost/productos")
           <v-card-text>Precio: ${{ producto.precio }}</v-card-text>
         </v-card>
         <v-card class="d-flex justify-center align-center">
-          <v-checkbox class="d-flex justify-center align-center" v-if="eliminar" label="Eliminar"></v-checkbox>
+          <v-checkbox @click="alerta=false" v-model="seleccionados" class="d-flex justify-center align-center" v-if="eliminar" :value="producto.id" label="Eliminar"></v-checkbox>
         </v-card>
       </v-col>
     </div>

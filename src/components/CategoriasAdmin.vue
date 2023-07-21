@@ -36,8 +36,6 @@ const eliminarCategoria = (event) => {
     dialogDel.value = false;
   }  
 }
-
-
 </script>
 
 <template>
@@ -45,7 +43,7 @@ const eliminarCategoria = (event) => {
     <v-col cols="auto">
       <v-dialog v-model="dialog" width="900">
         <template v-slot:activator="{ props }">
-          <v-btn @click="eliminar=false" v-bind="props" block rounded="xl" size="large"
+          <v-btn v-bind="props" block rounded="xl" size="large"
             ><v-icon icon="mdi-plus-circle" class="mr-2"></v-icon>Agregar
             categoria</v-btn
           >
