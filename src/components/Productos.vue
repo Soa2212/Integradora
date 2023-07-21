@@ -1,5 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
+import { useCarritoStore } from "@/stores/carrito.js";
+const carritoStore = useCarritoStore();
 
 //Las tres primeras variables son para el popup cuando se agrega un producto al carrito o como yo le digo menu individual
 const hovered = ref(false);
@@ -57,10 +59,11 @@ function guardarProducto(id, stockProducto, cantidadD) {
     const index = carritoP.value.findIndex((producto) => producto.Articulo === id);
 
     if (index !== -1) {
-      // Si el Articulo ya existe, sumar cantidadD a la propiedad cantidad del objeto
+      // Si la id ya existe, sumar cantidadD a la propiedad cantidad del objeto
       const cantidadTotal = carritoP.value[index].cantidad + cantidadD;
       if (cantidadTotal <= stockProducto) {
-        carritoP.value[index].cantidad = cantidadTotal;
+        carritoP.value[index].cantidad = cantidadTotal;//se le suma la cantidad a carritoP
+        carritoLS()
       } else {
         mostrarPestana();
       }
@@ -71,11 +74,20 @@ function guardarProducto(id, stockProducto, cantidadD) {
         cantidad: cantidadD,
       };
       carritoP.value.push(nuevoProducto);
+      carritoLS()
     }
   } else {
     mostrarPestana();
   }
 }
+
+const carritoLS = () => {//Funcion para guardar los datos en local storage
+  carritoP.value.forEach((producto) => {
+    carritoStore.agregarAlCarrito(producto);
+  });
+};
+
+
 
 const Mostrar = () => {
   //Esto se debera mandar al la bd para poder pasarselo al carrito
