@@ -54,26 +54,26 @@ const productosConStock = computed(() => {
 function guardarProducto(id, stockProducto, cantidadD) {
   if (stockProducto >= cantidadD) {
     // Buscar si la id ya existe en el array de objetos
-    const index = carritoP.value.findIndex((producto) => producto.id === id);
+    const index = carritoP.value.findIndex((producto) => producto.Articulo === id);
 
     if (index !== -1) {
-      // Si la id ya existe, sumar cantidadD a la propiedad cantidad del objeto
+      // Si el Articulo ya existe, sumar cantidadD a la propiedad cantidad del objeto
       const cantidadTotal = carritoP.value[index].cantidad + cantidadD;
       if (cantidadTotal <= stockProducto) {
         carritoP.value[index].cantidad = cantidadTotal;
       } else {
-        console.log("La cantidad en el carrito excede el stock disponible");
+        mostrarPestana();
       }
     } else {
       // Si la id no existe, crear un nuevo objeto y añadirlo al array
       const nuevoProducto = {
-        id: id,
+        Articulo: id,
         cantidad: cantidadD,
       };
       carritoP.value.push(nuevoProducto);
     }
   } else {
-    console.log("Ingrese una cantidad menor");
+    mostrarPestana();
   }
 }
 
@@ -117,6 +117,7 @@ const defArticulo = () => {
   amountArticulo.value = "";
   inputValue.value = 1;
   lastValidValue.value = 1;
+  mostrarModal.value = false;
 };
 
 const shouldDisplayTalla = computed(() => {
@@ -165,6 +166,21 @@ const DinputValue = () => {
     inputValue.value = inputValue.value;
     lastValidValue.value = lastValidValue.value;
   }
+};
+
+const mostrarModal = ref(false);
+const tiempoVisible = 800; // Tiempo en milisegundos (1/8 de segundo)
+let temporizador = null;
+
+const mostrarPestana = () => {
+  mostrarModal.value = true;
+  if (temporizador) clearTimeout(temporizador);
+};
+
+const iniciarTemporizador = () => {
+  temporizador = setTimeout(() => {
+    mostrarModal.value = false;
+  }, tiempoVisible);
 };
 </script>
 
@@ -358,6 +374,16 @@ const DinputValue = () => {
                       >
                         <strong class="botnsP">AGREGAR AL CARRITO</strong>
                       </button>
+                      <transition
+                        name="pestanita"
+                        @after-enter="iniciarTemporizador"
+                      >
+                        <div v-if="mostrarModal" class="modal">
+                          <div class="modal-contenido">
+                            <p>No puedes agregar mas {{ productBanner.nombre }} al carrito.</p>
+                          </div>
+                        </div>
+                      </transition>
                     </div>
                   </div>
                 </div>
@@ -597,5 +623,36 @@ input[type="number"] {
 .scroll button {
   /* Estilo para los botones de las tallas */
   width: 40px; /* Establece el ancho deseado para los botones */
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height:7%;
+}
+
+.modal-contenido {
+  background-color: #f44336;
+  color: white;
+  top: 50%;
+  left: 50%;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Transición para la pestaña emergente */
+.pestanita-enter-active,
+.pestanita-leave-active {
+  transition: opacity 0.3s;
+}
+
+.pestanita-enter, .pestanita-leave-to /* .pestanita-leave-active in <2.1.8 */ {
+  opacity: 0;
 }
 </style>

@@ -50,7 +50,7 @@ fetch("http://localhost/categorias") //Me consigue todas las categorias para mos
     <div style="width: 20%; display: flex; align-items: center; justify-content: space-evenly; margin-left: 20px;">
       <img src="../assets/carrito.png" alt=""  style="height: 30px; width: 40px;"> 
       <li>
-        <li ><RouterLink to="#"><img src="../assets/user.png" alt="" style="height: 30px; width: 30px;" /></RouterLink></li>
+        <li ><img src="../assets/user.png" alt="" style="height: 30px; width: 30px;" /></li>
           <ul class="menu-drop" style="font-size: 20px; width: 250px;">
               <li><RouterLink to="LoginView">Iniciar Sesion</RouterLink></li>
               <li><RouterLink to="#">Cerrar Sesion</RouterLink></li>
