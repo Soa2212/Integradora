@@ -45,6 +45,13 @@ const Articulos = (id) => {
     });
 };
 
+const categorias = ref([]);
+fetch("http://localhost/categorias") //Me consigue todas las categorias para mostrar en la pagina
+  .then((res) => res.json())
+  .then((datos) => {
+    categorias.value = datos.data;
+  });
+
 function setHovered(index, value) {
   isHovered.value[index] = value;
 }
@@ -88,11 +95,6 @@ const carritoLS = () => {
   carritoP.value.forEach((producto) => {
     carritoStore.agregarAlCarrito(producto);
   });
-};
-
-const Mostrar = () => {
-  //Esto se debera mandar al la bd para poder pasarselo al carrito
-  console.log(carritoP.value);
 };
 
 //El objeto de abajo y la funcion que le sigue es para mostra ciertas caracteristicas cuando se seleccione un producto
@@ -196,14 +198,36 @@ const iniciarTemporizador = () => {
     mostrarModal.value = false;
   }, tiempoVisible);
 };
+
+const prodCategoria =(id)=>{
+  fetch("http://localhost/categoriasp/" +id) //Me consigue todos los productos de una categoria en especifico para mostrar en el catalogo
+  .then((res) => res.json())
+  .then((datos) => {
+    productos.value = datos.data;
+  });
+}
+
+const prodCategoriaDEF =(id)=>{
+  fetch("http://localhost/prodcat") //Me consigue todos los productos para mostrar en el catalogo
+  .then((res) => res.json())
+  .then((datos) => {
+    productos.value = datos.data;
+  });
+}
+
 </script>
 
 <template>
   <div class="contenedor">
     <div class="vista">
       <div class="categorias">
-        <button @click="Mostrar">Mostrar carrito</button>
-        <div><router-link to="/Carrito">Ir al Carrito</router-link></div>
+        <div class="CB">
+          <button @click="prodCategoriaDEF" class="CTB">CATÁLOGO</button>
+          <div class="lh"></div>
+          <p v-for="cat in categorias" :key="cat.id" class="CBB">
+            <button @click="prodCategoria(cat.id)">{{ cat.categoria }}</button>
+          </p>
+        </div>
       </div>
 
       <div class="productos">
@@ -217,6 +241,8 @@ const iniciarTemporizador = () => {
             cols="4"
           >
             <v-card
+              @mouseover="setHovered(index, true)"
+              @mouseleave="setHovered(index, false)"
               height="360"
               class="d-flex flex-column tarjeta"
               style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
@@ -227,12 +253,7 @@ const iniciarTemporizador = () => {
                 :src="producto.imagen1"
                 cover
               ></v-img>
-              <div
-                class="informacion"
-                :class="{ hovered: isHovered[index] }"
-                @mouseover="setHovered(index, true)"
-                @mouseleave="setHovered(index, false)"
-              >
+              <div class="informacion" :class="{ hovered: isHovered[index] }">
                 <button
                   @click="
                     productoPP(producto.id);
@@ -445,19 +466,47 @@ const iniciarTemporizador = () => {
   display: flex;
   width: 80vw;
   height: 90%;
-  background-color: red;
+  background-color: beige;
 }
 
 .categorias {
-  width: 25%;
-  height: 100px;
-  background-color: aqua;
+  width: 30%;
+  height:max-content;
+  padding-bottom: 170px;
+  margin-right: 10px;
+  background-color: white;
+  padding-left: 15px;
+  padding-top: 10px;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
 }
 
+.CB {
+  background-color: white;
+}
+
+.CTB {
+  font-size: 26px;
+  text-align: center;
+}
+.lh {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+  border-radius: 50px;
+  width: 90%;
+  height: 5px;
+}
+
+.CBB {
+  color: #777777;
+  margin-top: 7px;
+}
 .productos {
   width: 75%;
   height: 100%;
   background-color: white;
+  border-top-right-radius: 20px; /* Radio de esquina superior derecha */
+  border-bottom-right-radius: 20px; /* Radio de esquina inferior derecha */
   padding: 2em 1em;
 }
 

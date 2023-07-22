@@ -36,14 +36,7 @@ fetch("http://localhost/categorias") //Me consigue todas las categorias para mos
     <RouterLink to="HomeView" :class="{ IMGD: isNavActive }" ><img src="../assets/Protecc_Seg.png" alt="Logo" style="height: 65px; width: 215px; margin-left: 40px; margin-top: 10px;"></RouterLink>
       <div style="width: 80%; display: flex; align-items: center; justify-content: flex-start; gap: 20px;">
         <li><RouterLink to="HomeView" :class="{ 'selected': selectedIndex === 0 }" @click.native="selectNavItemF(0)">Inicio</RouterLink></li>
-        <li>
-            <li><RouterLink to="ProductosView"  :class="{ 'selected': selectedIndex === 1 }" @click.native="selectNavItemF(1)">Catalogo</RouterLink></li>
-              <ul class="menu-drop" style="margin-left: -10px;width: 170px;">
-              <li v-for="cat in categorias" :key="cat.id">
-                <a href="#">{{ cat.categoria }}</a>
-              </li>
-              </ul>
-        </li>
+        <li><RouterLink to="ProductosView"  :class="{ 'selected': selectedIndex === 1 }" @click.native="selectNavItemF(1)">Catalogo</RouterLink></li> 
         <li><a href="https://www.actividadsegura.com/_files/ugd/ebd4b4_b015367e2e184b23808b0addf4860c35.pdf" target="_blank" :class="{ 'selected': selectedIndex === 2 }" @click.native="selectNavItemF(2)">Catalogo PDF</a></li>
         <li><RouterLink to="AcercaView" :class="{ 'selected': selectedIndex === 4 }" @click.native="selectNavItemF(4)">Acerca de</RouterLink></li>
     </div>
