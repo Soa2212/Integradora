@@ -50,6 +50,11 @@ const routes = [
     path:'/AdminCategorias',
     name:'AdminCat',
     component:()=>import('@/components/CategoriasAdmin.vue')
+  },
+  {
+    path:'/AgregarAdmin',
+    name:'AdminAdd',
+    component:()=>import('@/components/AgregarUsuarioAdmin.vue')
   }
 
 ]

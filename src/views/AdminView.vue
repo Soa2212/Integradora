@@ -7,7 +7,7 @@ const links = [
     ['mdi-home-circle-outline', 'Inicio', 'AdminHome'],
     ['mdi-store', 'Productos', 'AdminPro'],
     ['mdi-tag', 'Categorias', 'AdminCat'],
-    ['mdi-account', 'Agregar usuario', 'AdminPro']
+    ['mdi-account', 'Agregar usuario', 'AdminAdd']
   ]
 </script>
 

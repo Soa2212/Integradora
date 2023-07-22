@@ -65,7 +65,6 @@ const agregarProducto = () => {
 </script>
 
 <template>
-  {{ nuevoProducto }}
   <div class="botones">
     <v-col cols="auto">
       <v-dialog v-model="dialog" width="auto">
