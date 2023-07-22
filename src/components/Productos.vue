@@ -56,14 +56,16 @@ const productosConStock = computed(() => {
 function guardarProducto(id, stockProducto, cantidadD) {
   if (stockProducto >= cantidadD) {
     // Buscar si la id ya existe en el array de objetos
-    const index = carritoP.value.findIndex((producto) => producto.Articulo === id);
+    const index = carritoP.value.findIndex(
+      (producto) => producto.Articulo === id
+    );
 
     if (index !== -1) {
       // Si la id ya existe, sumar cantidadD a la propiedad cantidad del objeto
       const cantidadTotal = carritoP.value[index].cantidad + cantidadD;
       if (cantidadTotal <= stockProducto) {
-        carritoP.value[index].cantidad = cantidadTotal;//se le suma la cantidad a carritoP
-        carritoLS()
+        carritoP.value[index].cantidad = cantidadTotal; //se le suma la cantidad a carritoP
+        carritoLS();
       } else {
         mostrarPestana();
       }
@@ -74,20 +76,19 @@ function guardarProducto(id, stockProducto, cantidadD) {
         cantidad: cantidadD,
       };
       carritoP.value.push(nuevoProducto);
-      carritoLS()
+      carritoLS();
     }
   } else {
     mostrarPestana();
   }
 }
 
-const carritoLS = () => {//Funcion para guardar los datos en local storage
+const carritoLS = () => {
+  //Funcion para guardar los datos en local storage
   carritoP.value.forEach((producto) => {
     carritoStore.agregarAlCarrito(producto);
   });
 };
-
-
 
 const Mostrar = () => {
   //Esto se debera mandar al la bd para poder pasarselo al carrito
@@ -180,6 +181,7 @@ const DinputValue = () => {
   }
 };
 
+//Estas tres funciones de abajo sirven para la alerta si el cliente agrega mas productos de los posibles
 const mostrarModal = ref(false);
 const tiempoVisible = 800; // Tiempo en milisegundos (1/8 de segundo)
 let temporizador = null;
@@ -275,11 +277,15 @@ const iniciarTemporizador = () => {
               style="display: flex; width: 100%; height: 100%; flex-wrap: wrap"
             >
               <div style="width: 100%; display: flex">
-                <div style="width: 40%">
+                <div style="width: 40%; display: flex; align-items: center">
                   <img
                     :src="productBanner.imagen1"
                     alt=""
-                    style="width: 300px; height: 300px; border-radius: 20px"
+                    style="
+                      max-width: 300px;
+                      max-height: 300px;
+                      border-radius: 20px;
+                    "
                   />
                 </div>
                 <div
@@ -290,22 +296,26 @@ const iniciarTemporizador = () => {
                     flex-direction: column;
                   "
                 >
-                  <p>{{ productBanner.nombre }}</p>
-                  <p>{{ productBanner.precio }}</p>
-                  <p>ID ARTICULO: {{ idArticulo }}</p>
-                  <p>Cantidad: {{ amountArticulo }}</p>
-                  <div v-if="shouldDisplayTalla">
-                    <p v-if="tallaArticulo != 'No seleccionada'">
-                      Talla: {{ tallaArticulo }}
+                  <p class="BannerNP">{{ productBanner.nombre }}</p>
+                  <div class="BannerIO">
+                    <p style="margin-top: 10px">
+                      Costo ${{ productBanner.precio }}
                     </p>
-                    <p v-if="shouldDisplayColor">Color: {{ colorArticulo }}</p>
+                    <div v-if="shouldDisplayTalla">
+                      <p
+                        v-if="tallaArticulo != 'No seleccionada'"
+                        style="margin-top: 10px"
+                      >
+                        Talla: {{ tallaArticulo }}
+                      </p>
+                      <p v-if="shouldDisplayColor">
+                        Color: {{ colorArticulo }}
+                      </p>
+                    </div>
                   </div>
 
-                  <div
-                    style="display: flex; gap: 10px; justify-content: center"
-                  >
+                  <div class="scroll">
                     <div
-                      class="scroll"
                       v-for="articulo in ArticulosProd"
                       :key="articulo.articulo"
                     >
@@ -351,6 +361,7 @@ const iniciarTemporizador = () => {
                       style="
                         width: 30%;
                         height: 100px;
+                        margin-right: -20px;
                         display: flex;
                         justify-content: end;
                         align-items: center;
@@ -392,7 +403,10 @@ const iniciarTemporizador = () => {
                       >
                         <div v-if="mostrarModal" class="modal">
                           <div class="modal-contenido">
-                            <p>No puedes agregar mas {{ productBanner.nombre }} al carrito.</p>
+                            <p>
+                              No puedes agregar mas
+                              {{ productBanner.nombre }} al carrito.
+                            </p>
                           </div>
                         </div>
                       </transition>
@@ -401,6 +415,7 @@ const iniciarTemporizador = () => {
                 </div>
               </div>
               <div style="width: 100%">
+                <div class="linea-horizontal"></div>
                 <p class="descArt">{{ productBanner.descripcion }}</p>
               </div>
             </div>
@@ -497,6 +512,7 @@ s .fade-enter-active,
 
 .popup-content {
   background-color: white;
+  display: flex;
   width: 55%;
   height: 67%;
   padding: 20px;
@@ -538,8 +554,8 @@ s .fade-enter-active,
 }
 .botnsP {
   font-size: 15px;
-  margin-top: 8px;
-  margin-block-end: 8px;
+  margin-top: 10px;
+  margin-block-end: 10px;
 }
 
 .botnsEst {
@@ -560,7 +576,6 @@ s .fade-enter-active,
   align-self: center;
   background-color: black;
   color: white;
-  margin-top: 10px;
 }
 
 .botnsEst:hover {
@@ -571,6 +586,8 @@ s .fade-enter-active,
 .inpQA {
   width: 90px;
   height: 50px;
+  margin-top: 15px;
+  margin-block-end: 5px;
   outline: none;
   text-align: center;
   background-color: #f7f8fa;
@@ -588,6 +605,8 @@ input[type="number"] {
 .btnA {
   font-size: 25px;
   font-weight: 900;
+  margin-top: 15px;
+  margin-block-end: 5px;
   background-color: #f7f8fa;
   height: 50px;
   color: #777777;
@@ -603,6 +622,7 @@ input[type="number"] {
 
 .descArt {
   text-align: center;
+  margin-top: 20px;
   font-size: 14px;
   line-height: 22px;
   color: #777777;
@@ -624,17 +644,20 @@ input[type="number"] {
 .scroll {
   /* Estilo para el div que contendrá los botones de las tallas */
   display: flex;
-  justify-content: end;
+  justify-content: flex-start;
+  margin-top: 10px;
   align-items: center;
   margin-left: 10px;
-  overflow-y: auto; /* Agregamos el scroll vertical si hay muchas tallas */
-  max-height: 200px; /* Establece una altura máxima para el div */
-  flex-wrap: wrap; /* Permite que los botones se acomoden en varias líneas */
+  overflow-x: auto;
+  max-height: 200px;
+  flex-wrap: nowrap;
+  padding-right: 5px;
 }
 
 .scroll button {
   /* Estilo para los botones de las tallas */
   width: 40px; /* Establece el ancho deseado para los botones */
+  flex-shrink: 0; /* Evita que los botones se reduzcan si hay muchos en una fila */
 }
 
 .modal {
@@ -645,7 +668,7 @@ input[type="number"] {
   top: 0;
   left: 0;
   width: 100%;
-  height:7%;
+  height: 7%;
 }
 
 .modal-contenido {
@@ -666,5 +689,26 @@ input[type="number"] {
 
 .pestanita-enter, .pestanita-leave-to /* .pestanita-leave-active in <2.1.8 */ {
   opacity: 0;
+}
+
+.BannerNP {
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.BannerIO {
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  font-weight: bold;
+  font-style: oblique;
+}
+
+.linea-horizontal {
+  margin-top: -30px;
+  border-bottom: 1px solid #ccc;
+  border-radius: 50px;
+  height: 5px;
 }
 </style>
