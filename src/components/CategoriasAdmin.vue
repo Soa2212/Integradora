@@ -89,8 +89,8 @@ const eliminarCategoria = (event) => {
       <v-card>
         <form @submit="eliminarCategoria">
           <v-card-title>
-          <span class="text-h5 d-flex mb-2">¿Está seguro que desea eliminar las siguientes categorias?</span>
-          <div class="d-flex ml-5" v-for="sel in seleccionados">-{{ sel }}</div>
+          <span class="text-h5 d-flex mb-2">¿Está seguro que desea eliminar las categorias seleccionadas?</span>
+          <div class="d-flex">Nota: Esto ocasionara que todos los productos y articulos relacionados a esta categoria sean eliminados</div>
         </v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -123,7 +123,7 @@ const eliminarCategoria = (event) => {
               :key="cat.id"
             >
               <td v-if="eliminar" style="width: 10px;">
-                <v-checkbox @click="alerta = false" v-model="seleccionados" class="d-flex justify-center align-center" :value="cat.categoria"></v-checkbox>
+                <v-checkbox @click="alerta = false" v-model="seleccionados" class="d-flex justify-center align-center" :value="cat.id"></v-checkbox>
               </td>
               <td>{{ cat.categoria }}</td>
               <td>{{ cat.estado }}</td>
