@@ -168,6 +168,7 @@ header .active ul li{
   display: none;
   list-style: none;
   margin-top: -5px;
+  margin-left: -100px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border-bottom-left-radius: 20px;
