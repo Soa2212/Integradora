@@ -63,13 +63,15 @@
 </script>
 <template>
     <div class="ma-4">
-        <h1>Agregar usuario administrador</h1>
-        <form @submit="submit">
-    <v-text-field
+        <h1 class="mb-2">Agregar usuario administrador</h1>
+        <v-divider class="mb-5" thickness="2" color="black"></v-divider>
+        <v-row  class="d-flex justify-start ml-1 mr-1">
+          <form class="mt-4" @submit="submit">
+              <v-text-field
       v-model="name.value.value"
       :counter="10"
       :error-messages="name.errorMessage.value"
-      label="Name"
+      label="Nombre"
     ></v-text-field>
     <v-text-field
       v-model="email.value.value"
@@ -97,5 +99,6 @@
       Agregar usuario
     </v-btn>
   </form>
+        </v-row>
     </div>
 </template>
