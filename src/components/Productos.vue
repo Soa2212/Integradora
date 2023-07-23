@@ -7,7 +7,6 @@ const carritoStore = useCarritoStore();
 const hovered = ref(false);
 const isHovered = ref([]);
 const showPopup = ref(false);
-let unidad = ref(1); //Siempre sera uno ya que esta pensado para el menu individual
 const carritoP = ref([]); //Variable que se va ir a la base de datos
 
 const productoPP = (id) => {
@@ -60,7 +59,7 @@ const productosConStock = computed(() => {
   return productos.value.filter((producto) => producto.estado === "activo"); // Filtrador para evitar mostrar productos sin stock o si no estan activos
 });
 
-function guardarProducto(id, stockProducto, cantidadD) {
+function guardarProducto(id, stockProducto, cantidadD, nombre, imagen, precio, talla, color) {
   if (stockProducto >= cantidadD) {
     // Buscar si la id ya existe en el array de objetos
     const index = carritoP.value.findIndex(
@@ -80,7 +79,13 @@ function guardarProducto(id, stockProducto, cantidadD) {
       // Si la id no existe, crear un nuevo objeto y añadirlo al array
       const nuevoProducto = {
         Articulo: id,
+        stock: stockProducto,
         cantidad: cantidadD,
+        nombre: nombre,
+        imagen: imagen,
+        precio: precio,
+        talla: talla,
+        color: color
       };
       carritoP.value.push(nuevoProducto);
       carritoLS();
@@ -199,21 +204,21 @@ const iniciarTemporizador = () => {
   }, tiempoVisible);
 };
 
-const prodCategoria =(id)=>{
-  fetch("http://localhost/categoriasp/" +id) //Me consigue todos los productos de una categoria en especifico para mostrar en el catalogo
-  .then((res) => res.json())
-  .then((datos) => {
-    productos.value = datos.data;
-  });
-}
+const prodCategoria = (id) => {
+  fetch("http://localhost/categoriasp/" + id) //Me consigue todos los productos de una categoria en especifico para mostrar en el catalogo
+    .then((res) => res.json())
+    .then((datos) => {
+      productos.value = datos.data;
+    });
+};
 
-const prodCategoriaDEF =(id)=>{
+const prodCategoriaDEF = (id) => {
   fetch("http://localhost/prodcat") //Me consigue todos los productos para mostrar en el catalogo
-  .then((res) => res.json())
-  .then((datos) => {
-    productos.value = datos.data;
-  });
-}
+    .then((res) => res.json())
+    .then((datos) => {
+      productos.value = datos.data;
+    });
+};
 
 </script>
 
@@ -361,7 +366,7 @@ const prodCategoriaDEF =(id)=>{
                             articulo.talla_ropa,
                             articulo.color,
                             articulo.articulo,
-                            articulo.cantidad
+                            articulo.cantidad,
                           )
                         "
                         v-if="articulo.talla_ropa !== 'No tiene'"
@@ -395,7 +400,6 @@ const prodCategoriaDEF =(id)=>{
                         v-model="inputValue"
                         @input="onInputChange"
                         class="inpQA"
-                        id="miInput"
                       />
                       <button
                         @click="DinputValue"
@@ -413,7 +417,12 @@ const prodCategoriaDEF =(id)=>{
                           guardarProducto(
                             idArticulo,
                             amountArticulo,
-                            inputValue
+                            inputValue,
+                            productBanner.nombre,
+                            productBanner.imagen1,
+                            productBanner.precio,
+                            tallaArticulo,
+                            colorArticulo
                           )
                         "
                       >
@@ -472,7 +481,7 @@ const prodCategoriaDEF =(id)=>{
 
 .categorias {
   width: 30%;
-  height:max-content;
+  height: max-content;
   padding-bottom: 170px;
   margin-right: 10px;
   background-color: white;
@@ -511,7 +520,6 @@ const prodCategoriaDEF =(id)=>{
   margin-top: 7px;
   transition: 0.3s;
   margin-bottom: 7px;
-
 }
 
 .CBB:hover {

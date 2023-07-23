@@ -41,7 +41,7 @@ fetch("http://localhost/categorias") //Me consigue todas las categorias para mos
         <li><RouterLink to="AcercaView" :class="{ 'selected': selectedIndex === 4 }" @click.native="selectNavItemF(4)">Acerca de</RouterLink></li>
     </div>
     <div style="width: 20%; display: flex; align-items: center; justify-content: space-evenly; margin-left: 20px;">
-      <img src="../assets/carrito.png" alt=""  style="height: 30px; width: 40px;"> 
+      <RouterLink to="/Carrito"><img src="../assets/carrito.png" alt=""  style="height: 30px; width: 40px;"> </RouterLink>
       <li>
         <li ><img src="../assets/user.png" alt="" style="height: 30px; width: 30px;" /></li>
           <ul class="menu-drop" style="font-size: 20px; width: 250px;">
@@ -161,7 +161,7 @@ header .active ul li{
   display: none;
   list-style: none;
   margin-top: -5px;
-  margin-left: -100px;
+  margin-left: -140px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border-bottom-left-radius: 20px;

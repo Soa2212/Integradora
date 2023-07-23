@@ -96,7 +96,7 @@ const productosConStock = computed(() => {
                 cover
               ></v-img>
               <div class="informacion" :class="{ hovered: isHovered[index] }">
-                <router-link to="ProductosView" style="text-decoration: none; color: black;">
+                <router-link to="/ProductosView" style="text-decoration: none; color: black;">
                   <p style="font-size: 15px; text-align: center">
                     {{ producto.categoria }}
                   </p>
