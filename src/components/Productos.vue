@@ -231,9 +231,10 @@ const prodCategoriaDEF =(id)=>{
       </div>
 
       <div class="productos">
-        <h1 style="display: flex; justify-content: center; font-size: 24px">
+        <p style="display: flex; justify-content: center; font-size: 26px">
           Productos
-        </h1>
+        </p>
+        <div class="lh"></div>
         <v-row class="mt-3">
           <v-col
             v-for="(producto, index) in productosConStock"
@@ -485,10 +486,6 @@ const prodCategoriaDEF =(id)=>{
   background-color: white;
 }
 
-.CTB {
-  font-size: 26px;
-  text-align: center;
-}
 .lh {
   border-bottom: 1px solid #ccc;
   margin-bottom: 10px;
@@ -496,10 +493,31 @@ const prodCategoriaDEF =(id)=>{
   width: 90%;
   height: 5px;
 }
+.CTB {
+  font-size: 26px;
+  text-align: center;
+  margin-top: 25px;
+  margin-left: 70px;
+}
+
+.CTB:hover {
+  /* Sombras al hacer hover */
+  color: rgb(28, 172, 216);
+  transition: 0.5s;
+}
 
 .CBB {
-  color: #777777;
+  color: #837f7f;
   margin-top: 7px;
+  transition: 0.3s;
+
+}
+
+.CBB:hover {
+  /* Sombras al hacer hover */
+  color: rgb(0, 0, 0);
+  font-size: 24px;
+  transition: 0.6s;
 }
 .productos {
   width: 75%;
