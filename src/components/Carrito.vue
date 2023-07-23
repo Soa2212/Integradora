@@ -52,24 +52,53 @@ const onInputChange = (item, event) => {
 
   carritoStore.agregarAlCarrito(item); // Guardar el cambio en el store
 };
+
+const elimArt = (idArticulo) => {
+  carritoStore.eliminarDelCarrito(idArticulo);
+};
+
+const vaCA = () => {
+  carritoStore.eliminarTodoDelLocalStorage();
+  location.reload();
+};
 </script>
 
 <template>
   <div class="container">
     <div class="carrito">
-      <p style="text-align: center">Carrito de compras</p>
+      <div
+        style="
+          width: 100%;
+          text-align: center;
+          margin-top: 40px;
+          margin-bottom: 40px;
+        "
+      >
+        <p style="text-align: center; font-size: 34px; font-weight: bold">
+          Carrito de compras
+        </p>
+      </div>
       <div v-for="item in carritoLS" :key="item.Articulo" class="item">
-        <div style="display: flex; align-items: center">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            width: 20%;
+            justify-content: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+          "
+        >
           <img
             :src="item.imagen"
             alt=""
             style="max-width: 100px; max-height: 100px; border-radius: 20px"
           />
         </div>
-        <div style="width: 20%; display: flex; flex-direction: column">
+        <div style="width: 30%; display: flex; flex-direction: column">
           <div class="IA">{{ item.nombre }}</div>
-          <div class="IA">Tamaño: {{ item.talla }}</div>
-          <div class="IA">Color: {{ item.color }}</div>
+          <div v-if="item.talla != 'No seleccionada' " class="IAB">Tamaño: {{ item.talla }}</div>
+          <div v-if="item.color != '0' && item.color != 'No tiene'  " class="IAB">Color: {{ item.color }}</div>
         </div>
         <div class="PA">${{ item.precio }}</div>
         <div
@@ -91,7 +120,106 @@ const onInputChange = (item, event) => {
             -
           </button>
         </div>
-        <p>${{ item.cantidad * item.precio }}</p>
+        <div style="width: 20%; display: flex">
+          <div
+            style="
+              width: 50%;
+              overflow: hidden;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <p style="white-space: nowrap">
+              ${{ item.cantidad * item.precio }}
+            </p>
+          </div>
+          <div
+            style="
+              width: 50%;
+              overflow: hidden;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <button @click="elimArt(item.Articulo)">
+              <img
+                src="../assets/btnB.png"
+                alt="Eliminar"
+                style="width: 20px; height: 20px"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div style="width: 50%; margin-bottom: 50px; margin-top: 30px">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            height: 40px;
+          "
+        >
+          <RouterLink
+            to="/ProductosView"
+            style="
+              text-decoration: none;
+              color: black;
+              font-size: 14px;
+              font-weight: bold;
+            "
+          >
+            <img
+              src="../assets/btnSC.png"
+              alt=""
+              style="width: 23px; height: 17px; margin-bottom: -3.5px"
+            />
+            SEGUIR COMPRANDO
+          </RouterLink>
+        </div>
+      </div>
+      <div
+        style="
+          width: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: end;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            height: 40px;
+          "
+        >
+          <button
+            to="/ProductosView"
+            style="
+              text-decoration: none;
+              color: black;
+              font-size: 14px;
+              font-weight: bold;
+              margin-right: 20px;
+            "
+            @click="vaCA"
+          >
+            <img
+              src="../assets/btnB.png"
+              alt=""
+              style="
+                width: 19px;
+                height: 17px;
+                margin-bottom: -2.5px;
+                margin-right: 3px;
+              "
+            />
+            VACIAR CARRITO
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -117,8 +245,12 @@ const onInputChange = (item, event) => {
   display: flex;
   flex-wrap: wrap; /* Agregamos flex-wrap: wrap para que los elementos se distribuyan en múltiples líneas */
   background-color: white;
-  width: 90%;
-  height: 90%;
+  width: 100%;
+  height: 100%;
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .item {
@@ -133,18 +265,19 @@ const onInputChange = (item, event) => {
 .IA {
   color: #191919;
   font-size: 14px;
+  text-align: start;
 }
 
 .PA {
-  width: 20%;
+  width: 10%;
   font-size: 16px;
+  display: flex;
+  justify-content: center;
 }
 
 .inpQA {
   width: 90px;
   height: 50px;
-  margin-top: 15px;
-  margin-block-end: 5px;
   outline: none;
   text-align: center;
   background-color: #f7f8fa;
@@ -162,8 +295,6 @@ input[type="number"] {
 .btnA {
   font-size: 25px;
   font-weight: 900;
-  margin-top: 15px;
-  margin-block-end: 5px;
   background-color: #f7f8fa;
   height: 50px;
   color: #777777;
@@ -176,5 +307,4 @@ input[type="number"] {
 .btnA:hover {
   color: black;
 }
-
 </style>

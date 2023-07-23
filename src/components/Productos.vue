@@ -59,7 +59,16 @@ const productosConStock = computed(() => {
   return productos.value.filter((producto) => producto.estado === "activo"); // Filtrador para evitar mostrar productos sin stock o si no estan activos
 });
 
-function guardarProducto(id, stockProducto, cantidadD, nombre, imagen, precio, talla, color) {
+function guardarProducto(
+  id,
+  stockProducto,
+  cantidadD,
+  nombre,
+  imagen,
+  precio,
+  talla,
+  color
+) {
   if (stockProducto >= cantidadD) {
     // Buscar si la id ya existe en el array de objetos
     const index = carritoP.value.findIndex(
@@ -71,7 +80,7 @@ function guardarProducto(id, stockProducto, cantidadD, nombre, imagen, precio, t
       const cantidadTotal = carritoP.value[index].cantidad + cantidadD;
       if (cantidadTotal <= stockProducto) {
         carritoP.value[index].cantidad = cantidadTotal; //se le suma la cantidad a carritoP
-        carritoLS();
+        mostrarPestanaV();
       } else {
         mostrarPestana();
       }
@@ -85,11 +94,13 @@ function guardarProducto(id, stockProducto, cantidadD, nombre, imagen, precio, t
         imagen: imagen,
         precio: precio,
         talla: talla,
-        color: color
+        color: color,
       };
       carritoP.value.push(nuevoProducto);
-      carritoLS();
+      mostrarPestanaV();
     }
+
+    carritoLS();
   } else {
     mostrarPestana();
   }
@@ -190,17 +201,31 @@ const DinputValue = () => {
 
 //Estas tres funciones de abajo sirven para la alerta si el cliente agrega mas productos de los posibles
 const mostrarModal = ref(false);
-const tiempoVisible = 800; // Tiempo en milisegundos (1/8 de segundo)
+const tiempoVisible = 600; // Tiempo en milisegundos (1/8 de segundo)
 let temporizador = null;
+const mostrarModal2 = ref(false);
 
 const mostrarPestana = () => {
   mostrarModal.value = true;
   if (temporizador) clearTimeout(temporizador);
 };
 
+const mostrarPestanaV = () => {
+  mostrarModal2.value = true;
+  if (temporizador) clearTimeout(temporizador);
+};
+
 const iniciarTemporizador = () => {
   temporizador = setTimeout(() => {
     mostrarModal.value = false;
+  }, tiempoVisible);
+};
+
+const iniciarTemporizadorV = () => {
+  clearTimeout(temporizador); // Cancelar el temporizador existente, si lo hay
+  temporizador = setTimeout(() => {
+    mostrarModal2.value = false;
+    location.reload(); // Reiniciar la página
   }, tiempoVisible);
 };
 
@@ -219,7 +244,6 @@ const prodCategoriaDEF = (id) => {
       productos.value = datos.data;
     });
 };
-
 </script>
 
 <template>
@@ -366,7 +390,7 @@ const prodCategoriaDEF = (id) => {
                             articulo.talla_ropa,
                             articulo.color,
                             articulo.articulo,
-                            articulo.cantidad,
+                            articulo.cantidad
                           )
                         "
                         v-if="articulo.talla_ropa !== 'No tiene'"
@@ -438,6 +462,16 @@ const prodCategoriaDEF = (id) => {
                               No puedes agregar mas
                               {{ productBanner.nombre }} al carrito.
                             </p>
+                          </div>
+                        </div>
+                      </transition>
+                      <transition
+                        name="pestanita"
+                        @after-enter="iniciarTemporizadorV"
+                      >
+                        <div v-if="mostrarModal2" class="modal2">
+                          <div class="modal-contenido2">
+                            <p>Producto agregado con exito al carrito.</p>
                           </div>
                         </div>
                       </transition>
@@ -744,15 +778,37 @@ input[type="number"] {
   top: 0;
   left: 0;
   width: 100%;
-  height: 7%;
+  height: 100%;
+}
+
+.modal2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.modal-contenido2 {
+  background-color: green;
+  color: white;
+  top: 50%;
+  left: 50%;
+  margin-top: -680px;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .modal-contenido {
-  background-color: #f44336;
+  background-color: rgb(128, 0, 0);
   color: white;
   top: 50%;
   left: 50%;
   padding: 10px;
+  margin-top: -680px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

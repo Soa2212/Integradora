@@ -18,7 +18,13 @@ export const useCarritoStore = defineStore("carrito", {
 
       if (index !== -1) {
         // Si el producto ya existe, actualizamos la cantidad del producto
-        this.carritoLS[index].cantidad = item.cantidad;
+        const cantidadTotal = this.carritoLS[index].cantidad + item.cantidad;
+        if (cantidadTotal <= this.carritoLS[index].stock) {
+          this.carritoLS[index].cantidad = cantidadTotal;
+        } else {
+          // Si la cantidad a agregar supera el stock, establecemos la cantidad igual al stock
+          this.carritoLS[index].cantidad = this.carritoLS[index].stock;
+        }
       } else {
         // Si el producto no existe, lo agregamos al carrito
         this.carritoLS.push(item);
@@ -30,6 +36,22 @@ export const useCarritoStore = defineStore("carrito", {
     // ...
     guardarCarritoEnLocalStorage() {
       localStorage.setItem("carritoLS", JSON.stringify(this.carritoLS));
+    },
+    // Función para eliminar un artículo del carrito por su ID
+    eliminarDelCarrito(id) {
+      const index = this.carritoLS.findIndex(
+        (producto) => producto.Articulo === id
+      );
+
+      if (index !== -1) {
+        // Si encontramos el artículo con la ID, lo eliminamos del carrito
+        this.carritoLS.splice(index, 1);
+        this.guardarCarritoEnLocalStorage(); // Guardamos los cambios en el LocalStorage
+      }
+    },
+    eliminarTodoDelLocalStorage() {
+      //Variable para eliminar todo el carrito
+      localStorage.removeItem("carritoLS");
     },
   },
 });
