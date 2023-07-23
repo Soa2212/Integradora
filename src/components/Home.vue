@@ -1,17 +1,9 @@
 <script setup>
 import { ref, computed } from "vue";
-import { useCarritoStore } from "@/stores/carrito.js";
-const carritoStore = useCarritoStore();
 
 //Las tres primeras variables son para el popup cuando se agrega un producto al carrito o como yo le digo menu individual
-const hovered = ref(false);
 const isHovered = ref([]);
-const showPopup = ref(false);
 
-const productoPP = (id) => {
-  showPopup.value = true;
-  Articulos(id);
-};
 
 const productos = ref([]);
 fetch("http://localhost/categoriasp/2") //Me consigue todos los productos para mostrar en el catalogo
@@ -20,28 +12,6 @@ fetch("http://localhost/categoriasp/2") //Me consigue todos los productos para m
     productos.value = datos.data;
   });
 
-const ArticulosProd = ref([]);
-
-const Articulos = (id) => {
-  fetch("http://localhost/articulos/" + id)
-    .then((res) => res.json())
-    .then((datos) => {
-      ArticulosProd.value = datos.data;
-
-      // Verificar que ArticulosProd.value tenga al menos un objeto
-      if (ArticulosProd.value.length > 0) {
-        // Asignar las propiedades 'cantidad' y 'articulo' del primer objeto en ArticulosProd.value
-        amountArticulo.value = ArticulosProd.value[0].cantidad;
-        idArticulo.value = ArticulosProd.value[0].articulo;
-        if (ArticulosProd.value[0].tall_ropa != "No tiene") {
-          tallaArticulo.value = ArticulosProd.value[0].tall_ropa;
-        }
-        if (ArticulosProd.value[0].talla_numerica != "No tiene") {
-          tallaArticulo.value = ArticulosProd.value[0].talla_numerica;
-        }
-      }
-    });
-};
 
 const categorias = ref([]);
 fetch("http://localhost/categorias") //Me consigue todas las categorias para mostrar en la pagina
@@ -58,24 +28,7 @@ const productosConStock = computed(() => {
   return productos.value.filter((producto) => producto.estado === "activo"); // Filtrador para evitar mostrar productos sin stock o si no estan activos
 });
 
-//El objeto de abajo y la funcion que le sigue es para mostra ciertas caracteristicas cuando se seleccione un producto
-const productBanner = ref({
-  nombre: "",
-  descripcion: "",
-  precio: "",
-  imagen1: null,
-});
 
-const productShow = (nombre, descripcion, precio, imagen1) => {
-  productBanner.value.nombre = nombre;
-  productBanner.value.descripcion = descripcion;
-  productBanner.value.precio = precio;
-  productBanner.value.imagen1 = imagen1;
-};
-
-const tallaArticulo = ref("No seleccionada");
-const idArticulo = ref(null);
-const amountArticulo = ref(null);
 </script>
 <template>
   <div style="width: 100%; height: 100%">
@@ -118,54 +71,48 @@ const amountArticulo = ref(null);
     </header>
 
     <div class="container">
-      <div class="vista">
-        <div class="productos">
-          <p style="display: flex; justify-content: center; font-size: 26px">
-            Productos de una de nuestras categorias.
-          </p>
-          <div class="lh"></div>
-          <v-row class="mt-5">
-            <v-col
-              v-for="(producto, index) in productosConStock"
-              :key="producto.id"
-              cols="3"
+      <div class="productos">
+        <p style="display: flex; justify-content: center; font-size: 26px; font-weight: 700; font-style: italic;">
+          Productos de una de nuestras categorias...
+        </p>
+        <div style="display: flex; justify-content: center;"><div class="lh"></div></div>
+        <v-row class="mt-5">
+          <v-col
+            v-for="(producto, index) in productosConStock.slice(0, 12)"
+            :key="producto.id"
+            cols="3"
+          >
+            <v-card
+              @mouseover="setHovered(index, true)"
+              @mouseleave="setHovered(index, false)"
+              height="360"
+              class="d-flex flex-column tarjeta"
+              style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
             >
-              <v-card
-                @mouseover="setHovered(index, true)"
-                @mouseleave="setHovered(index, false)"
-                height="360"
-                class="d-flex flex-column tarjeta"
-                style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
-              >
-                <v-img
-                  style="border-radius: 10px"
-                  height="100"
-                  :src="producto.imagen1"
-                  cover
-                ></v-img>
-                <div class="informacion" :class="{ hovered: isHovered[index] }">
-                  <button>
-                    <p style="font-size: 15px; text-align: center">
-                      {{ producto.categoria }}
-                    </p>
-                    <h3
-                      style="
-                        cursor: pointer;
-                        font-size: 15px;
-                        text-align: center;
-                      "
-                    >
-                      {{ producto.nombre }}
-                    </h3>
-                    <h2 style="font-size: 15px; text-align: center">
-                      $ {{ producto.precio }}
-                    </h2>
-                  </button>
-                </div>
-              </v-card>
-            </v-col>
-          </v-row>
-        </div>
+              <v-img
+                style="border-radius: 10px"
+                height="100"
+                :src="producto.imagen1"
+                cover
+              ></v-img>
+              <div class="informacion" :class="{ hovered: isHovered[index] }">
+                <router-link to="ProductosView" style="text-decoration: none; color: black;">
+                  <p style="font-size: 15px; text-align: center">
+                    {{ producto.categoria }}
+                  </p>
+                  <h3
+                    style="cursor: pointer; font-size: 15px; text-align: center"
+                  >
+                    {{ producto.nombre }}
+                  </h3>
+                  <h2 style="font-size: 15px; text-align: center">
+                    $ {{ producto.precio }}
+                  </h2>
+                </router-link>
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
       </div>
     </div>
   </div>
@@ -204,10 +151,10 @@ const amountArticulo = ref(null);
 }
 
 .lh {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 2px solid #ccc;
   margin-bottom: 10px;
   border-radius: 50px;
-  width: 90%;
+  width: 70%;
   height: 5px;
 }
 .CTB {
@@ -236,12 +183,11 @@ const amountArticulo = ref(null);
   transition: 0.6s;
 }
 .productos {
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  border-top-right-radius: 20px; /* Radio de esquina superior derecha */
-  border-bottom-right-radius: 20px; /* Radio de esquina inferior derecha */
+  width: 80%;
+  height: 90%;
+  background-color: rgb(255, 255, 255);
   padding: 2em 1em;
+  border-radius: 50px;
 }
 
 .tarjeta {
@@ -513,7 +459,7 @@ input[type="number"] {
   margin: auto;
   overflow: hidden;
   margin-block-end: 50px;
-  margin-top: -80px;
+  margin-top: -60px;
 }
 .titulo {
   color: black;
@@ -554,9 +500,9 @@ input[type="number"] {
 
 .vista {
   display: flex;
-  width: 80vw;
+  width: 90%;
   height: 90%;
-  background-color:#004ff9 ;
+  background-color: #004ff9;
 }
 
 .textos-header {
@@ -615,19 +561,5 @@ input[type="number"] {
   font-size: 24px;
   margin-top: 20px;
   color: #9e9797;
-}
-.tarjetas {
-  width: 75%;
-  display: flex;
-  flex-direction: column;
-}
-
-.productos {
-  width: 75%;
-  height: 100%;
-  background-color: white;
-  border-top-right-radius: 20px; /* Radio de esquina superior derecha */
-  border-bottom-right-radius: 20px; /* Radio de esquina inferior derecha */
-  padding: 2em 1em;
 }
 </style>

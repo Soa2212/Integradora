@@ -510,6 +510,7 @@ const prodCategoriaDEF =(id)=>{
   color: #837f7f;
   margin-top: 7px;
   transition: 0.3s;
+  margin-bottom: 7px;
 
 }
 
