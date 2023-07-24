@@ -11,6 +11,21 @@ export const useCarritoStore = defineStore("carrito", {
   }),
   actions: {
     // Función para agregar un elemento al carrito
+    agregarAlCarrito1(item) {
+      const index = this.carritoLS.findIndex(
+        (producto) => producto.Articulo === item.Articulo
+      );
+
+      if (index !== -1) {
+        // Si el producto ya existe, actualizamos la cantidad del producto
+        this.carritoLS[index].cantidad = item.cantidad;
+      } else {
+        // Si el producto no existe, lo agregamos al carrito
+        this.carritoLS.push(item);
+      }
+
+      this.guardarCarritoEnLocalStorage();
+    },
     agregarAlCarrito(item) {
       const index = this.carritoLS.findIndex(
         (producto) => producto.Articulo === item.Articulo

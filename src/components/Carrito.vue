@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed, watch } from "vue";
 import { useCarritoStore } from "@/stores/carrito";
 
 // Obtén la instancia del store
@@ -24,7 +24,7 @@ const increment = (item) => {
   // Actualizar el input para reflejar la nueva cantidad
   inputValue.value = item.cantidad;
 
-  carritoStore.agregarAlCarrito(item); // Guardar el cambio en el store
+  carritoStore.agregarAlCarrito1(item); // Guardar el cambio en el store
 };
 
 // Función para decrementar la cantidad del item
@@ -32,7 +32,7 @@ const decrement = (item) => {
   item.cantidad = Math.max(1, parseInt(item.cantidad) - 1);
   inputValue.value = item.cantidad; // Actualizar el input para reflejar la nueva cantidad
 
-  carritoStore.agregarAlCarrito(item); // Guardar el cambio en el store
+  carritoStore.agregarAlCarrito1(item); // Guardar el cambio en el store
 };
 
 // Función para validar y mantener solo números enteros en el input
@@ -50,7 +50,7 @@ const onInputChange = (item, event) => {
 
   lastValidValue.value = item.cantidad; // Actualizar lastValidValue con el valor válido actual
 
-  carritoStore.agregarAlCarrito(item); // Guardar el cambio en el store
+  carritoStore.agregarAlCarrito1(item); // Guardar el cambio en el store
 };
 
 const elimArt = (idArticulo) => {
@@ -60,6 +60,33 @@ const elimArt = (idArticulo) => {
 const vaCA = () => {
   carritoStore.eliminarTodoDelLocalStorage();
   location.reload();
+};
+
+const calcularTotalParcial = (item) => {
+  return item.cantidad * parseFloat(item.precio);
+};
+
+const total = ref(0);
+
+const actualizarTotal = () => {
+  total.value = carritoLS.reduce((total, item) => total + calcularTotalParcial(item), 0);
+};
+
+// Calculamos el total al inicio
+actualizarTotal();
+
+// Observamos cambios en carritoLS y actualizamos el total reactivamente
+watch(carritoLS, () => {
+  actualizarTotal();
+});
+
+const finalizarCompra = () => {
+  const carritoParaCompra = carritoLS.map((item) => ({
+    Articulo: item.Articulo,
+    cantidad: item.cantidad,
+  }));
+  console.log("Carrito para la BD")
+  console.log(carritoParaCompra)
 };
 </script>
 
@@ -97,8 +124,12 @@ const vaCA = () => {
         </div>
         <div style="width: 30%; display: flex; flex-direction: column">
           <div class="IA">{{ item.nombre }}</div>
-          <div v-if="item.talla != 'No seleccionada' " class="IAB">Tamaño: {{ item.talla }}</div>
-          <div v-if="item.color != '0' && item.color != 'No tiene'  " class="IAB">Color: {{ item.color }}</div>
+          <div v-if="item.talla != 'No seleccionada'" class="IAB">
+            Tamaño: {{ item.talla }}
+          </div>
+          <div v-if="item.color != '0' && item.color != 'No tiene'" class="IAB">
+            Color: {{ item.color }}
+          </div>
         </div>
         <div class="PA">${{ item.precio }}</div>
         <div
@@ -124,15 +155,14 @@ const vaCA = () => {
           <div
             style="
               width: 50%;
-              overflow: hidden;
+              overflow-x: auto;
               display: flex;
-              justify-content: center;
+              justify-content: start;
               align-items: center;
+              margin-left: 20px;
             "
           >
-            <p style="white-space: nowrap">
-              ${{ item.cantidad * item.precio }}
-            </p>
+            <p style="white-space: nowrap">${{ calcularTotalParcial(item) }}</p>
           </div>
           <div
             style="
@@ -222,6 +252,19 @@ const vaCA = () => {
         </div>
       </div>
     </div>
+    <div class="submenu">
+      <div class="subTTL">
+        <div style="display: flex;">
+          <div style="width: 50%; display: flex; justify-content: center">
+            <strong style="font-size: 20px;">TOTAL :</strong>
+          </div>
+          <div style="width: 50%; display: flex; justify-content: center">
+            <strong style="font-size: 20px;">${{ total }}</strong>
+          </div>
+        </div>
+        <button class="botnsEstF" @click="finalizarCompra "><strong class="botnsP">FINALIZAR COMPRA</strong></button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -246,11 +289,33 @@ const vaCA = () => {
   flex-wrap: wrap; /* Agregamos flex-wrap: wrap para que los elementos se distribuyan en múltiples líneas */
   background-color: white;
   width: 100%;
-  height: 100%;
+  height: 50%;
   border-top-right-radius: 30px;
   border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
   padding-left: 20px;
   padding-right: 20px;
+}
+
+.submenu {
+  display: flex;
+  justify-content: end;
+  flex-wrap: wrap; /* Agregamos flex-wrap: wrap para que los elementos se distribuyan en múltiples líneas */
+  background-color: beige;
+  width: 100%;
+  height: 50%;
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
+}
+.subTTL {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 40%;
+  background-color: white;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+
 }
 
 .item {
@@ -307,4 +372,23 @@ input[type="number"] {
 .btnA:hover {
   color: black;
 }
+
+.botnsP {
+  font-size: 15px;
+  margin-top: 10px;
+  margin-block-end: 10px;
+}
+
+.botnsEstF {
+  width: 80%;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  background-color: black;
+  color: white;
+}
+
+
 </style>

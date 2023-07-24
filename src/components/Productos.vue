@@ -201,7 +201,7 @@ const DinputValue = () => {
 
 //Estas tres funciones de abajo sirven para la alerta si el cliente agrega mas productos de los posibles
 const mostrarModal = ref(false);
-const tiempoVisible = 600; // Tiempo en milisegundos (1/8 de segundo)
+const tiempoVisible = 300; // Tiempo en milisegundos
 let temporizador = null;
 const mostrarModal2 = ref(false);
 
@@ -668,15 +668,7 @@ s .fade-enter-active,
   margin-block-end: 10px;
 }
 
-.botnsEst {
-  width: 80%;
-  margin-left: 20px;
-  display: flex;
-  justify-content: center;
-  align-self: center;
-  border: solid 2px black;
-  margin-top: 10px;
-}
+
 
 .botnsEstF {
   width: 80%;

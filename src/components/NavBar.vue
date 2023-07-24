@@ -14,11 +14,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener("scroll", handleScroll);
 });
-const selectedIndex  = ref(0);
 
-const selectNavItemF = (index) => {
-  selectedIndex .value = index;
-};
 const categorias = ref([]);
 fetch("http://localhost/categorias") //Me consigue todas las categorias para mostrar en la pagina
   .then((res) => res.json())
@@ -35,10 +31,10 @@ fetch("http://localhost/categorias") //Me consigue todas las categorias para mos
   <ul class="menu" :class="{ menuDD: isNavActive }">
     <RouterLink to="HomeView" :class="{ IMGD: isNavActive }" ><img src="../assets/Protecc_Seg.png" alt="Logo" style="height: 65px; width: 215px; margin-left: 40px; margin-top: 10px;"></RouterLink>
       <div style="width: 80%; display: flex; align-items: center; justify-content: flex-start; gap: 20px;">
-        <li><RouterLink to="HomeView" :class="{ 'selected': selectedIndex === 0 }" @click.native="selectNavItemF(0)">Inicio</RouterLink></li>
-        <li><RouterLink to="ProductosView"  :class="{ 'selected': selectedIndex === 1 }" @click.native="selectNavItemF(1)">Catalogo</RouterLink></li> 
-        <li><a href="https://www.actividadsegura.com/_files/ugd/ebd4b4_b015367e2e184b23808b0addf4860c35.pdf" target="_blank" :class="{ 'selected': selectedIndex === 2 }" @click.native="selectNavItemF(2)">Catalogo PDF</a></li>
-        <li><RouterLink to="AcercaView" :class="{ 'selected': selectedIndex === 4 }" @click.native="selectNavItemF(4)">Acerca de</RouterLink></li>
+        <li><RouterLink to="HomeView" >Inicio</RouterLink></li>
+        <li><RouterLink to="ProductosView">Catalogo</RouterLink></li> 
+        <li><a href="https://www.actividadsegura.com/_files/ugd/ebd4b4_b015367e2e184b23808b0addf4860c35.pdf" target="_blank" >Catalogo PDF</a></li>
+        <li><RouterLink to="AcercaView">Acerca de</RouterLink></li>
     </div>
     <div style="width: 20%; display: flex; align-items: center; justify-content: space-evenly; margin-left: 20px;">
       <RouterLink to="/Carrito"><img src="../assets/carrito.png" alt=""  style="height: 30px; width: 40px;"> </RouterLink>
@@ -110,22 +106,7 @@ header .active ul li{
   transition: .5s;
   
 }
-.selected {
-  position: relative;
-}
 
-.selected::after {
-  content: '';
-  display: block;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  margin-left: -2px;
-  width: 105%;
-  height: 3px;
-  border-radius: 10px;
-  background-color: rgba(76, 170, 237, 0.3);
-}
 /*Color de la barra de navegacion*/
 .nav{
   position: fixed;
