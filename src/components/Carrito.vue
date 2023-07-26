@@ -88,6 +88,8 @@ const finalizarCompra = () => {
   console.log("Carrito para la BD")
   console.log(carritoParaCompra)
 };
+
+  
 </script>
 
 <template>

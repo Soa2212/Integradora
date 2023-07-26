@@ -55,8 +55,7 @@ const routes = [
     path:'/AgregarAdmin',
     name:'AdminAdd',
     component:()=>import('@/components/AgregarUsuarioAdmin.vue')
-  }
-
+  },
 ]
   
 

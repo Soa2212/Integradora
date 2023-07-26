@@ -37,9 +37,9 @@ fetch("http://localhost/categorias") //Me consigue todas las categorias para mos
         <li><RouterLink to="AcercaView">Acerca de</RouterLink></li>
     </div>
     <div style="width: 20%; display: flex; align-items: center; justify-content: space-evenly; margin-left: 20px;">
-      <RouterLink to="/Carrito"><img src="../assets/carrito.png" alt=""  style="height: 30px; width: 40px;"> </RouterLink>
+      <RouterLink to="/Carrito"><img src="../assets/carrito.png" alt=""  class="carrIMG"> </RouterLink>
       <li>
-        <li ><img src="../assets/user.png" alt="" style="height: 30px; width: 30px;" /></li>
+        <li ><img src="../assets/user.png" alt="" class="usrIMG" /></li>
           <ul class="menu-drop" style="font-size: 20px; width: 250px;">
               <li><RouterLink to="LoginView">Iniciar Sesion</RouterLink></li>
               <li><RouterLink to="#">Cerrar Sesion</RouterLink></li>
@@ -214,4 +214,26 @@ header .active ul li{
   background-color: #000000;
 }
 
+.carrIMG{
+  height: 30px; 
+  width: 40px;
+  transition: 0.6s;
+}
+
+.carrIMG:hover{
+  height: 33px; 
+  width: 43px;
+  transition: 0.4s;
+}
+
+.usrIMG{
+  height: 30px; 
+  width: 30px;
+  transition: 0.6s;
+}
+.usrIMG:hover{
+  height: 33px; 
+  width: 33px;
+  transition: 0.4s;
+}
 </style>

@@ -99,11 +99,11 @@ function guardarProducto(
       carritoP.value.push(nuevoProducto);
       mostrarPestanaV();
     }
-
     carritoLS();
   } else {
     mostrarPestana();
   }
+
 }
 
 const carritoLS = () => {
@@ -111,6 +111,7 @@ const carritoLS = () => {
   carritoP.value.forEach((producto) => {
     carritoStore.agregarAlCarrito(producto);
   });
+  carritoP.value = []; 
 };
 
 //El objeto de abajo y la funcion que le sigue es para mostra ciertas caracteristicas cuando se seleccione un producto
@@ -225,7 +226,6 @@ const iniciarTemporizadorV = () => {
   clearTimeout(temporizador); // Cancelar el temporizador existente, si lo hay
   temporizador = setTimeout(() => {
     mostrarModal2.value = false;
-    location.reload(); // Reiniciar la página
   }, tiempoVisible);
 };
 
@@ -568,6 +568,7 @@ const prodCategoriaDEF = (id) => {
   background-color: white;
   border-top-right-radius: 20px; /* Radio de esquina superior derecha */
   border-bottom-right-radius: 20px; /* Radio de esquina inferior derecha */
+  border-bottom-left-radius: 20px;
   padding: 2em 1em;
 }
 

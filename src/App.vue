@@ -1,31 +1,67 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
-import NavBar from './components/NavBar.vue';
-import Footer from './components/Footer.vue';
-import AdminView from './views/AdminView.vue';
+import { ref, onMounted , watch } from "vue";
+import { useRouter, RouterView } from "vue-router";
+import NavBar from "./components/NavBar.vue";
+import Footer from "./components/Footer.vue";
+import AdminView from "./views/AdminView.vue";
 
-// Cambiar el valor de esta variable a 'false' cuando quieran visualizar la otra pagina(como eres mañoso tovar)
-let admin = false;
+const loginResult = ref({//Este es el arreglo que se vendra con la verificacion
+  isAdmin: true, // Cambiar a 'false' si el usuario es cliente
+});
+
+// Verificar el rol del usuario y establecer la variable 'admin'
+let admin = loginResult.value.isAdmin;
+
+watch(
+  () => admin,
+  (newValue) => {
+    // Redirigir al usuario según su rol después de que inicie sesión
+    const router = useRouter();
+    if (newValue) {
+      // El usuario es administrador, redirigir a la vista de administrador (por ejemplo, /AdminProductos)
+      router.push({ name: "AdminPro" }); // Cambia "AdminPro" al nombre de la ruta de AdminProductos
+    } else {
+      // El usuario es cliente, redirigir a la vista de cliente (página de inicio)
+      router.push({ name: "HomeView" });
+    }
+  }
+);
+
+// Realizar la redirección después de que el componente se haya montado y el valor de 'admin' esté actualizado
+onMounted(() => {
+  if (admin !== null) {
+    // Realizar la redirección inicial según el valor de 'admin' al montar el componente
+    const router = useRouter();
+    if (admin) {
+      router.push({ name: "AdminPro" }); // Cambia "AdminPro" al nombre de la ruta de AdminProductos
+    } else {
+      router.push({ name: "HomeView" });
+    }
+  }
+});
 </script>
 
 <template>
-<v-app v-if="admin" id="administrador">
-  <AdminView></AdminView>
-</v-app>
-<v-app v-if="!admin" id="inspire">
-  <v-system-bar style="height: -24px;">
-    <NavBar></NavBar>
-  </v-system-bar>
-  
- <div style="margin-top: 70px; background-color:beige ;">
-  <div style="margin-top: 30px;"><RouterView></RouterView></div>
-  <div>
-    <Footer></Footer>
-  </div>
-</div>
+  <v-app>
+    <v-system-bar style="height: -24px">
+      <!-- Mostrar NavBar solo si el usuario es cliente -->
+      <NavBar v-if="!admin"></NavBar>
+    </v-system-bar>
 
-</v-app>
-
+    <div style="margin-top: 70px; background-color: beige">
+      <!-- Verificar si el usuario es administrador -->
+      <template v-if="admin">
+        <!-- Mostrar la vista de administrador -->
+        <AdminView></AdminView>
+      </template>
+      <template v-else>
+        <!-- Mostrar la vista de cliente -->
+        <div style="margin-top: 30px">
+          <RouterView></RouterView>
+          <Footer></Footer>
+        </div>
+      </template>
+    </div>
+  </v-app>
 </template>
-<style>
-</style>
+<style></style>
