@@ -5,6 +5,7 @@ const categorias = ref({});
 const eliminar = ref(false);
 const dialog = ref(false);
 const dialogDel = ref(false);
+const dialogInh = ref(false);
 const alerta = ref(false);
 
 const seleccionados = ref([]);
@@ -36,9 +37,23 @@ const eliminarCategoria = (event) => {
     dialogDel.value = false;
   }  
 }
+
+const inhabilitarCategoria = (event) => {
+  if(seleccionados.value[0] != undefined){
+    alerta.value = false;
+    fetch('http://localhost/inhabilitarCat', {
+  method: "POST",
+  body: JSON.stringify(seleccionados.value)})
+  } else {
+    event.preventDefault();
+    alerta.value = true;
+    dialogDel.value = false;
+  }  
+}
 </script>
 
 <template>
+  {{ seleccionados }}
   <v-row class="pa-5">
     <v-col cols="auto">
       <v-dialog v-model="dialog" width="900">
@@ -100,7 +115,27 @@ const eliminarCategoria = (event) => {
         </form>
       </v-card>
     </v-dialog>
-        
+    <v-dialog
+      v-model="dialogInh"
+      persistent
+      width="min-content"
+    >
+      <template v-slot:activator="{ props }">
+        <v-btn :=props class="ma-3" v-if="eliminar">Inhabilitar</v-btn>
+      </template>
+      <v-card>
+        <form @submit="inhabilitarCategoria">
+          <v-card-title>
+          <span class="text-h5 d-flex mb-2">¿Está seguro que desea inhabilitar las categorias seleccionadas?</span>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue-darken-1" variant="text" type="submit">Acepto</v-btn>
+          <v-btn color="blue-darken-1" variant="text" @click="dialogInh = false">Cancelar</v-btn>
+        </v-card-actions>
+        </form>
+      </v-card>
+    </v-dialog>
       </div>
       <div class="tabla">
         <v-table>
