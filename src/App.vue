@@ -6,7 +6,7 @@ import Footer from "./components/Footer.vue";
 import AdminView from "./views/AdminView.vue";
 
 const loginResult = ref({//Este es el arreglo que se vendra con la verificacion
-  isAdmin: false, // Cambiar a 'false' si el usuario es cliente
+  isAdmin: true, // Cambiar a 'false' si el usuario es cliente
 });
 
 // Verificar el rol del usuario y establecer la variable 'admin'
@@ -43,12 +43,12 @@ onMounted(() => {
 
 <template>
   <v-app>
-    <v-system-bar style="height: -24px">
+    <v-system-bar style="height: -24px" v-if="!admin">
       <!-- Mostrar NavBar solo si el usuario es cliente -->
-      <NavBar v-if="!admin"></NavBar>
+      <NavBar ></NavBar>
     </v-system-bar>
 
-    <div style="margin-top: 70px; background-color: beige">
+    <div style=" background-color: beige">
       <!-- Verificar si el usuario es administrador -->
       <template v-if="admin">
         <!-- Mostrar la vista de administrador -->
