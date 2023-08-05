@@ -747,6 +747,7 @@ input[type="number"] {
 .scroll {
   /* Estilo para el div que contendrá los botones de las tallas */
   display: flex;
+  max-width: 400px;
   justify-content: flex-start;
   margin-top: 10px;
   align-items: center;
