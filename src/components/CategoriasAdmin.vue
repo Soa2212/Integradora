@@ -1,12 +1,13 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref} from 'vue';
 
 const categorias = ref({});
 const eliminar = ref(false);
 const dialog = ref(false);
-const dialogDel = ref(false);
 const dialogInh = ref(false);
 const alerta = ref(false);
+const timestamp = Date.now();
+const url = `http://localhost/inhabilitarCat?timestamp=${timestamp}`;
 
 const seleccionados = ref([]);
 
@@ -15,53 +16,63 @@ const categoriaNueva = ref({
   estado: 'activo'
 });
 
+const mostrarCategorias = () => {
 fetch("http://localhost/categorias")
 .then(res => res.json())
 .then(data => categorias.value = data.data);
+}
 
-const agregarCategoria = () => {
+onMounted(() => {
+  mostrarCategorias();
+})
+
+const cancelar = () => {
+  eliminar.value=false;
+  seleccionados.value  = [];
+}
+
+const agregarCategoria = (event) => {
+  event.preventDefault();
+  router.push({ name: 'AdminCat' });
+  dialog.value = false;
   fetch('http://localhost/insertarCat', {
   method: "POST",
-  body: JSON.stringify(categoriaNueva.value)
-})};
-
-const eliminarCategoria = (event) => {
-  if(seleccionados.value[0] != undefined){
-    alerta.value = false;
-    fetch('http://localhost/eliminarCat', {
-  method: "POST",
-  body: JSON.stringify(seleccionados.value)})
-  } else {
-    event.preventDefault();
-    alerta.value = true;
-    dialogDel.value = false;
-  }  
+  body: JSON.stringify(categoriaNueva.value) 
+})
+categoriaNueva.value.categoria = '';
+setTimeout(() => {
+  mostrarCategorias();
+}, 1000);
 }
 
 const inhabilitarCategoria = (event) => {
   if(seleccionados.value[0] != undefined){
+    event.preventDefault();
+    dialogInh.value = false;
     alerta.value = false;
-    fetch('http://localhost/inhabilitarCat', {
-  method: "POST",
-  body: JSON.stringify(seleccionados.value)})
+    fetch(url, {
+    method: "POST",
+    body: JSON.stringify(seleccionados.value)})
+    seleccionados.value  = [];
+    setTimeout(() => {
+  mostrarCategorias();
+}, 1000);
   } else {
     event.preventDefault();
     alerta.value = true;
-    dialogDel.value = false;
+    dialogInh.value = false;
   }  
 }
 </script>
 
 <template>
-  {{ seleccionados }}
   <v-row class="pa-5">
     <v-col cols="auto">
       <v-dialog v-model="dialog" width="900">
         <template v-slot:activator="{ props }">
           <v-btn v-bind="props" block rounded="xl" size="large"
             ><v-icon icon="mdi-plus-circle" class="mr-2"></v-icon>Agregar
-            categoria</v-btn
-          >
+            categoria</v-btn>
         </template>
         <v-card>
           <v-card-title>Agregar categoria</v-card-title>
@@ -91,10 +102,23 @@ const inhabilitarCategoria = (event) => {
     <div class="pa-5">
       <h1>Categorias</h1>
       <v-divider class="mb-5" thickness="2" color="black"></v-divider>
-      <div class="d-flex justify-end">
-        <v-btn @click="eliminar=false" class="ma-3" v-if="eliminar">Cancelar</v-btn>
-        <v-dialog
-      v-model="dialogDel"
+      
+      <div class="d-flex justify-space-between">
+        <div class="pb-2">
+          <v-row class="d-flex ml-3 mt-1">
+            <v-col cols="auto">
+              <v-alert v-if="alerta"
+                density="compact"
+                type="warning"
+                title="Por favor, seleccione una categoria"
+              ></v-alert>
+          </v-col>
+        </v-row>
+        </div>
+        <div>
+        <v-btn @click="cancelar" class="ma-3" v-if="eliminar">Cancelar</v-btn>
+    <v-dialog
+      v-model="dialogInh"
       persistent
       width="min-content"
     >
@@ -102,31 +126,9 @@ const inhabilitarCategoria = (event) => {
         <v-btn :=props class="ma-3" v-if="eliminar">Eliminar</v-btn>
       </template>
       <v-card>
-        <form @submit="eliminarCategoria">
-          <v-card-title>
-          <span class="text-h5 d-flex mb-2">¿Está seguro que desea eliminar las categorias seleccionadas?</span>
-          <div class="d-flex">Nota: Esto ocasionara que todos los productos y articulos relacionados a esta categoria sean eliminados</div>
-        </v-card-title>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue-darken-1" variant="text" type="submit">Acepto</v-btn>
-          <v-btn color="blue-darken-1" variant="text" @click="dialogDel = false">Cancelar</v-btn>
-        </v-card-actions>
-        </form>
-      </v-card>
-    </v-dialog>
-    <v-dialog
-      v-model="dialogInh"
-      persistent
-      width="min-content"
-    >
-      <template v-slot:activator="{ props }">
-        <v-btn :=props class="ma-3" v-if="eliminar">Inhabilitar</v-btn>
-      </template>
-      <v-card>
         <form @submit="inhabilitarCategoria">
           <v-card-title>
-          <span class="text-h5 d-flex mb-2">¿Está seguro que desea inhabilitar las categorias seleccionadas?</span>
+          <span class="text-h5 d-flex mb-2">¿Está seguro que desea eliminar las categorias seleccionadas?</span>
         </v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -136,6 +138,7 @@ const inhabilitarCategoria = (event) => {
         </form>
       </v-card>
     </v-dialog>
+  </div>
       </div>
       <div class="tabla">
         <v-table>
@@ -165,15 +168,6 @@ const inhabilitarCategoria = (event) => {
             </tr>
           </tbody>
         </v-table>
-        <v-row class="d-flex ml-3 mt-1">
-            <v-col cols="auto">
-              <v-alert v-if="alerta"
-                density="compact"
-                type="warning"
-                title="Por favor, seleccione una categoria"
-              ></v-alert>
-          </v-col>
-        </v-row>
       </div>
     </div>
 </template>
