@@ -3,11 +3,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/',
+    path: '',
     redirect: '/HomeView', // Redireccionar la ruta raíz a la página de inicio
   },
   {
-    path: '/HomeView',
+    path: '/',
     name: 'HomeView',
     component: () => import('@/views/HomeView.vue'),
   },
