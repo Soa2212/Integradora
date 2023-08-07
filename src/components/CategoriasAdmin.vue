@@ -2,6 +2,7 @@
 import { onMounted, ref} from 'vue';
 
 const categorias = ref({});
+const categoriasInactivas = ref({});
 const eliminar = ref(false);
 const dialog = ref(false);
 const dialogInh = ref(false);
@@ -10,6 +11,7 @@ const timestamp = Date.now();
 const url = `http://localhost/inhabilitarCat?timestamp=${timestamp}`;
 
 const seleccionados = ref([]);
+const seleccionadosActivar = ref([]); 
 
 const categoriaNueva = ref({
   categoria: '',
@@ -22,18 +24,25 @@ fetch("http://localhost/categorias")
 .then(data => categorias.value = data.data);
 }
 
+const mostrarCategoriasInactivas = () => {
+fetch("http://localhost/categoriasInactivas")
+.then(res => res.json())
+.then(data => categoriasInactivas.value = data.data);
+}
+
 onMounted(() => {
   mostrarCategorias();
+  mostrarCategoriasInactivas();
 })
 
 const cancelar = () => {
   eliminar.value=false;
   seleccionados.value  = [];
+  alerta.value = false;
 }
 
 const agregarCategoria = (event) => {
   event.preventDefault();
-  router.push({ name: 'AdminCat' });
   dialog.value = false;
   fetch('http://localhost/insertarCat', {
   method: "POST",
@@ -42,7 +51,27 @@ const agregarCategoria = (event) => {
 categoriaNueva.value.categoria = '';
 setTimeout(() => {
   mostrarCategorias();
-}, 1000);
+}, 500);
+}
+
+const habilitarCategoria = (event) => {
+  if(seleccionadosActivar.value[0] != undefined){
+    event.preventDefault();
+    dialogInh.value = false;
+    alerta.value = false;
+    fetch('http://localhost/habilitarCat', {
+    method: "POST",
+    body: JSON.stringify(seleccionadosActivar.value)})
+    seleccionadosActivar.value  = [];
+    setTimeout(() => {
+  mostrarCategorias();
+  mostrarCategoriasInactivas();
+}, 500);
+  } else {
+    event.preventDefault();
+    alerta.value = true;
+    dialogInh.value = false;
+  }  
 }
 
 const inhabilitarCategoria = (event) => {
@@ -56,7 +85,8 @@ const inhabilitarCategoria = (event) => {
     seleccionados.value  = [];
     setTimeout(() => {
   mostrarCategorias();
-}, 1000);
+  mostrarCategoriasInactivas();
+}, 500);
   } else {
     event.preventDefault();
     alerta.value = true;
@@ -96,12 +126,12 @@ const inhabilitarCategoria = (event) => {
         </v-col>
         <v-col cols="auto">
             <v-btn @click="eliminar=true" block rounded="xl" size="large"><v-icon
-          icon="mdi-minus-circle" class="mr-2"></v-icon>Eliminar categoria</v-btn>
+          icon="mdi-cog" class="mr-2"></v-icon>Modificar categorias</v-btn>
         </v-col>
   </v-row>
-    <div class="pa-5">
-      <h1>Categorias</h1>
-      <v-divider class="mb-5" thickness="2" color="black"></v-divider>
+    <div class="pl-5">
+      <h1>Categorias activas</h1>
+      <v-divider class="mb-5 mr-5" thickness="2" color="black"></v-divider>
       
       <div class="d-flex justify-space-between">
         <div class="pb-2">
@@ -141,7 +171,7 @@ const inhabilitarCategoria = (event) => {
   </div>
       </div>
       <div class="tabla">
-        <v-table>
+        <v-table class="mr-5">
           <thead>
             <tr>
               <th v-if="eliminar" class="text-left">
@@ -169,6 +199,38 @@ const inhabilitarCategoria = (event) => {
           </tbody>
         </v-table>
       </div>
+      <h1 class="mt-5">Categorias inactivas</h1>
+      <v-divider class="mb-5 mr-5" thickness="2" color="black"></v-divider>
+      <div class="d-flex justify-end">
+        <v-btn @click="habilitarCategoria" class="ma-3" v-if="eliminar">Habilitar</v-btn>
+      </div>
+      <v-table class="mr-5 mb-5">
+          <thead>
+            <tr>
+              <th v-if="eliminar" class="text-left">
+                Habilitar
+              </th>
+              <th class="text-left">
+                Categoria
+              </th>
+              <th class="text-left">
+                Estado
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="cat in categoriasInactivas"
+              :key="cat.id"
+            >
+              <td v-if="eliminar" style="width: 10px;">
+                <v-checkbox @click="alerta = false" v-model="seleccionadosActivar" class="d-flex justify-center align-center" :value="cat.id"></v-checkbox>
+              </td>
+              <td>{{ cat.categoria }}</td>
+              <td>{{ cat.estado }}</td>
+            </tr>
+          </tbody>
+        </v-table>
     </div>
 </template>
 
