@@ -7,7 +7,7 @@ const routes = [
     redirect: '/HomeView', // Redireccionar la ruta raíz a la página de inicio
   },
   {
-    path: '/',
+    path: '/HomeView',
     name: 'HomeView',
     component: () => import('@/views/HomeView.vue'),
   },
