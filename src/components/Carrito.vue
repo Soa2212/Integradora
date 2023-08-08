@@ -1,9 +1,13 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import { useCarritoStore } from "@/stores/carrito";
+import { RouterLink, useRouter } from "vue-router";
 
 // Obtén la instancia del store
 const carritoStore = useCarritoStore();
+const mostrarModal = ref(false);
+let temporizador = null;
+const tiempoVisible = 10000; // Tiempo en milisegundos
 
 // Obtén la variable carritoLS del store
 const carritoLS = carritoStore.carritoLS;
@@ -90,6 +94,18 @@ const finalizarCompra = () => {
   }));
   console.log("Carrito para la BD");
   console.log(carritoParaCompra);
+  mostrarPestana();
+};
+
+const mostrarPestana = () => {
+  mostrarModal.value = true;
+  if (temporizador) clearTimeout(temporizador);
+};
+
+const iniciarTemporizador = () => {
+  temporizador = setTimeout(() => {
+    mostrarModal.value = false;
+  }, tiempoVisible);
 };
 </script>
 
@@ -112,8 +128,12 @@ const finalizarCompra = () => {
             src="@/assets/carrito_vista0.png"
             style="height: 150px; width: 150px"
           />
-          <strong style="font-size: 30px;">Tu carrito de compras está vacío</strong>
-          <p style="color: #777777; font-size: 15px;">No tiene artículos en su carrito de compras.</p>
+          <strong style="font-size: 30px"
+            >Tu carrito de compras está vacío</strong
+          >
+          <p style="color: #777777; font-size: 15px">
+            No tiene artículos en su carrito de compras.
+          </p>
           <RouterLink
             to="/ProductosView"
             style="
@@ -130,7 +150,7 @@ const finalizarCompra = () => {
               color: white;
             "
           >
-            <strong style="font-size: 15px;">SEGUIR COMPRANDO</strong>
+            <strong style="font-size: 15px">SEGUIR COMPRANDO</strong>
           </RouterLink>
         </div>
       </div>
@@ -318,13 +338,20 @@ const finalizarCompra = () => {
               <strong style="font-size: 20px">${{ total }}</strong>
             </div>
           </div>
-          <button class="botnsEstF" @click="finalizarCompra">
+          <button to="Pedido" class="botnsEstF" @click="finalizarCompra">
             <strong class="botnsP">FINALIZAR COMPRA</strong>
           </button>
         </div>
       </div>
     </div>
   </template>
+  <transition name="pestanita" @after-enter="iniciarTemporizador">
+    <div v-if="mostrarModal" class="modal2">
+      <div class="modal-contenido2">
+        <p>Su pedido ha sido confirmado. Por favor, revise su correo en las próximas 24 horas. Si surge algún problema, no dude en contactarnos.</p>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <style scoped>
@@ -455,9 +482,38 @@ input[type="number"] {
   margin-top: 20px;
   margin-bottom: 30px;
   display: flex;
+  text-decoration: none;
   justify-content: center;
   align-self: center;
   background-color: black;
   color: white;
+}
+
+.modal2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.modal-contenido2 {
+  background-color: green;
+  color: white;
+  margin-top: -510px;
+  padding: 10px;
+  border-radius: 8px;
+
+}
+
+.pestanita-enter-active,
+.pestanita-leave-active {
+  transition: opacity 0.3s;
+}
+
+.pestanita-enter, .pestanita-leave-to /* .pestanita-leave-active in <2.1.8 */ {
+  opacity: 0;
 }
 </style>

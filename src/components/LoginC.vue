@@ -1,17 +1,7 @@
 <script setup>
-import { useField, useForm } from "vee-validate";
 import { ref } from "vue";
 import { useUsuarioStore } from "@/stores/UsuarioStore";
 import Loading from "@/components/Loading.vue";
-const { handleSubmit, handleReset } = useForm({
-  validationSchema: {
-    name(value) {
-      if (value?.length >= 2) return true;
-
-      return "Tu nombre debe tener al menos 2 letras.";
-    },
-  },
-});
 
 const usuarioStore = useUsuarioStore();
 let valid = ref(true);
@@ -35,26 +25,6 @@ function login() {
   data.email = mail.value;
   data.contraseña = contraseña.value;
 
-  fetch("http://localhost/gettoken", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      const token = data.token;
-
-      // Guardar el token JWT en el store 'useUsuarioStore'
-      usuarioStore.setUser({ _token: token });
-
-      // Aquí puedes utilizar el token recibido en la respuesta del servidor, si es necesario
-      console.log(token);
-    })
-    .catch((error) => {
-      console.error("Error al obtener el token:", error);
-    });
 }
 
 </script>

@@ -56,6 +56,12 @@ const routes = [
     name:'AdminAdd',
     component:()=>import('@/components/AgregarUsuarioAdmin.vue')
   },
+  {
+    path:'/Pedido',
+    name:'Pedido',
+    component:()=>import('@/components/PedidoC.vue')
+  },
+  
 ]
   
 
