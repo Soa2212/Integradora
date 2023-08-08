@@ -69,7 +69,10 @@ const calcularTotalParcial = (item) => {
 const total = ref(0);
 
 const actualizarTotal = () => {
-  total.value = carritoLS.reduce((total, item) => total + calcularTotalParcial(item), 0);
+  total.value = carritoLS.reduce(
+    (total, item) => total + calcularTotalParcial(item),
+    0
+  );
 };
 
 // Calculamos el total al inicio
@@ -85,189 +88,243 @@ const finalizarCompra = () => {
     Articulo: item.Articulo,
     cantidad: item.cantidad,
   }));
-  console.log("Carrito para la BD")
-  console.log(carritoParaCompra)
+  console.log("Carrito para la BD");
+  console.log(carritoParaCompra);
 };
-
-  
 </script>
 
 <template>
-  <div class="container">
-    <div class="carrito">
-      <div
-        style="
-          width: 100%;
-          text-align: center;
-          margin-top: 40px;
-          margin-bottom: 40px;
-        "
-      >
-        <p style="text-align: center; font-size: 34px; font-weight: bold">
-          Carrito de compras
-        </p>
-      </div>
-      <div v-for="item in carritoLS" :key="item.Articulo" class="item">
+  <template v-if="carritoLS.length === 0">
+    <div class="container">
+      <div class="carritoV">
         <div
           style="
             display: flex;
             align-items: center;
-            width: 20%;
+            width: 100%;
             justify-content: center;
+            flex-direction: column;
             margin-top: 10px;
             margin-bottom: 10px;
           "
         >
-          <img
-            :src="item.imagen"
-            alt=""
-            style="max-width: 100px; max-height: 100px; border-radius: 20px"
+          <v-img
+            src="@/assets/carrito_vista0.png"
+            style="height: 150px; width: 150px"
           />
-        </div>
-        <div style="width: 30%; display: flex; flex-direction: column">
-          <div class="IA">{{ item.nombre }}</div>
-          <div v-if="item.talla != 'No seleccionada'" class="IAB">
-            Tamaño: {{ item.talla }}
-          </div>
-          <div v-if="item.color != '0' && item.color != 'No tiene'" class="IAB">
-            Color: {{ item.color }}
-          </div>
-        </div>
-        <div class="PA">${{ item.precio }}</div>
-        <div
-          style="
-            width: 20%;
-            display: flex;
-            justify-content: end;
-            align-items: center;
-          "
-        >
-          <button @click="increment(item)" class="btnA">+</button>
-          <input
-            type="number"
-            v-model="item.cantidad"
-            @input="(event) => onInputChange(item, event)"
-            class="inpQA"
-          />
-          <button @click="decrement(item)" class="btnA" style="font-size: 30px">
-            -
-          </button>
-        </div>
-        <div style="width: 20%; display: flex">
-          <div
-            style="
-              width: 50%;
-              overflow-x: auto;
-              display: flex;
-              justify-content: start;
-              align-items: center;
-              margin-left: 20px;
-            "
-          >
-            <p style="white-space: nowrap">${{ calcularTotalParcial(item) }}</p>
-          </div>
-          <div
-            style="
-              width: 50%;
-              overflow: hidden;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            "
-          >
-            <button @click="elimArt(item.Articulo)">
-              <img
-                src="../assets/btnB.png"
-                alt="Eliminar"
-                style="width: 20px; height: 20px"
-              />
-            </button>
-          </div>
-        </div>
-      </div>
-      <div style="width: 50%; margin-bottom: 50px; margin-top: 30px">
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            justify-content: start;
-            height: 40px;
-          "
-        >
+          <strong style="font-size: 30px;">Tu carrito de compras está vacío</strong>
+          <p style="color: #777777; font-size: 15px;">No tiene artículos en su carrito de compras.</p>
           <RouterLink
             to="/ProductosView"
             style="
               text-decoration: none;
-              color: black;
-              font-size: 14px;
-              font-weight: bold;
+              margin-top: 20px;
+              padding-top: 5px;
+              padding-bottom: 5px;
+              padding-left: 25px;
+              padding-right: 25px;
+              display: flex;
+              justify-content: center;
+              align-self: center;
+              background-color: black;
+              color: white;
             "
           >
-            <img
-              src="../assets/btnSC.png"
-              alt=""
-              style="width: 23px; height: 17px; margin-bottom: -3.5px"
-            />
-            SEGUIR COMPRANDO
+            <strong style="font-size: 15px;">SEGUIR COMPRANDO</strong>
           </RouterLink>
         </div>
       </div>
-      <div
-        style="
-          width: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: end;
-        "
-      >
+    </div>
+  </template>
+  <template v-else>
+    <div class="container">
+      <div class="carrito">
         <div
           style="
+            width: 100%;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 40px;
+          "
+        >
+          <p style="text-align: center; font-size: 34px; font-weight: bold">
+            Carrito de compras
+          </p>
+        </div>
+        <div v-for="item in carritoLS" :key="item.Articulo" class="item">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              width: 20%;
+              justify-content: center;
+              margin-top: 10px;
+              margin-bottom: 10px;
+            "
+          >
+            <img
+              :src="item.imagen"
+              alt=""
+              style="max-width: 100px; max-height: 100px; border-radius: 20px"
+            />
+          </div>
+          <div style="width: 30%; display: flex; flex-direction: column">
+            <div class="IA">{{ item.nombre }}</div>
+            <div v-if="item.talla != 'No seleccionada'" class="IAB">
+              Tamaño: {{ item.talla }}
+            </div>
+            <div
+              v-if="item.color != '0' && item.color != 'No tiene'"
+              class="IAB"
+            >
+              Color: {{ item.color }}
+            </div>
+          </div>
+          <div class="PA">${{ item.precio }}</div>
+          <div
+            style="
+              width: 20%;
+              display: flex;
+              justify-content: end;
+              align-items: center;
+            "
+          >
+            <button @click="increment(item)" class="btnA">+</button>
+            <input
+              type="number"
+              v-model="item.cantidad"
+              @input="(event) => onInputChange(item, event)"
+              class="inpQA"
+            />
+            <button
+              @click="decrement(item)"
+              class="btnA"
+              style="font-size: 30px"
+            >
+              -
+            </button>
+          </div>
+          <div style="width: 20%; display: flex">
+            <div
+              style="
+                width: 50%;
+                overflow-x: auto;
+                display: flex;
+                justify-content: start;
+                align-items: center;
+                margin-left: 20px;
+              "
+            >
+              <p style="white-space: nowrap">
+                ${{ calcularTotalParcial(item) }}
+              </p>
+            </div>
+            <div
+              style="
+                width: 50%;
+                overflow: hidden;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              <button @click="elimArt(item.Articulo)">
+                <img
+                  src="../assets/btnB.png"
+                  alt="Eliminar"
+                  style="width: 20px; height: 20px"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="width: 50%; margin-bottom: 50px; margin-top: 30px">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: start;
+              height: 40px;
+            "
+          >
+            <RouterLink
+              to="/ProductosView"
+              style="
+                text-decoration: none;
+                color: black;
+                font-size: 14px;
+                font-weight: bold;
+              "
+            >
+              <img
+                src="../assets/btnSC.png"
+                alt=""
+                style="width: 23px; height: 17px; margin-bottom: -3.5px"
+              />
+              SEGUIR COMPRANDO
+            </RouterLink>
+          </div>
+        </div>
+        <div
+          style="
+            width: 50%;
             display: flex;
             align-items: center;
             justify-content: end;
-            height: 40px;
           "
         >
-          <button
-            to="/ProductosView"
+          <div
             style="
-              text-decoration: none;
-              color: black;
-              font-size: 14px;
-              font-weight: bold;
-              margin-right: 20px;
+              display: flex;
+              align-items: center;
+              justify-content: end;
+              height: 40px;
             "
-            @click="vaCA"
           >
-            <img
-              src="../assets/btnB.png"
-              alt=""
+            <button
+              to="/ProductosView"
               style="
-                width: 19px;
-                height: 17px;
-                margin-bottom: -2.5px;
-                margin-right: 3px;
+                text-decoration: none;
+                color: black;
+                font-size: 14px;
+                font-weight: bold;
+                margin-right: 20px;
               "
-            />
-            VACIAR CARRITO
+              @click="vaCA"
+            >
+              <img
+                src="../assets/btnB.png"
+                alt=""
+                style="
+                  width: 19px;
+                  height: 17px;
+                  margin-bottom: -2.5px;
+                  margin-right: 3px;
+                "
+              />
+              VACIAR CARRITO
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="submenu">
+        <div class="subTTL">
+          <div style="display: flex">
+            <div style="width: 50%; display: flex; justify-content: center">
+              <strong style="font-size: 20px">TOTAL :</strong>
+            </div>
+            <div style="width: 50%; display: flex; justify-content: center">
+              <strong style="font-size: 20px">${{ total }}</strong>
+            </div>
+          </div>
+          <button class="botnsEstF" @click="finalizarCompra">
+            <strong class="botnsP">FINALIZAR COMPRA</strong>
           </button>
         </div>
       </div>
     </div>
-    <div class="submenu">
-      <div class="subTTL">
-        <div style="display: flex;">
-          <div style="width: 50%; display: flex; justify-content: center">
-            <strong style="font-size: 20px;">TOTAL :</strong>
-          </div>
-          <div style="width: 50%; display: flex; justify-content: center">
-            <strong style="font-size: 20px;">${{ total }}</strong>
-          </div>
-        </div>
-        <button class="botnsEstF" @click="finalizarCompra "><strong class="botnsP">FINALIZAR COMPRA</strong></button>
-      </div>
-    </div>
-  </div>
+  </template>
 </template>
 
 <style scoped>
@@ -299,10 +356,23 @@ const finalizarCompra = () => {
   padding-right: 20px;
 }
 
+.carritoV {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: white;
+  width: 100%;
+  height: 50vh;
+  border-radius: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 40px;
+}
+
 .submenu {
   display: flex;
   justify-content: end;
-  flex-wrap: wrap; /* Agregamos flex-wrap: wrap para que los elementos se distribuyan en múltiples líneas */
+  flex-wrap: wrap;
   background-color: beige;
   width: 100%;
   height: 50%;
@@ -317,7 +387,6 @@ const finalizarCompra = () => {
   background-color: white;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-
 }
 
 .item {
@@ -391,6 +460,4 @@ input[type="number"] {
   background-color: black;
   color: white;
 }
-
-
 </style>
