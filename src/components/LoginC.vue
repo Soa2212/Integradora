@@ -9,7 +9,7 @@ const mail = ref("");
 const contraseña = ref("");
 
 const data = {
-  email: "",
+  nombre: "",
   contraseña: "",
 };
 
