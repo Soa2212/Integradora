@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
+import { useTokenStore } from "@/stores/TokenUser";
+
 const isNavActive = ref(false);
 
 const handleScroll = () => {
@@ -22,7 +24,13 @@ fetch("http://localhost/categorias") //Me consigue todas las categorias para mos
     categorias.value = datos.data;
   });  
 
-</script>
+const logout=()=>{
+  tokenStore.eliminarTokenDelLocalStorage();
+  location.reload();
+}
+
+const tokenStore = useTokenStore();
+const tieneToken = tokenStore.tieneToken;</script>
 
 <template>
 
@@ -41,8 +49,9 @@ fetch("http://localhost/categorias") //Me consigue todas las categorias para mos
       <li>
         <li ><img src="../assets/user.png" alt="" class="usrIMG" /></li>
           <ul class="menu-drop" style="font-size: 20px; width: 250px;">
-              <li><RouterLink to="LoginView">Iniciar Sesion</RouterLink></li>
-              <li><RouterLink to="#">Cerrar Sesion</RouterLink></li>
+              <li><RouterLink to="LoginView" v-if="!tieneToken">Iniciar Sesion</RouterLink>
+                <a @click="logout()"  v-else>Cerrar Sesion</a></li>
+              
           </ul>
       </li>
     </div>
@@ -192,12 +201,14 @@ header .active ul li{
   text-decoration: none;
   font-weight: bold;
   transition: all 0.5s ease;
+  cursor: pointer;
   
 }
 /*Letras de hover barra */
 .menu li a:hover{
   display: flex;
   color: rgb(28, 172, 216);
+  cursor: pointer;
 }
 .menu li:hover .menu-drop{
   display: flex;

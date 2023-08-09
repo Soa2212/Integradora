@@ -1,9 +1,9 @@
 <script setup>
 import { ref } from "vue";
-import { useUsuarioStore } from "@/stores/UsuarioStore";
+import { useTokenStore } from "@/stores/TokenUser";
 import Loading from "@/components/Loading.vue";
 
-const usuarioStore = useUsuarioStore();
+const TokenUser = useTokenStore();
 let valid = ref(true);
 const mail = ref("");
 const contrasena = ref("");
@@ -36,12 +36,14 @@ function login() {
       console.log(data);
       token.value = data.data._token;
       console.log(token);
+      TokenUser.guardarTokenEnLocalStorage(token);
     })
     .catch((error) => {
       console.error("Error en la solicitud:", error);
     });
 
   overlay.value = false;
+  location.reload();
 }
 </script>
 <template>
@@ -124,3 +126,4 @@ function login() {
   background-color: rgb(30, 139, 30);
 }
 </style>
+@/stores/TokenUser
