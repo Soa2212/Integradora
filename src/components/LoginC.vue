@@ -6,27 +6,43 @@ import Loading from "@/components/Loading.vue";
 const usuarioStore = useUsuarioStore();
 let valid = ref(true);
 const mail = ref("");
-const contraseña = ref("");
-
-const data = {
-  nombre: "",
-  contraseña: "",
-};
-
+const contrasena = ref("");
 let overlay = ref(false);
+const token = ref();
+
+
+const data = ref({
+  email: "",
+  contrasena: "",
+});
 
 function login() {
-  if (!valid.value) {
-    return;
-  }
+  overlay.value = true;
 
-  const usuarioStore = useUsuarioStore();
+  data.value.contrasena = contrasena.value;
+  data.value.email = mail.value;
 
-  data.email = mail.value;
-  data.contraseña = contraseña.value;
+  fetch("http://localhost/logear", {
+    method: "POST",
+    body: JSON.stringify(data.value),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Hubo un problema con la solicitud.");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      token.value = data.data._token;
+      console.log(token);
+    })
+    .catch((error) => {
+      console.error("Error en la solicitud:", error);
+    });
 
+  overlay.value = false;
 }
-
 </script>
 <template>
   <div class="container">
@@ -51,8 +67,9 @@ function login() {
         ></v-text-field>
 
         <v-text-field
-          v-model="contraseña"
+          v-model="contrasena"
           label="Contraseña"
+          type="password"
         ></v-text-field>
         <v-btn @click="login()" class="custom-btn">submit</v-btn>
       </div>
