@@ -38,23 +38,35 @@ const contraseña = useField("contraseña");
 const confcontraseña = useField("confcontraseña");
 const checkbox = useField("checkbox");
 
+//ESTO ES PARA RICARDOOOOOOOOOOOOOOOOOOOOO
 const objct = ref({
   nombre: "",
   email: "",
   password: "",
   tipo: "normal",
 });
-
-const setUser = () => {
+function setUser() {
   objct.value.nombre = name.value;
   objct.value.email = email.value;
   objct.value.password = contraseña.value;
 
   fetch("http://localhost/agregarUser", {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(objct.value),
-  }).then((res) => res.json());
-};
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Hubo un problema con la solicitud.");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error("Error en la solicitud:", error);
+    });
+}
 </script>
 <template>
   <div class="cont">
