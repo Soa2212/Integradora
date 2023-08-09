@@ -6,7 +6,7 @@ import Footer from "./components/Footer.vue";
 import AdminView from "./views/AdminView.vue";
 
 const loginResult = ref({//Este es el arreglo que se vendra con la verificacion
-  isAdmin: true , // Cambiar a 'false' si el usuario es cliente
+  isAdmin: false , // Cambiar a 'false' si el usuario es cliente
 });
 
 // Verificar el rol del usuario y establecer la variable 'admin'
