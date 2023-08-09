@@ -254,7 +254,7 @@ const prodCategoriaDEF = (id) => {
           <button @click="prodCategoriaDEF" class="CTB">CATÁLOGO</button>
           <div class="lh"></div>
           <p v-for="cat in categorias" :key="cat.id" class="CBB">
-            <button @click="prodCategoria(cat.id)">{{ cat.categoria }}</button>
+            <button @click="prodCategoria(cat.id)" v-if="cat.estado !='inactivo' ">{{ cat.categoria }}</button>
           </p>
         </div>
       </div>
