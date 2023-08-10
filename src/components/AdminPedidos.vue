@@ -91,7 +91,7 @@ fetch("http://localhost/productos")
               :key="prod"
             >
               <td>{{ prod }}</td>
-              <td>{{ productos.imagen1 }}</td>
+              <td>{{ prod.imagen1 }}</td>
               <td><v-combobox
                 :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
                 ></v-combobox>

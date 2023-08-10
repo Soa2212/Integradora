@@ -1,5 +1,6 @@
 <script setup>
 import { ref,computed } from "vue";
+import { useField, useForm } from 'vee-validate'
 
 const productos = ref({});
 const categorias = ref({});
@@ -9,6 +10,8 @@ const dialogDel = ref(false);
 const alerta = ref(false);
 const fileInput = ref(null);
 const selectedImage = ref(null);
+
+let letras = /[a-zA-Z]/;
 
 // Esta propiedad es para mostrar las categorias al momento de agregar un producto
 const categoriasItems = computed(() => categorias.value.map(categoria => categoria.categoria));
@@ -62,6 +65,49 @@ const agregarProducto = () => {
     }
   };
 
+  const { handleSubmit, handleReset } = useForm({
+    validationSchema: {
+      name (value) {
+        if (value?.length >= 2) {
+            nuevoProducto.value.nombre = value;
+            return true}
+
+        return 'Ingrese al menos 2 caracteres'
+      },
+      precio (value) {
+        if (letras.test(value) || value?.length <= 2) 
+          return 'Use solamente numeros'
+        else {
+            nuevoProducto.value.precio = value;
+            return true}
+      },
+      descripcion (value) {
+        if (value?.length >= 5) {
+          nuevoProducto.value.descripcion = value;
+          return true
+        }
+
+        return 'Ingrese al menos 5 caracteres'
+      },
+      categoria (value) {
+        if (value?.length >= 2) {
+            nuevoProducto.value.categoria = value;
+            return true}
+
+        return 'Por favor, seleccione una categoria'
+      }
+    },
+  })
+  const name = useField('name')
+  const precio = useField('precio')
+  const descripcion = useField('descripcion')
+  const categoria = useField('categoria')
+
+  const submit = handleSubmit(values => {
+    agregarProducto()
+    handleReset();
+  });
+
 </script>
 
 <template>
@@ -78,13 +124,15 @@ const agregarProducto = () => {
           <v-card-title>Agregar producto</v-card-title>
           <v-card-text>
             <v-container>
-              <form @submit="agregarProducto">
+              <form @submit.prevent="submit">
                 <v-row>
                 <v-col cols="12" sm="12" md="12">
-                  <v-text-field v-model="nuevoProducto.nombre" label="Nombre*"></v-text-field>
+                  <v-text-field v-model="name.value.value" 
+                  :error-messages="name.errorMessage.value" label="Nombre*"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="12" md="12">
-                  <v-text-field v-model="nuevoProducto.precio"
+                  <v-text-field v-model="precio.value.value"
+                  :error-messages="precio.errorMessage.value"
                     label="Precio"
                     hint="Utilice solo 2 decimales"
                   ></v-text-field>
@@ -95,12 +143,14 @@ const agregarProducto = () => {
     </div>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field v-model="nuevoProducto.descripcion"
+                  <v-text-field v-model="descripcion.value.value"
+                  :error-messages="descripcion.errorMessage.value"
                     label="Descripcion del producto"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="12">
-                    <v-combobox v-model="nuevoProducto.categoria"
+                    <v-combobox v-model="categoria.value.value"
+                    :error-messages="categoria.errorMessage.value"
                         :items="categoriasItems"
                         label="Categoria"
                     ></v-combobox>
