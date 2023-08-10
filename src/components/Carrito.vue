@@ -339,7 +339,7 @@ const iniciarTemporizador = () => {
             </div>
           </div>
           <button to="Pedido" class="botnsEstF" @click="finalizarCompra">
-            <strong class="botnsP">FINALIZAR COMPRA</strong>
+            <strong class="botnsP">REALIZAR PEDIDO</strong>
           </button>
         </div>
       </div>
