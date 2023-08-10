@@ -1,14 +1,17 @@
 <script setup>
 import { ref } from "vue";
 import { useTokenStore } from "@/stores/TokenUser";
+import { useTipoStore } from "@/stores/TipoUSR";
 import Loading from "@/components/Loading.vue";
 
+const TipoUSR = useTipoStore();
 const TokenUser = useTokenStore();
 let valid = ref(true);
 const mail = ref("");
 const contrasena = ref("");
 let overlay = ref(false);
 const token = ref();
+const tipoUSR = ref();
 
 const data = ref({
   email: "",
@@ -35,7 +38,8 @@ function login() {
       // Cambio el nombre de la variable para evitar conflicto con data
       console.log(responseData);
       token.value = responseData.data._token;
-      console.log(token.value); // Acceder al valor del token, no al token en sí
+      tipoUSR.value = responseData.data.usuario.tipo;
+      TipoUSR.guardarTipoEnLocalStorage(tipoUSR.value);
       TokenUser.guardarTokenEnLocalStorage(token.value); // Guardar el valor del token en almacenamiento local
       overlay.value = false; // Mover estas líneas dentro del segundo then
       location.reload();
@@ -83,7 +87,10 @@ function mostrarMensajeError(mensaje) {
           label="Contraseña"
           type="password"
         ></v-text-field>
-        <div id="mensaje-error" style="opacity: 0; color: rgb(177, 0, 0); margin-top: -10px;"></div>
+        <div
+          id="mensaje-error"
+          style="opacity: 0; color: rgb(177, 0, 0); margin-top: -10px"
+        ></div>
         <v-btn @click="login()" class="custom-btn">submit</v-btn>
       </div>
       <Loading :mostrar="overlay"></Loading>

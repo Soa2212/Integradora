@@ -4,9 +4,13 @@ import { useRouter, RouterView } from "vue-router";
 import NavBar from "./components/NavBar.vue";
 import Footer from "./components/Footer.vue";
 import AdminView from "./views/AdminView.vue";
+import { useTipoStore } from "@/stores/TipoUSR";
+
+const TipoUSR = useTipoStore();
+const Admin = TipoUSR.tieneTipo;
 
 const loginResult = ref({//Este es el arreglo que se vendra con la verificacion
-  isAdmin: false, // Cambiar a 'false' si el usuario es cliente
+  isAdmin: Admin, // Cambiar a 'false' si el usuario es cliente
 });
 
 // Verificar el rol del usuario y establecer la variable 'admin'

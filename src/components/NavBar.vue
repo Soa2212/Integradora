@@ -2,7 +2,9 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import { useTokenStore } from "@/stores/TokenUser";
+import { useTipoStore } from "@/stores/TipoUSR";
 
+const TipoUSR = useTipoStore();
 const isNavActive = ref(false);
 
 const handleScroll = () => {
@@ -26,6 +28,7 @@ fetch("http://localhost/categorias") //Me consigue todas las categorias para mos
 
 const logout=()=>{
   tokenStore.eliminarTokenDelLocalStorage();
+  TipoUSR.eliminarTipoDelLocalStorage();
   location.reload();
 }
 
