@@ -1,11 +1,4 @@
-<script setup>
-defineProps({
-  mostrar: {
-    type: Boolean,
-    default: false,
-  },
-});
-</script>
+<script setup></script>
 <template>
   <v-overlay :model-value="mostrar" class="align-center justify-center">
     <v-progress-circular

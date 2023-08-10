@@ -4,14 +4,12 @@ import { ref, computed } from "vue";
 //Las tres primeras variables son para el popup cuando se agrega un producto al carrito o como yo le digo menu individual
 const isHovered = ref([]);
 
-
 const productos = ref([]);
 fetch("http://localhost/categoriasp/2") //Me consigue todos los productos para mostrar en el catalogo
   .then((res) => res.json())
   .then((datos) => {
     productos.value = datos.data;
   });
-
 
 const categorias = ref([]);
 fetch("http://localhost/categorias") //Me consigue todas las categorias para mostrar en la pagina
@@ -27,8 +25,6 @@ function setHovered(index, value) {
 const productosConStock = computed(() => {
   return productos.value.filter((producto) => producto.estado === "activo"); // Filtrador para evitar mostrar productos sin stock o si no estan activos
 });
-
-
 </script>
 <template>
   <div style="width: 100%; height: 100%">
@@ -72,10 +68,20 @@ const productosConStock = computed(() => {
 
     <div class="container">
       <div class="productos">
-        <p style="display: flex; justify-content: center; font-size: 26px; font-weight: 700; font-style: italic;">
+        <p
+          style="
+            display: flex;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 700;
+            font-style: italic;
+          "
+        >
           Productos de una de nuestras categorias...
         </p>
-        <div style="display: flex; justify-content: center;"><div class="lh"></div></div>
+        <div style="display: flex; justify-content: center">
+          <div class="lh"></div>
+        </div>
         <v-row class="mt-5">
           <v-col
             v-for="(producto, index) in productosConStock.slice(0, 12)"
@@ -96,7 +102,10 @@ const productosConStock = computed(() => {
                 cover
               ></v-img>
               <div class="informacion" :class="{ hovered: isHovered[index] }">
-                <router-link to="/ProductosView" style="text-decoration: none; color: black;">
+                <router-link
+                  to="/ProductosView"
+                  style="text-decoration: none; color: black"
+                >
                   <p style="font-size: 15px; text-align: center">
                     {{ producto.categoria }}
                   </p>
