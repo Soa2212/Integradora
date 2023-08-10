@@ -21,8 +21,7 @@ export const useTipoStore = defineStore("Tipo", {
   },
   getters: {
     tieneTipo() {
-      // Cambia la condición para comprobar si Tipo es diferente de "normal"
-      return this.TipoLS == "admin" || "dueño";
+      return this.TipoLS === "admin" || this.TipoLS === "dueño";
     },
   },
 });

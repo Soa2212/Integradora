@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted , watch } from "vue";
+import { ref, onMounted , watch, computed } from "vue";
 import { useRouter, RouterView } from "vue-router";
 import NavBar from "./components/NavBar.vue";
 import Footer from "./components/Footer.vue";
@@ -7,25 +7,22 @@ import AdminView from "./views/AdminView.vue";
 import { useTipoStore } from "@/stores/TipoUSR";
 
 const TipoUSR = useTipoStore();
-const Admin = TipoUSR.tieneTipo;
+const Admin = computed(() => TipoUSR.tieneTipo);
 
 const loginResult = ref({//Este es el arreglo que se vendra con la verificacion
-  isAdmin: Admin, // Cambiar a 'false' si el usuario es cliente
+  isAdmin: Admin.value, // Cambiar a 'false' si el usuario es cliente
 });
 
 // Verificar el rol del usuario y establecer la variable 'admin'
 let admin = loginResult.value.isAdmin;
 
 watch(
-  () => admin,
+  Admin,
   (newValue) => {
-    // Redirigir al usuario según su rol después de que inicie sesión
     const router = useRouter();
     if (newValue) {
-      // El usuario es administrador, redirigir a la vista de administrador (por ejemplo, /AdminProductos)
-      router.push({ name: "AdminPro" }); // Cambia "AdminPro" al nombre de la ruta de AdminProductos
+      router.push({ name: "AdminPro" });
     } else {
-      // El usuario es cliente, redirigir a la vista de cliente (página de inicio)
       router.push({ name: "HomeView" });
     }
   }
@@ -54,7 +51,7 @@ onMounted(() => {
 
     <div style=" background-color: beige;">
       <!-- Verificar si el usuario es administrador -->
-      <template v-if="admin">
+      <template v-if="loginResult.isAdmin">
         <!-- Mostrar la vista de administrador -->
         <AdminView></AdminView>
       </template>

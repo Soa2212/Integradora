@@ -1,5 +1,9 @@
 <script setup>
 import { ref } from "vue";
+import { useTokenStore } from "@/stores/TokenUser";
+import { useTipoStore } from "@/stores/TipoUSR";
+const tokenStore = useTokenStore();
+const TipoUSR = useTipoStore();
 
 const drawer = ref(null);
 
