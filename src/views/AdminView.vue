@@ -6,6 +6,8 @@ const drawer = ref(null);
 const links = [
     ['mdi-store', 'Productos', 'AdminPro'],
     ['mdi-tag', 'Categorias', 'AdminCat'],
+    ['mdi-home-analytics', 'Analiticas', 'AdminRep'],
+    ['mdi-currency-usd', 'Realizar pedido', 'AdminPed'],
     ['mdi-account', 'Agregar usuario', 'AdminAdd']
   ]
 
