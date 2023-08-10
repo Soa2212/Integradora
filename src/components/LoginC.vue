@@ -43,7 +43,17 @@ function login() {
     .catch((error) => {
       console.error("Error en la solicitud:", error);
       overlay.value = false;
+      mostrarMensajeError("Usuario o contraseña incorrectos*");
     });
+}
+
+function mostrarMensajeError(mensaje) {
+  const mensajeErrorElement = document.getElementById("mensaje-error");
+
+  if (mensajeErrorElement) {
+    mensajeErrorElement.textContent = mensaje;
+    mensajeErrorElement.style.opacity = "1";
+  }
 }
 </script>
 <template>
@@ -73,6 +83,7 @@ function login() {
           label="Contraseña"
           type="password"
         ></v-text-field>
+        <div id="mensaje-error" style="opacity: 0; color: rgb(177, 0, 0); margin-top: -10px;"></div>
         <v-btn @click="login()" class="custom-btn">submit</v-btn>
       </div>
       <Loading :mostrar="overlay"></Loading>
