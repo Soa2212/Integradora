@@ -2,16 +2,18 @@
 import { ref } from "vue";
 import { useTokenStore } from "@/stores/TokenUser";
 import { useTipoStore } from "@/stores/TipoUSR";
+import { useEmailStore } from "@/stores/EmailUSR";
 import Loading from "@/components/Loading.vue";
 
+const Email = useEmailStore();
 const TipoUSR = useTipoStore();
 const TokenUser = useTokenStore();
-let valid = ref(true);
 const mail = ref("");
 const contrasena = ref("");
 let overlay = ref(false);
 const token = ref();
 const tipoUSR = ref();
+const emailusr = ref();
 
 const data = ref({
   email: "",
@@ -39,7 +41,9 @@ function login() {
       console.log(responseData);
       token.value = responseData.data._token;
       tipoUSR.value = responseData.data.usuario.tipo;
+      emailusr.value = responseData.data.usuario.email;
       TipoUSR.guardarTipoEnLocalStorage(tipoUSR.value);
+      Email.guardarEmailEnLocalStorage(emailusr.value);
       TokenUser.guardarTokenEnLocalStorage(token.value); // Guardar el valor del token en almacenamiento local
       overlay.value = false; // Mover estas líneas dentro del segundo then
       location.reload();

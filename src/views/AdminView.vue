@@ -2,8 +2,12 @@
 import { ref } from "vue";
 import { useTokenStore } from "@/stores/TokenUser";
 import { useTipoStore } from "@/stores/TipoUSR";
+import { useEmailStore } from "@/stores/EmailUSR";
 const tokenStore = useTokenStore();
 const TipoUSR = useTipoStore();
+
+const Email = useEmailStore();
+const contenidoEmailLS = Email.getEmailLS;
 
 const drawer = ref(null);
 
@@ -28,7 +32,7 @@ const logout = () => {
       <v-sheet color="grey-lighten-4" class="pa-4">
         <v-avatar class="mb-4" color="grey-darken-1" size="64"></v-avatar>
 
-        <div>john@google.com</div>
+        <div>{{contenidoEmailLS}}</div>
       </v-sheet>
 
       <v-divider></v-divider>
