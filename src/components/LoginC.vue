@@ -10,7 +10,6 @@ const contrasena = ref("");
 let overlay = ref(false);
 const token = ref();
 
-
 const data = ref({
   email: "",
   contrasena: "",
@@ -32,18 +31,19 @@ function login() {
       }
       return response.json();
     })
-    .then((data) => {
-      console.log(data);
-      token.value = data.data._token;
-      console.log(token);
-      TokenUser.guardarTokenEnLocalStorage(token);
+    .then((responseData) => {
+      // Cambio el nombre de la variable para evitar conflicto con data
+      console.log(responseData);
+      token.value = responseData.data._token;
+      console.log(token.value); // Acceder al valor del token, no al token en sí
+      TokenUser.guardarTokenEnLocalStorage(token.value); // Guardar el valor del token en almacenamiento local
+      overlay.value = false; // Mover estas líneas dentro del segundo then
+      location.reload();
     })
     .catch((error) => {
       console.error("Error en la solicitud:", error);
+      overlay.value = false;
     });
-
-  overlay.value = false;
-  location.reload();
 }
 </script>
 <template>
