@@ -1,4 +1,3 @@
-// Composables
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -55,6 +54,21 @@ const routes = [
     path: "/AgregarAdmin",
     name: "AdminAdd",
     component: () => import("@/components/AgregarUsuarioAdmin.vue"),
+  },
+  {
+    path: "/AdminReportes",
+    name: "AdminRep",
+    component: () => import("@/components/AdminReportes.vue"),
+  },
+  {
+    path: "/AdminPedido",
+    name: "AdminPed",
+    component: () => import("@/components/AdminPedidos.vue"),
+  },
+  {
+    path: "/Pedido",
+    name: "Pedido",
+    component: () => import("@/components/PedidoC.vue"),
   },
 ];
 
