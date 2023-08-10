@@ -43,12 +43,13 @@ fetch("http://localhost/categorias")
 
 const eliminarProducto = () => {
   if (seleccionados.value[0] != undefined) {
-    fetch("http://localhost/eliminarProd", {
+    fetch("http://localhost/inhabilitarProd", {
       method: "POST",
       body: JSON.stringify(seleccionados.value),
     });
+    dialogDel.value = false;
+    seleccionados.value = [];
   } else {
-    event.preventDefault();
     alerta.value = true;
     dialogDel.value = false;
   }
@@ -199,7 +200,7 @@ const agregarProducto = () => {
           <v-btn :="props" class="ma-3" v-if="eliminar">Eliminar</v-btn>
         </template>
         <v-card>
-          <form @submit="eliminarProducto">
+          <form @submit.prevent="eliminarProducto">
             <v-card-title>
               <div class="text-h5 d-flex mb-2">
                 ¿Está seguro que desea eliminarlos?
