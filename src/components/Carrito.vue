@@ -3,6 +3,7 @@ import { ref, computed, watch } from "vue";
 import { useCarritoStore } from "@/stores/carrito";
 import { RouterLink, useRouter } from "vue-router";
 import { useTokenStore } from "@/stores/TokenUser";
+import BloqLog from "@/components/BloqLog.vue";
 const tokenStore = useTokenStore();
 const tieneToken = tokenStore.tieneToken;
 
@@ -113,6 +114,7 @@ const iniciarTemporizador = () => {
 </script>
 
 <template>
+  <div v-if="!tieneToken"><BloqLog></BloqLog></div>
   <template v-if="carritoLS.length === 0">
     <div class="container">
       <div class="carritoV">
@@ -128,6 +130,7 @@ const iniciarTemporizador = () => {
           "
         >
           <v-img
+            v-if="tieneToken"
             src="@/assets/carrito_vista0.png"
             style="height: 150px; width: 150px"
           />
