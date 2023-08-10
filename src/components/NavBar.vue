@@ -30,7 +30,8 @@ const logout=()=>{
 }
 
 const tokenStore = useTokenStore();
-const tieneToken = tokenStore.tieneToken;</script>
+const tieneToken = tokenStore.tieneToken;
+</script>
 
 <template>
 

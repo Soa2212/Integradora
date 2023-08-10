@@ -2,6 +2,10 @@
 import { ref, computed, watch } from "vue";
 import { useCarritoStore } from "@/stores/carrito";
 import { RouterLink, useRouter } from "vue-router";
+import { useTokenStore } from "@/stores/TokenUser";
+import BloqLog from "@/components/BloqLog.vue";
+const tokenStore = useTokenStore();
+const tieneToken = tokenStore.tieneToken;
 
 // Obtén la instancia del store
 const carritoStore = useCarritoStore();
@@ -110,6 +114,7 @@ const iniciarTemporizador = () => {
 </script>
 
 <template>
+  <div v-if="!tieneToken"><BloqLog></BloqLog></div>
   <template v-if="carritoLS.length === 0">
     <div class="container">
       <div class="carritoV">
@@ -125,6 +130,7 @@ const iniciarTemporizador = () => {
           "
         >
           <v-img
+            v-if="tieneToken"
             src="@/assets/carrito_vista0.png"
             style="height: 150px; width: 150px"
           />
@@ -348,7 +354,10 @@ const iniciarTemporizador = () => {
   <transition name="pestanita" @after-enter="iniciarTemporizador">
     <div v-if="mostrarModal" class="modal2">
       <div class="modal-contenido2">
-        <p>Su pedido ha sido confirmado. Por favor, revise su correo en las próximas 24 horas. Si surge algún problema, no dude en contactarnos.</p>
+        <p>
+          Su pedido ha sido confirmado. Por favor, revise su correo en las
+          próximas 24 horas. Si surge algún problema, no dude en contactarnos.
+        </p>
       </div>
     </div>
   </transition>
@@ -505,7 +514,6 @@ input[type="number"] {
   margin-top: -510px;
   padding: 10px;
   border-radius: 8px;
-
 }
 
 .pestanita-enter-active,
