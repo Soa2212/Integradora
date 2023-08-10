@@ -37,8 +37,8 @@ const Articulos = (id) => {
         if (ArticulosProd.value[0].tall_ropa != "No tiene") {
           tallaArticulo.value = ArticulosProd.value[0].tall_ropa;
         }
-        if (ArticulosProd.value[0].talla_numerica != "No tiene") {
-          tallaArticulo.value = ArticulosProd.value[0].talla_numerica;
+        if (ArticulosProd.value[0].TALLA_NUMERICA!= "No tiene") {
+          tallaArticulo.value = ArticulosProd.value[0].TALLA_NUMERICA;
         }
       }
     });
@@ -373,29 +373,29 @@ const prodCategoriaDEF = (id) => {
                       <button
                         @click="
                           tallaArt(
-                            articulo.talla_numerica,
+                            articulo.TALLA_NUMERICA,
                             articulo.color,
                             articulo.articulo,
                             articulo.cantidad
                           )
                         "
                         class="btnTallas"
-                        v-if="articulo.talla_numerica !== 'No tiene'"
+                        v-if="articulo.TALLA_NUMERICA !== 'No tiene'"
                       >
-                        {{ articulo.talla_numerica }}
+                        {{ articulo.TALLA_NUMERICA }}
                       </button>
                       <button
                         @click="
                           tallaArt(
-                            articulo.talla_ropa,
+                            articulo.tall_ropa,
                             articulo.color,
                             articulo.articulo,
                             articulo.cantidad
                           )
                         "
-                        v-if="articulo.talla_ropa !== 'No tiene'"
+                        v-if="articulo.tall_ropa !== 'No tiene'"
                       >
-                        {{ articulo.talla_ropa }}
+                        {{ articulo.tall_ropa }}
                       </button>
                     </div>
                   </div>
