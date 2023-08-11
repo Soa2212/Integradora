@@ -11,7 +11,7 @@ const tieneToken = tokenStore.tieneToken;
 const carritoStore = useCarritoStore();
 const mostrarModal = ref(false);
 let temporizador = null;
-const tiempoVisible = 10000; // Tiempo en milisegundos
+const tiempoVisible = 9000; // Tiempo en milisegundos
 
 // Obtén la variable carritoLS del store
 const carritoLS = carritoStore.carritoLS;
@@ -94,7 +94,7 @@ watch(carritoLS, () => {
 const objCar = ref({
   articulo: "",
   cantidad: "",
-});//Poner la orden activa para asi tener en cuenta el proceso
+}); //Poner la orden activa para asi tener en cuenta el proceso
 
 const finalizarCompra = () => {
   const carritoParaCompra = carritoLS.map((item) => ({
@@ -137,6 +137,7 @@ const mostrarPestana = () => {
 const iniciarTemporizador = () => {
   temporizador = setTimeout(() => {
     mostrarModal.value = false;
+    vaCA();
   }, tiempoVisible);
 };
 </script>
