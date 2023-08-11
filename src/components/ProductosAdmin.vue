@@ -94,15 +94,31 @@ const cancelarSeleccion = () => {
 const borrarDatosArticulo = () => {
   crearNuevoArticulo.value = false;
   nuevoArticulo.value.producto = '';
+  nuevoArticulo.value.cantidad = '';
+  nuevoArticulo.value.talla_numerica = '33';
+  nuevoArticulo.value.talla_numerica = '7';
+  nuevoArticulo.value.color = '17';
+  borrarDatosProducto();
+}
+
+const borrarDatosProducto = () => {
+  nuevoProducto.value.nombre = '',
+  nuevoProducto.value.descripcion = '',
+  nuevoProducto.value.categoria = '',
+  nuevoProducto.value.precio = '',
+  nuevoProducto.value.imagen1 = ''
 }
 
 const agregarNuevoArticulo = () => {
   crearNuevoArticulo.value = false;
+  agregarTallaRopa.value = false;
+  agregarColor.value = false;
   detallar.value = true;
   nuevoArticulo.value.cantidad = '';
   nuevoArticulo.value.talla_numerica = '33';
   nuevoArticulo.value.talla_ropa = '7';
   nuevoArticulo.value.color = '17';
+  borrarDatosProducto();
 }
 
 onMounted(() => {
@@ -368,7 +384,7 @@ const agregarArticulo = () => {
                       </v-card>
                     </v-dialog>
                   </div>
-                  <v-card-text>
+                  <v-card-text style="color: rgb(177,0,0);">
                     {{ aviso }}
                   </v-card-text>
                   <v-text-field
