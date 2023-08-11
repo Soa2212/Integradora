@@ -96,6 +96,8 @@ const objCar = ref({
   cantidad: "",
 }); //Poner la orden activa para asi tener en cuenta el proceso
 
+
+//Faltara que haga el proceso que permita agregarlo a una orden por medio de un usuario
 const finalizarCompra = () => {
   const carritoParaCompra = carritoLS.map((item) => ({
     Articulo: item.Articulo,
