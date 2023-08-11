@@ -126,21 +126,21 @@ const agregarProducto = () => {
       fetch("http://localhost/insertarProd", {
         method: "POST",
         body: JSON.stringify(nuevoProducto.value)});
-      }
-      detallar.value = true;
+    }}
+    detallar.value = true;
       dialog.value = false;
       setTimeout(() => {
-  fetch("http://localhost/obtenerId", {
-    method: "POST",
-    body: JSON.stringify(producto.value),
-  })
-    .then((res) => res.json())
-    .then((datos) => {
-      nuevoArticulo.value.producto = datos.data[0].id;
-    });
-}, 1000);
-    };
-    };
+        mostrarProductos();
+        fetch("http://localhost/obtenerId", {
+          method: "POST",
+          body: JSON.stringify(producto.value),
+        })
+          .then((res) => res.json())
+          .then((datos) => {
+            nuevoArticulo.value.producto = datos.data[0].id;
+          });
+      }, 1000);
+};
 
 const agregarArticulo = () => {
   fetch("http://localhost/insertarArticulo", {
@@ -189,6 +189,8 @@ const agregarArticulo = () => {
 </script>
 
 <template>
+  {{ nuevoProducto }} <br>
+  {{ nuevoArticulo }}
   <div class="botones">
     <v-col cols="auto">
       <v-dialog v-model="dialog" width="auto">
@@ -347,7 +349,6 @@ const agregarArticulo = () => {
             </v-btn>
           </v-card-actions>
           </div>
-          
         </v-card>
       </v-dialog>
     <v-col cols="auto">
