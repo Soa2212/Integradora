@@ -91,6 +91,11 @@ watch(carritoLS, () => {
   actualizarTotal();
 });
 
+const objCar = ref({
+  articulo: "",
+  cantidad: "",
+});//Poner la orden activa para asi tener en cuenta el proceso
+
 const finalizarCompra = () => {
   const carritoParaCompra = carritoLS.map((item) => ({
     Articulo: item.Articulo,
@@ -98,6 +103,29 @@ const finalizarCompra = () => {
   }));
   console.log("Carrito para la BD");
   console.log(carritoParaCompra);
+  for (let i = 0; i < carritoParaCompra.length; i++) {
+    console.log(carritoParaCompra[i]);
+    objCar.value.articulo = carritoParaCompra[i].Articulo;
+    objCar.value.cantidad = carritoParaCompra[i].cantidad;
+    console.log(objCar.value);
+    console.log(JSON.stringify(objCar.value));
+    fetch("http://localhost/detallar", {
+      method: "POST",
+      body: JSON.stringify(objCar.value),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Hubo un problema con la solicitud.");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error en la solicitud:", error);
+      });
+  }
   mostrarPestana();
 };
 
