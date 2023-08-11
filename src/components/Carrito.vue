@@ -1,13 +1,19 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import { useCarritoStore } from "@/stores/carrito";
-import { RouterLink, useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
 import { useTokenStore } from "@/stores/TokenUser";
+import { useIdStore } from "@/stores/IdUSR";
 import BloqLog from "@/components/BloqLog.vue";
 const tokenStore = useTokenStore();
 const tieneToken = tokenStore.tieneToken;
 
 // Obtén la instancia del store
+const IdUsr = useIdStore();
+const id = IdUsr.IdLS; // Acceder a la variable IdLS desde el store
+
+//Variable que contiene la id es la id de arriba
+
 const carritoStore = useCarritoStore();
 const mostrarModal = ref(false);
 let temporizador = null;
@@ -99,6 +105,7 @@ const objCar = ref({
 
 //Faltara que haga el proceso que permita agregarlo a una orden por medio de un usuario
 const finalizarCompra = () => {
+  console.log(id.value);//Esta variable contiene el id del usuario
   const carritoParaCompra = carritoLS.map((item) => ({
     Articulo: item.Articulo,
     cantidad: item.cantidad,
