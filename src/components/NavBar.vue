@@ -2,8 +2,10 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import { useTokenStore } from "@/stores/TokenUser";
+import { useIdStore } from "@/stores/IdUSR";
 import { useTipoStore } from "@/stores/TipoUSR";
 
+const IdUsr = useIdStore();
 const TipoUSR = useTipoStore();
 const isNavActive = ref(false);
 
@@ -29,6 +31,7 @@ fetch("http://localhost/categorias") //Me consigue todas las categorias para mos
 const logout=()=>{
   tokenStore.eliminarTokenDelLocalStorage();
   TipoUSR.eliminarTipoDelLocalStorage();
+  IdUsr.eliminarIdDelLocalStorage();
   location.reload();
 }
 
