@@ -10,6 +10,10 @@ const productosSeleccionados = ref([]);
 fetch("http://localhost/productos")
   .then((res) => res.json())
   .then((datos) => (productos.value = datos.data));
+
+const waza = () => {
+  console.log(productos);
+};
 </script>
 
 <template>
@@ -59,60 +63,66 @@ fetch("http://localhost/productos")
     </v-dialog>
     <h2>Resumen</h2>
     <v-table class="mr-5 mb-5">
-          <thead>
-            <tr>
-              <th class="text-left">
-                Producto
-              </th>
-              <th class="text-left">
-                Imagen
-              </th>
-              <th class="text-left">
-                Talla
-              </th>
-              <th class="text-left">
-                Talla
-              </th>
-              <th class="text-left">
-                Color
-              </th>
-              <th class="text-left">
-                Cantidad
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="prod in productosSeleccionados"
-              :key="prod"
-            >
-              <td>{{ prod }}</td>
-              <td>{{ prod.imagen1 }}</td>
-              <td><v-combobox
-                :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
-                ></v-combobox>
-              </td>
-              <td><v-combobox
-                :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
-                ></v-combobox>
-              </td>
-              <td><v-combobox
-                :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
-                ></v-combobox>
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
-        <v-row class="mt-2 mr-4 d-flex justify-end">
-            <v-btn
-          color="primary"
-          style="width: min-content;"
-        >
-          Confirmar pedido
-        </v-btn>
-        </v-row>
-        
-    </v-app>
+      <thead>
+        <tr>
+          <th class="text-left">Producto</th>
+          <th class="text-left">Imagen</th>
+          <th class="text-left">Talla</th>
+          <th class="text-left">Talla</th>
+          <th class="text-left">Color</th>
+          <th class="text-left">Cantidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="prod in productosSeleccionados" :key="prod">
+          <td>{{ prod }}</td>
+          <td>{{ prod.imagen1 }}</td>
+          <td>
+            <v-combobox
+              :items="[
+                'California',
+                'Colorado',
+                'Florida',
+                'Georgia',
+                'Texas',
+                'Wyoming',
+              ]"
+            ></v-combobox>
+          </td>
+          <td>
+            <v-combobox
+              :items="[
+                'California',
+                'Colorado',
+                'Florida',
+                'Georgia',
+                'Texas',
+                'Wyoming',
+              ]"
+            ></v-combobox>
+          </td>
+          <td>
+            <v-combobox
+              :items="[
+                'California',
+                'Colorado',
+                'Florida',
+                'Georgia',
+                'Texas',
+                'Wyoming',
+              ]"
+            ></v-combobox>
+          </td>
+        </tr>
+      </tbody>
+    </v-table>
+    <v-row class="mt-2 mr-4 d-flex justify-end">
+      <v-btn color="primary" style="width: min-content">
+        Confirmar pedido
+      </v-btn>
+      <v-btn @click="waza">A</v-btn>
+    </v-row>
+  </v-app>
 </template>
 
 <style scoped>
