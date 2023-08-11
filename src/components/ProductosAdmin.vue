@@ -1,5 +1,5 @@
 <script setup>
-import { ref,computed } from "vue";
+import { ref,computed,onMounted} from "vue";
 import { useField, useForm } from 'vee-validate'
 
 const productos = ref({});
@@ -10,10 +10,21 @@ const dialogDel = ref(false);
 const alerta = ref(false);
 const fileInput = ref(null);
 const selectedImage = ref(null);
+const detallar = ref(false);
+const seleccionarCat = ref(false);
+
+const tallaNum = ref({});
+const tallaRopa = ref({});
+const color = ref({});
 
 let letras = /[a-zA-Z]/;
 
 // Esta propiedad es para mostrar las categorias al momento de agregar un producto
+
+const categoriasId = computed(() =>
+  categorias.value.map((categoria) => categoria.id)
+);
+
 const categoriasItems = computed(() =>
   categorias.value.map((categoria) => categoria.categoria)
 );
@@ -33,13 +44,26 @@ const handleFileChange = () => {
   selectedImage.value = fileInput.value.files[0];
 };
 
-fetch("http://localhost/productos")
+const mostrarProductos = () => {
+  fetch("http://localhost/productos")
   .then((res) => res.json())
   .then((datos) => (productos.value = datos.data));
+}
 
-fetch("http://localhost/categorias")
+const mostrarCategorias = () =>{
+  fetch("http://localhost/categorias")
   .then((res) => res.json())
   .then((datos) => (categorias.value = datos.data));
+}
+
+const cancelarSeleccion = () => {
+  eliminar.value = false;
+  seleccionados.value = [];
+}
+onMounted(() => {
+  mostrarProductos();
+  mostrarCategorias();
+});
 
 const eliminarProducto = () => {
   if (seleccionados.value[0] != undefined) {
@@ -66,6 +90,9 @@ const agregarProducto = () => {
         method: "POST",
         body: JSON.stringify(nuevoProducto.value)});
       };
+      detallar.value = true;
+      dialog.value = false;
+      nuevoProducto.value.imagen1 = null;
     }
   };
 
@@ -92,29 +119,26 @@ const agregarProducto = () => {
         }
 
         return 'Ingrese al menos 5 caracteres'
-      },
-      categoria (value) {
-        if (value?.length >= 2) {
-            nuevoProducto.value.categoria = value;
-            return true}
-
-        return 'Por favor, seleccione una categoria'
       }
     },
   })
   const name = useField('name')
   const precio = useField('precio')
   const descripcion = useField('descripcion')
-  const categoria = useField('categoria')
 
   const submit = handleSubmit(values => {
     agregarProducto()
     handleReset();
+    nuevoProducto.value.categoria='';
+    nuevoProducto.value.descripcion='';
+    nuevoProducto.value.nombre='';
+    nuevoProducto.value.precio='';
   });
 
 </script>
 
 <template>
+  {{ nuevoProducto }}
   <div class="botones">
     <v-col cols="auto">
       <v-dialog v-model="dialog" width="auto">
@@ -125,10 +149,10 @@ const agregarProducto = () => {
           >
         </template>
         <v-card>
+          <form @submit.prevent="submit">
           <v-card-title>Agregar producto</v-card-title>
           <v-card-text>
             <v-container>
-              <form @submit.prevent="submit">
                 <v-row>
                 <v-col cols="12" sm="12" md="12">
                   <v-text-field v-model="name.value.value" 
@@ -143,8 +167,8 @@ const agregarProducto = () => {
                 </v-col>
                 <v-col cols="12">
                   <div>
-      <input type="file" ref="fileInput" @change="handleFileChange"/>
-    </div>
+                    <input type="file" ref="fileInput" @change="handleFileChange"/>
+                  </div>
                 </v-col>
                 <v-col cols="12">
                   <v-text-field v-model="descripcion.value.value"
@@ -153,24 +177,114 @@ const agregarProducto = () => {
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="12">
-                    <v-combobox v-model="categoria.value.value"
-                    :error-messages="categoria.errorMessage.value"
-                        :items="categoriasItems"
-                        label="Categoria"
-                    ></v-combobox>
+                  <div class="text-left">
+                    <v-btn
+                      color="primary"
+                      @click="seleccionarCat = true"
+                    >
+                      Seleccionar categoria
+                    </v-btn>
+
+                    <v-dialog
+                      v-model="seleccionarCat"
+                      width="auto"
+                    >
+                      <v-card class="pa-7">
+                        <v-row v-for="cat in categorias">
+                          <v-card-text><v-checkbox @click="seleccionarCat=false" v-model="nuevoProducto.categoria" :value="cat.id" :label="cat.categoria"></v-checkbox></v-card-text>
+                        </v-row>
+                      </v-card>
+                    </v-dialog>
+                  </div>
                   </v-col>
                   <v-col class="d-flex justify-end">
-                    <v-btn type="submit">Agregar</v-btn>
+                    <v-btn type="submit" >Continuar</v-btn>
                     <v-btn @click="dialog = false" class="ml-3">Cancelar</v-btn>
                   </v-col>
                 </v-row>
-              </form>
             </v-container>
             <small>* Indica que es un campo requerido</small>
           </v-card-text>
+        </form>
         </v-card>
       </v-dialog>
     </v-col>
+    <v-dialog
+        v-model="detallar"
+        width="auto"
+      >
+        <v-card>
+          <v-card-title>
+            Detalle su producto
+          </v-card-title>
+          <div class="text-left">
+                    <v-btn
+                      color="primary"
+                      @click="seleccionarCat = true"
+                    >
+                      Seleccionar color
+                    </v-btn>
+
+                    <v-dialog
+                      v-model="seleccionarCat"
+                      width="auto"
+                    >
+                      <v-card class="pa-7">
+                        <v-row v-for="cat in categorias">
+                          <v-card-text><v-checkbox @click="seleccionarCat=false" v-model="nuevoProducto.categoria" :value="cat.id" :label="cat.categoria"></v-checkbox></v-card-text>
+                        </v-row>
+                      </v-card>
+                    </v-dialog>
+                  </div>
+                  <div class="text-left">
+                    <v-btn
+                      color="primary"
+                      @click="seleccionarCat = true"
+                    >
+                      Seleccionar talla numerica
+                    </v-btn>
+
+                    <v-dialog
+                      v-model="seleccionarCat"
+                      width="auto"
+                    >
+                      <v-card class="pa-7">
+                        <v-row v-for="cat in categorias">
+                          <v-card-text><v-checkbox @click="seleccionarCat=false" v-model="nuevoProducto.categoria" :value="cat.id" :label="cat.categoria"></v-checkbox></v-card-text>
+                        </v-row>
+                      </v-card>
+                    </v-dialog>
+                  </div>
+                  <div class="text-left">
+                    <v-btn
+                      color="primary"
+                      @click="seleccionarCat = true"
+                    >
+                      Seleccionar talla ropa
+                    </v-btn>
+
+                    <v-dialog
+                      v-model="seleccionarCat"
+                      width="auto"
+                    >
+                      <v-card class="pa-7">
+                        <v-row v-for="cat in categorias">
+                          <v-card-text><v-checkbox @click="seleccionarCat=false" v-model="nuevoProducto.categoria" :value="cat.id" :label="cat.categoria"></v-checkbox></v-card-text>
+                        </v-row>
+                      </v-card>
+                    </v-dialog>
+                  </div>
+          <v-card-actions>
+            <v-btn
+              color="primary"
+              variant="text"
+              @click="detallar = false"
+            >
+              Cerrar
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     <v-col cols="auto">
       <v-btn @click="eliminar = true" block rounded="xl" size="large"
         ><v-icon icon="mdi-minus-circle" class="mr-2"></v-icon>Eliminar
@@ -192,7 +306,7 @@ const agregarProducto = () => {
           ></v-alert>
         </v-col>
       </v-row>
-      <v-btn @click="eliminar = false" class="ma-3" v-if="eliminar"
+      <v-btn @click="cancelarSeleccion" class="ma-3" v-if="eliminar"
         >Cancelar</v-btn
       >
       <v-dialog v-model="dialogDel" persistent width="min-content">
@@ -267,3 +381,5 @@ const agregarProducto = () => {
   justify-content: flex-end;
 }
 </style>
+
+
