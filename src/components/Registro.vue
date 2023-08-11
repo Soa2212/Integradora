@@ -2,20 +2,28 @@
 import { ref } from "vue";
 import { useField, useForm } from "vee-validate";
 
+const usuario = ref({
+  nombre: "",
+  email: "",
+  password: "",
+  tipo: "normal",
+});
+
 const { handleSubmit, handleReset } = useForm({
   validationSchema: {
     name(value) {
-      if (value?.length >= 2) return true;
+      if (value?.length >= 2) {
+        usuario.value.nombre = value;
+        return true;
+      }
 
       return "Tu nombre debe tener al menos 2 letras.";
     },
-    phone(value) {
-      if (value?.length > 9 && /[0-9-]+/.test(value)) return true;
-
-      return "Tu numero necesita tener minimo 9 digitos.";
-    },
     email(value) {
-      if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true;
+      if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) {
+        usuario.value.email = value;
+        return true;
+      }
 
       return "Tu email debe tener un dominio valido.";
     },
@@ -25,7 +33,10 @@ const { handleSubmit, handleReset } = useForm({
       return "Tienes que validar.";
     },
     contraseña(value) {
-      if (value === confcontraseña.value.value) return true;
+      if (value === confcontraseña.value.value) {
+        usuario.value.password = value;
+        return true;
+      }
 
       return "Las contraseñas son diferentes";
     },
@@ -34,39 +45,19 @@ const { handleSubmit, handleReset } = useForm({
 const name = useField("name");
 const email = useField("email");
 const contraseña = useField("contraseña");
-
 const confcontraseña = useField("confcontraseña");
 const checkbox = useField("checkbox");
 
-//ESTO ES PARA RICARDOOOOOOOOOOOOOOOOOOOOO
-const objct = ref({
-  nombre: "",
-  email: "",
-  password: "",
-  tipo: "normal",
-});
-function setUser() {
-  objct.value.nombre = name.value;
-  objct.value.email = email.value;
-  objct.value.password = contraseña.value;
-
+const submit = handleSubmit((values) => {
   fetch("http://localhost/agregarUser", {
-    method: 'POST',
-    body: JSON.stringify(objct.value),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Hubo un problema con la solicitud.");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error("Error en la solicitud:", error);
-    });
-}
+    method: "POST",
+    body: JSON.stringify(usuario.value),
+  });
+  handleReset();
+  usuario.value.nombre = '';
+  usuario.value.email = '';
+  usuario.value.password = '';
+});
 </script>
 <template>
   <div class="cont">
@@ -119,7 +110,7 @@ function setUser() {
 
       <div class="btnsc">
         <div style="width: 65%; display: flex; justify-content: end">
-          <v-btn class="form__submit1" type="Comfirmar" @click="setUser()"
+          <v-btn class="form__submit1" type="submit"
             >submit</v-btn
           >
         </div>
