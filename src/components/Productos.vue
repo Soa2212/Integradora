@@ -626,7 +626,7 @@ s .fade-enter-active,
   background-color: white;
   display: flex;
   width: 55%;
-  height: 67%;
+  height: 60%;
   padding: 20px;
   border-radius: 15px;
   position: relative; /* Añadido para posicionar el botón de cierre */
