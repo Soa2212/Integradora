@@ -105,7 +105,6 @@ const agregarNuevoArticulo = () => {
   nuevoArticulo.value.color = '17';
 }
 
-
 onMounted(() => {
   mostrarProductos();
   mostrarCategorias();
