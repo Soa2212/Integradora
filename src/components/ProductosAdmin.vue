@@ -12,10 +12,17 @@ const fileInput = ref(null);
 const selectedImage = ref(null);
 const detallar = ref(false);
 const seleccionarCat = ref(false);
+const producto = ref({
+  nombre: ''
+});
+
+const seleccionarColor = ref(false);
+const seleccionarTallaNum = ref(false);
+const seleccionarTallaRopa = ref(false);
 
 const tallaNum = ref({});
 const tallaRopa = ref({});
-const color = ref({});
+const colores = ref({});
 
 let letras = /[a-zA-Z]/;
 
@@ -40,6 +47,14 @@ const nuevoProducto = ref({
   estado: "activo",
 });
 
+const nuevoArticulo = ref({
+  producto: "",
+  cantidad: "",
+  talla_numerica: "",
+  talla_ropa: "",
+  color: ""
+})
+
 const handleFileChange = () => {
   selectedImage.value = fileInput.value.files[0];
 };
@@ -56,6 +71,24 @@ const mostrarCategorias = () =>{
   .then((datos) => (categorias.value = datos.data));
 }
 
+const mostrarColores = () => {
+  fetch("http://localhost/colores")
+  .then((res) => res.json())
+  .then((datos) => (colores.value = datos.data));
+}
+
+const mostrarTallasNumericas = () => {
+  fetch("http://localhost/tallasNum")
+  .then((res) => res.json())
+  .then((datos) => (tallaNum.value = datos.data));
+}
+
+const mostrarTallasRopa = () => {
+  fetch("http://localhost/tallasRopa")
+  .then((res) => res.json())
+  .then((datos) => (tallaRopa.value = datos.data));
+}
+
 const cancelarSeleccion = () => {
   eliminar.value = false;
   seleccionados.value = [];
@@ -63,6 +96,9 @@ const cancelarSeleccion = () => {
 onMounted(() => {
   mostrarProductos();
   mostrarCategorias();
+  mostrarColores();
+  mostrarTallasNumericas();
+  mostrarTallasRopa();
 });
 
 const eliminarProducto = () => {
@@ -81,6 +117,7 @@ const eliminarProducto = () => {
 
 const agregarProducto = () => {
   if (selectedImage.value) {
+    producto.value.nombre = nuevoProducto.value.nombre;
     const reader = new FileReader();
     reader.readAsDataURL(selectedImage.value);
     reader.onload = () => {
@@ -89,12 +126,29 @@ const agregarProducto = () => {
       fetch("http://localhost/insertarProd", {
         method: "POST",
         body: JSON.stringify(nuevoProducto.value)});
-      };
+      }
       detallar.value = true;
       dialog.value = false;
-      nuevoProducto.value.imagen1 = null;
-    }
-  };
+      setTimeout(() => {
+  fetch("http://localhost/obtenerId", {
+    method: "POST",
+    body: JSON.stringify(producto.value),
+  })
+    .then((res) => res.json())
+    .then((datos) => {
+      nuevoArticulo.value.producto = datos.data[0].id;
+    });
+}, 1000);
+    };
+    };
+
+const agregarArticulo = () => {
+  fetch("http://localhost/insertarArticulo", {
+    method: "POST",
+    body: JSON.stringify(nuevoArticulo.value)
+  })
+  detallar.value = false;
+}
 
   const { handleSubmit, handleReset } = useForm({
     validationSchema: {
@@ -129,16 +183,12 @@ const agregarProducto = () => {
   const submit = handleSubmit(values => {
     agregarProducto()
     handleReset();
-    nuevoProducto.value.categoria='';
-    nuevoProducto.value.descripcion='';
-    nuevoProducto.value.nombre='';
-    nuevoProducto.value.precio='';
+    
   });
 
 </script>
 
 <template>
-  {{ nuevoProducto }}
   <div class="botones">
     <v-col cols="auto">
       <v-dialog v-model="dialog" width="auto">
@@ -217,63 +267,69 @@ const agregarProducto = () => {
           <v-card-title>
             Detalle su producto
           </v-card-title>
-          <div class="text-left">
+          <div class="d-flex pa-5 flex-column">
+            <div class="text-left mb-3">
                     <v-btn
                       color="primary"
-                      @click="seleccionarCat = true"
+                      @click="seleccionarColor = true"
                     >
                       Seleccionar color
                     </v-btn>
 
                     <v-dialog
-                      v-model="seleccionarCat"
+                      v-model="seleccionarColor"
                       width="auto"
                     >
                       <v-card class="pa-7">
-                        <v-row v-for="cat in categorias">
-                          <v-card-text><v-checkbox @click="seleccionarCat=false" v-model="nuevoProducto.categoria" :value="cat.id" :label="cat.categoria"></v-checkbox></v-card-text>
+                        <v-row v-for="col in colores">
+                          <v-card-text><v-checkbox v-model="nuevoArticulo.color" :value="col.id" :label="col.color"></v-checkbox></v-card-text>
                         </v-row>
                       </v-card>
                     </v-dialog>
                   </div>
-                  <div class="text-left">
+                  <div class="text-left mb-3">
                     <v-btn
                       color="primary"
-                      @click="seleccionarCat = true"
+                      @click="seleccionarTallaNum = true"
                     >
                       Seleccionar talla numerica
                     </v-btn>
 
                     <v-dialog
-                      v-model="seleccionarCat"
+                      v-model="seleccionarTallaNum"
                       width="auto"
                     >
                       <v-card class="pa-7">
-                        <v-row v-for="cat in categorias">
-                          <v-card-text><v-checkbox @click="seleccionarCat=false" v-model="nuevoProducto.categoria" :value="cat.id" :label="cat.categoria"></v-checkbox></v-card-text>
+                        <v-row v-for="talla in tallaNum">
+                          <v-card-text><v-checkbox v-model="nuevoArticulo.talla_numerica" :value="talla.id" :label="talla.talla"></v-checkbox></v-card-text>
                         </v-row>
                       </v-card>
                     </v-dialog>
                   </div>
-                  <div class="text-left">
+                  <div class="text-left mb-3">
                     <v-btn
                       color="primary"
-                      @click="seleccionarCat = true"
+                      @click="seleccionarTallaRopa = true"
                     >
                       Seleccionar talla ropa
                     </v-btn>
 
                     <v-dialog
-                      v-model="seleccionarCat"
+                      v-model="seleccionarTallaRopa"
                       width="auto"
                     >
                       <v-card class="pa-7">
-                        <v-row v-for="cat in categorias">
-                          <v-card-text><v-checkbox @click="seleccionarCat=false" v-model="nuevoProducto.categoria" :value="cat.id" :label="cat.categoria"></v-checkbox></v-card-text>
+                        <v-row v-for="talla in tallaRopa">
+                          <v-card-text><v-checkbox v-model="nuevoArticulo.talla_ropa" :value="talla.id" :label="talla.talla"></v-checkbox></v-card-text>
                         </v-row>
                       </v-card>
                     </v-dialog>
                   </div>
+                  <v-text-field
+                      v-model="nuevoArticulo.cantidad"
+                      label="Existencias"
+                      required
+                    ></v-text-field>
           <v-card-actions>
             <v-btn
               color="primary"
@@ -282,7 +338,16 @@ const agregarProducto = () => {
             >
               Cerrar
             </v-btn>
+            <v-btn
+              color="primary"
+              variant="text"
+              @click="agregarArticulo"
+            >
+              Agregar
+            </v-btn>
           </v-card-actions>
+          </div>
+          
         </v-card>
       </v-dialog>
     <v-col cols="auto">
