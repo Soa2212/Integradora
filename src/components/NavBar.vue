@@ -4,7 +4,9 @@ import { RouterLink, RouterView } from 'vue-router';
 import { useTokenStore } from "@/stores/TokenUser";
 import { useIdStore } from "@/stores/IdUSR";
 import { useTipoStore } from "@/stores/TipoUSR";
+import { useEmailStore } from "@/stores/EmailUSR";
 
+const Email = useEmailStore();
 const IdUsr = useIdStore();
 const TipoUSR = useTipoStore();
 const isNavActive = ref(false);
@@ -32,6 +34,7 @@ const logout=()=>{
   tokenStore.eliminarTokenDelLocalStorage();
   TipoUSR.eliminarTipoDelLocalStorage();
   IdUsr.eliminarIdDelLocalStorage();
+  Email.eliminarEmailDelLocalStorage();
   location.reload();
 }
 
