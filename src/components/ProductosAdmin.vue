@@ -1,5 +1,5 @@
 <script setup>
-import { ref,computed,onMounted} from "vue";
+import { ref,onMounted} from "vue";
 import { useField, useForm } from 'vee-validate'
 
 const productos = ref({});
@@ -13,6 +13,11 @@ const selectedImage = ref(null);
 const detallar = ref(false);
 const crearNuevoArticulo = ref(false);
 const seleccionarCat = ref(false);
+
+const agregarTallaNum = ref(true);
+const agregarTallaRopa = ref(false);
+const agregarColor = ref(false);
+const aviso = ref('');
 
 const producto = ref({
   nombre: ''
@@ -42,9 +47,9 @@ const nuevoProducto = ref({
 const nuevoArticulo = ref({
   producto: "",
   cantidad: "",
-  talla_numerica: "",
-  talla_ropa: "",
-  color: ""
+  talla_numerica: "33",
+  talla_ropa: "7",
+  color: "17"
 })
 
 const handleFileChange = () => {
@@ -87,30 +92,23 @@ const cancelarSeleccion = () => {
 }
 
 const borrarDatosArticulo = () => {
-  crearNuevoArticulo.value = false
-  nuevoArticulo.value.producto = '',
-  nuevoArticulo.value.cantidad = '',
-  nuevoArticulo.value.talla_numerica = '',
-  nuevoArticulo.value.talla_ropa = '',
-  nuevoArticulo.value.color = ''
+  crearNuevoArticulo.value = false;
+  nuevoArticulo.value.producto = '';
 }
 
 const agregarNuevoArticulo = () => {
   crearNuevoArticulo.value = false;
   detallar.value = true;
-  nuevoArticulo.value.cantidad = '',
-  nuevoArticulo.value.talla_numerica = '',
-  nuevoArticulo.value.talla_ropa = '',
-  nuevoArticulo.value.color = ''
+  nuevoArticulo.value.cantidad = '';
+  nuevoArticulo.value.talla_numerica = '33';
+  nuevoArticulo.value.talla_ropa = '7';
+  nuevoArticulo.value.color = '17';
 }
 
 
 onMounted(() => {
   mostrarProductos();
   mostrarCategorias();
-  mostrarColores();
-  mostrarTallasNumericas();
-  mostrarTallasRopa();
 });
 
 const eliminarProducto = () => {
@@ -140,6 +138,9 @@ const agregarProducto = () => {
         body: JSON.stringify(nuevoProducto.value)});
     }}
     detallar.value = true;
+    mostrarColores();
+    mostrarTallasNumericas();
+    mostrarTallasRopa();
       dialog.value = false;
       setTimeout(() => {
         mostrarProductos();
@@ -154,6 +155,33 @@ const agregarProducto = () => {
       }, 1000);
 };
 
+const verificarArticuloTallaNum = (id) => {
+  if (id == 33) {
+    agregarColor.value = false;
+    agregarTallaRopa.value = true;
+  }
+  else if (id !== 33) {
+    agregarTallaRopa.value = false;
+    agregarColor.value = true;
+    aviso.value = '';
+  }
+}
+
+const verificarArticuloTallaRopa = (id) => {
+  if (id == 7 && nuevoArticulo.value.talla_numerica !== 33) {
+    agregarColor.value = false;
+  }
+  else if (id !== 7) {
+    agregarTallaNum.value = false;
+    agregarColor.value = true;
+  }
+  else if (id == 7 && nuevoArticulo.value.talla_numerica == 33){
+    aviso.value = 'Su articulo no tiene talla, por ende no puede tener color. Modifique las tallas si necesita un color';
+  }
+}
+
+
+// VALIDACION DE FORMULARIO
 const agregarArticulo = () => {
   fetch("http://localhost/insertarArticulo", {
     method: "POST",
@@ -284,25 +312,7 @@ const agregarArticulo = () => {
           <div class="d-flex pa-5 flex-column">
             <div class="text-left mb-3">
                     <v-btn
-                      color="primary"
-                      @click="seleccionarColor = true"
-                    >
-                      Seleccionar color
-                    </v-btn>
-
-                    <v-dialog
-                      v-model="seleccionarColor"
-                      width="auto"
-                    >
-                      <v-card class="pa-7">
-                        <v-row v-for="col in colores">
-                          <v-card-text><v-checkbox v-model="nuevoArticulo.color" :value="col.id" :label="col.color"></v-checkbox></v-card-text>
-                        </v-row>
-                      </v-card>
-                    </v-dialog>
-                  </div>
-                  <div class="text-left mb-3">
-                    <v-btn
+                      v-if="agregarTallaNum"
                       color="primary"
                       @click="seleccionarTallaNum = true"
                     >
@@ -315,13 +325,14 @@ const agregarArticulo = () => {
                     >
                       <v-card class="pa-7">
                         <v-row v-for="talla in tallaNum">
-                          <v-card-text><v-checkbox v-model="nuevoArticulo.talla_numerica" :value="talla.id" :label="talla.talla"></v-checkbox></v-card-text>
+                          <v-card-text><v-checkbox @click="verificarArticuloTallaNum(talla.id)" v-model="nuevoArticulo.talla_numerica" :value="talla.id" :label="talla.talla"></v-checkbox></v-card-text>
                         </v-row>
                       </v-card>
                     </v-dialog>
                   </div>
                   <div class="text-left mb-3">
                     <v-btn
+                      v-if="agregarTallaRopa"
                       color="primary"
                       @click="seleccionarTallaRopa = true"
                     >
@@ -334,11 +345,33 @@ const agregarArticulo = () => {
                     >
                       <v-card class="pa-7">
                         <v-row v-for="talla in tallaRopa">
-                          <v-card-text><v-checkbox v-model="nuevoArticulo.talla_ropa" :value="talla.id" :label="talla.talla"></v-checkbox></v-card-text>
+                          <v-card-text><v-checkbox @click="verificarArticuloTallaRopa(talla.id)" v-model="nuevoArticulo.talla_ropa" :value="talla.id" :label="talla.talla"></v-checkbox></v-card-text>
                         </v-row>
                       </v-card>
                     </v-dialog>
                   </div>
+            <div class="text-left mb-3">
+                    <v-btn
+                      v-if="agregarColor"
+                      color="primary"
+                      @click="seleccionarColor = true"
+                    >
+                      Seleccionar color
+                    </v-btn>
+                    <v-dialog
+                      v-model="seleccionarColor"
+                      width="auto"
+                    >
+                      <v-card class="pa-7">
+                        <v-row v-for="col in colores">
+                          <v-card-text><v-checkbox v-model="nuevoArticulo.color" :value="col.id" :label="col.color"></v-checkbox></v-card-text>
+                        </v-row>
+                      </v-card>
+                    </v-dialog>
+                  </div>
+                  <v-card-text>
+                    {{ aviso }}
+                  </v-card-text>
                   <v-text-field
                       v-model="nuevoArticulo.cantidad"
                       label="Existencias"
