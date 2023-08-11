@@ -148,4 +148,3 @@ function mostrarMensajeError(mensaje) {
   background-color: rgb(30, 139, 30);
 }
 </style>
-@/stores/TokenUser
