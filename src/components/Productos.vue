@@ -40,6 +40,7 @@ const Articulos = (id) => {
         if (ArticulosProd.value[0].TALLA_NUMERICA!= "No tiene") {
           tallaArticulo.value = ArticulosProd.value[0].TALLA_NUMERICA;
         }
+        colorArticulo.value=ArticulosProd.value[0].color;
       }
     });
 };
@@ -314,7 +315,7 @@ const prodCategoriaDEF = (id) => {
       </div>
 
       <div v-if="showPopup" class="popup-container">
-        <div class="popup-content">
+        <div class="popup-content" >
           <span
             class="close-button"
             @click="
@@ -323,9 +324,9 @@ const prodCategoriaDEF = (id) => {
             "
             >✖</span
           >
-          <div>
+          <div style="width: 100%; padding: 20px;">
             <div
-              style="display: flex; width: 100%; height: 100%; flex-wrap: wrap"
+              style="display: flex; width: 100%; height: 100%; flex-wrap: wrap;"
             >
               <div style="width: 100%; display: flex">
                 <div style="width: 40%; display: flex; align-items: center">
@@ -333,8 +334,8 @@ const prodCategoriaDEF = (id) => {
                     :src="productBanner.imagen1"
                     alt=""
                     style="
-                      max-width: 300px;
-                      max-height: 300px;
+                      max-width: 250px;
+                      max-height: 250px;
                       border-radius: 20px;
                     "
                   />
@@ -625,7 +626,7 @@ s .fade-enter-active,
   background-color: white;
   display: flex;
   width: 55%;
-  height: 67%;
+  height: 60%;
   padding: 20px;
   border-radius: 15px;
   position: relative; /* Añadido para posicionar el botón de cierre */
@@ -672,7 +673,7 @@ s .fade-enter-active,
 
 
 .botnsEstF {
-  width: 80%;
+  width: 100%;
   margin-left: 20px;
   display: flex;
   justify-content: center;
@@ -832,6 +833,7 @@ input[type="number"] {
 }
 
 .linea-horizontal {
+  width: 100%;
   margin-top: -30px;
   border-bottom: 1px solid #ccc;
   border-radius: 50px;
