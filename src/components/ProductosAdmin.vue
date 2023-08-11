@@ -11,7 +11,9 @@ const alerta = ref(false);
 const fileInput = ref(null);
 const selectedImage = ref(null);
 const detallar = ref(false);
+const crearNuevoArticulo = ref(false);
 const seleccionarCat = ref(false);
+
 const producto = ref({
   nombre: ''
 });
@@ -25,16 +27,6 @@ const tallaRopa = ref({});
 const colores = ref({});
 
 let letras = /[a-zA-Z]/;
-
-// Esta propiedad es para mostrar las categorias al momento de agregar un producto
-
-const categoriasId = computed(() =>
-  categorias.value.map((categoria) => categoria.id)
-);
-
-const categoriasItems = computed(() =>
-  categorias.value.map((categoria) => categoria.categoria)
-);
 
 const seleccionados = ref([]);
 
@@ -93,6 +85,26 @@ const cancelarSeleccion = () => {
   eliminar.value = false;
   seleccionados.value = [];
 }
+
+const borrarDatosArticulo = () => {
+  crearNuevoArticulo.value = false
+  nuevoArticulo.value.producto = '',
+  nuevoArticulo.value.cantidad = '',
+  nuevoArticulo.value.talla_numerica = '',
+  nuevoArticulo.value.talla_ropa = '',
+  nuevoArticulo.value.color = ''
+}
+
+const agregarNuevoArticulo = () => {
+  crearNuevoArticulo.value = false;
+  detallar.value = true;
+  nuevoArticulo.value.cantidad = '',
+  nuevoArticulo.value.talla_numerica = '',
+  nuevoArticulo.value.talla_ropa = '',
+  nuevoArticulo.value.color = ''
+}
+
+
 onMounted(() => {
   mostrarProductos();
   mostrarCategorias();
@@ -148,6 +160,7 @@ const agregarArticulo = () => {
     body: JSON.stringify(nuevoArticulo.value)
   })
   detallar.value = false;
+  crearNuevoArticulo.value = true;
 }
 
   const { handleSubmit, handleReset } = useForm({
@@ -183,7 +196,6 @@ const agregarArticulo = () => {
   const submit = handleSubmit(values => {
     agregarProducto()
     handleReset();
-    
   });
 
 </script>
@@ -351,6 +363,20 @@ const agregarArticulo = () => {
           </div>
         </v-card>
       </v-dialog>
+      <v-dialog
+                      v-model="crearNuevoArticulo"
+                      width="auto"
+                    >
+                      <v-card class="pa-7">
+                          <v-card-text class="mb-6">
+                            ¿Desea crear un nuevo articulo?
+                          </v-card-text>
+                          <v-row class="d-flex justify-end">
+                            <v-btn @click="agregarNuevoArticulo" class="mr-3">Aceptar</v-btn>
+                          <v-btn @click="borrarDatosArticulo">Cancelar</v-btn>
+                          </v-row>
+                      </v-card>
+                    </v-dialog>
     <v-col cols="auto">
       <v-btn @click="eliminar = true" block rounded="xl" size="large"
         ><v-icon icon="mdi-minus-circle" class="mr-2"></v-icon>Eliminar
