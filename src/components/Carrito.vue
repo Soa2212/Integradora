@@ -100,16 +100,18 @@ watch(carritoLS, () => {
 const objCar = ref({
   articulo: "",
   cantidad: "",
+  usuario:""
 }); //Poner la orden activa para asi tener en cuenta el proceso
 
 
 //Faltara que haga el proceso que permita agregarlo a una orden por medio de un usuario
 const finalizarCompra = () => {
-  console.log(id.value);//Esta variable contiene el id del usuario
   const carritoParaCompra = carritoLS.map((item) => ({
     Articulo: item.Articulo,
     cantidad: item.cantidad,
   }));
+  objCar.value.usuario=id;
+  console.log(objCar.value.usuario);
   console.log("Carrito para la BD");
   console.log(carritoParaCompra);
   for (let i = 0; i < carritoParaCompra.length; i++) {
