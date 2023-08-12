@@ -37,10 +37,10 @@ const Articulos = (id) => {
         if (ArticulosProd.value[0].tall_ropa != "No tiene") {
           tallaArticulo.value = ArticulosProd.value[0].tall_ropa;
         }
-        if (ArticulosProd.value[0].TALLA_NUMERICA!= "No tiene") {
+        if (ArticulosProd.value[0].TALLA_NUMERICA != "No tiene") {
           tallaArticulo.value = ArticulosProd.value[0].TALLA_NUMERICA;
         }
-        colorArticulo.value=ArticulosProd.value[0].color;
+        colorArticulo.value = ArticulosProd.value[0].color;
       }
     });
 };
@@ -104,7 +104,6 @@ function guardarProducto(
   } else {
     mostrarPestana();
   }
-
 }
 
 const carritoLS = () => {
@@ -112,7 +111,7 @@ const carritoLS = () => {
   carritoP.value.forEach((producto) => {
     carritoStore.agregarAlCarrito(producto);
   });
-  carritoP.value = []; 
+  carritoP.value = [];
 };
 
 //El objeto de abajo y la funcion que le sigue es para mostra ciertas caracteristicas cuando se seleccione un producto
@@ -245,6 +244,11 @@ const prodCategoriaDEF = (id) => {
       productos.value = datos.data;
     });
 };
+const popupF = () => {
+  setTimeout(() => {
+    showPopup.value = false;
+  }, 720);
+};
 </script>
 
 <template>
@@ -255,7 +259,12 @@ const prodCategoriaDEF = (id) => {
           <button @click="prodCategoriaDEF" class="CTB">CATÁLOGO</button>
           <div class="lh"></div>
           <p v-for="cat in categorias" :key="cat.id" class="CBB">
-            <button @click="prodCategoria(cat.id)" v-if="cat.estado !='inactivo' ">{{ cat.categoria }}</button>
+            <button
+              @click="prodCategoria(cat.id)"
+              v-if="cat.estado != 'inactivo'"
+            >
+              {{ cat.categoria }}
+            </button>
           </p>
         </div>
       </div>
@@ -271,31 +280,31 @@ const prodCategoriaDEF = (id) => {
             :key="producto.id"
             cols="4"
           >
-            <v-card
-              @mouseover="setHovered(index, true)"
-              @mouseleave="setHovered(index, false)"
-              height="360"
-              class="d-flex flex-column tarjeta"
-              style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
+            <button
+              @click="
+                productoPP(producto.id);
+                productShow(
+                  producto.nombre,
+                  producto.descripcion,
+                  producto.precio,
+                  producto.imagen1
+                );
+              "
             >
-              <v-img
-                style="border-radius: 10px"
-                height="100"
-                :src="producto.imagen1"
-                cover
-              ></v-img>
-              <div class="informacion" :class="{ hovered: isHovered[index] }">
-                <button
-                  @click="
-                    productoPP(producto.id);
-                    productShow(
-                      producto.nombre,
-                      producto.descripcion,
-                      producto.precio,
-                      producto.imagen1
-                    );
-                  "
-                >
+              <v-card
+                @mouseover="setHovered(index, true)"
+                @mouseleave="setHovered(index, false)"
+                height="360"
+                class="d-flex flex-column tarjeta"
+                style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
+              >
+                <v-img
+                  style="border-radius: 10px"
+                  height="100"
+                  :src="producto.imagen1"
+                  cover
+                ></v-img>
+                <div class="informacion" :class="{ hovered: isHovered[index] }">
                   <p style="font-size: 15px; text-align: center">
                     {{ producto.categoria }}
                   </p>
@@ -307,15 +316,15 @@ const prodCategoriaDEF = (id) => {
                   <h2 style="font-size: 15px; text-align: center">
                     $ {{ producto.precio }}
                   </h2>
-                </button>
-              </div>
-            </v-card>
+                </div>
+              </v-card>
+            </button>
           </v-col>
         </v-row>
       </div>
 
-      <div v-if="showPopup" class="popup-container">
-        <div class="popup-content" >
+      <div :class="['popup-container', { hide: !showPopup }]">
+        <div class="popup-content">
           <span
             class="close-button"
             @click="
@@ -324,9 +333,9 @@ const prodCategoriaDEF = (id) => {
             "
             >✖</span
           >
-          <div style="width: 100%; padding: 20px;">
+          <div style="width: 100%; padding: 20px">
             <div
-              style="display: flex; width: 100%; height: 100%; flex-wrap: wrap;"
+              style="display: flex; width: 100%; height: 100%; flex-wrap: wrap"
             >
               <div style="width: 100%; display: flex">
                 <div style="width: 40%; display: flex; align-items: center">
@@ -448,7 +457,8 @@ const prodCategoriaDEF = (id) => {
                             productBanner.precio,
                             tallaArticulo,
                             colorArticulo
-                          )
+                          ),
+                            popupF()
                         "
                       >
                         <strong class="botnsP">AGREGAR AL CARRITO</strong>
@@ -528,6 +538,7 @@ const prodCategoriaDEF = (id) => {
 
 .CB {
   background-color: white;
+  widows: 100%;
 }
 
 .lh {
@@ -538,10 +549,11 @@ const prodCategoriaDEF = (id) => {
   height: 5px;
 }
 .CTB {
+  width: 100%;
   font-size: 26px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
   margin-top: 25px;
-  margin-left: 70px;
 }
 
 .CTB:hover {
@@ -620,6 +632,14 @@ s .fade-enter-active,
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  opacity: 1; /* Configuración de opacidad inicial */
+  transition: opacity 0.3s ease; /* Transición de opacidad */
+  pointer-events: auto; /* Habilitar interacción con el popup visible */
+}
+
+.hide {
+  opacity: 0; /* Opacidad a 0 para ocultar el popup */
+  pointer-events: none; /* Deshabilitar interacción con el popup oculto */
 }
 
 .popup-content {
@@ -669,8 +689,6 @@ s .fade-enter-active,
   margin-top: 10px;
   margin-block-end: 10px;
 }
-
-
 
 .botnsEstF {
   width: 100%;
@@ -838,5 +856,8 @@ input[type="number"] {
   border-bottom: 1px solid #ccc;
   border-radius: 50px;
   height: 5px;
+}
+
+@media (max-width: 1000px) {
 }
 </style>

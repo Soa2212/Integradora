@@ -48,19 +48,19 @@ const tieneToken = tokenStore.tieneToken;
 <nav :class="{ active: isNavActive }" class="nav" >     
   <ul class="menu" :class="{ menuDD: isNavActive }">
     <RouterLink to="HomeView" :class="{ IMGD: isNavActive }" ><img src="../assets/Protecc_Seg.png" alt="Logo" style="height: 65px; width: 215px; margin-left: 40px; margin-top: 10px;"></RouterLink>
-      <div style="width: 80%; display: flex; align-items: center; justify-content: flex-start; gap: 20px;">
+      <div class="nvbr">
         <li><RouterLink to="HomeView" >Inicio</RouterLink></li>
         <li><RouterLink to="ProductosView">Catalogo</RouterLink></li> 
         <li><a href="https://www.actividadsegura.com/_files/ugd/ebd4b4_b015367e2e184b23808b0addf4860c35.pdf" target="_blank" >Catalogo PDF</a></li>
         <li><RouterLink to="AcercaView">Acerca de</RouterLink></li>
     </div>
-    <div style="width: 20%; display: flex; align-items: center; justify-content: space-evenly; margin-left: 20px;">
+    <div class="usrCarrito">
       <RouterLink to="/Carrito"><img src="../assets/carrito.png" alt=""  class="carrIMG"> </RouterLink>
       <li>
         <li ><img src="../assets/user.png" alt="" class="usrIMG" /></li>
-          <ul class="menu-drop" style="font-size: 20px; width: 250px;">
-            <li>
-              <RouterLink to="Pedidos" v-if="tieneToken">Pedidos 
+          <ul class="menu-drop" style=" width: 250px;">
+            <li v-if="tieneToken">
+              <RouterLink to="Pedidos">Pedidos 
                 <v-icon class="mdi-border-color">a</v-icon>
               </RouterLink>
             </li>
@@ -163,7 +163,6 @@ header .active ul li{
 .menu-drop{
   position: absolute;
   text-align: center;
-  font-size: 13px;
   display: none;
   list-style: none;
   margin-top: -5px;
@@ -184,9 +183,8 @@ header .active ul li{
   height: 85px;
   width: 100%;
   font-family: sans-serif;
-  font-size:small;
   list-style: none;
-  margin-top: -10px;
+  margin-top: -7px;
   box-shadow: inset 0 -5px 15px -5px rgba(0, 0, 0, 0.2); 
   margin-bottom: -57px;
   transition: 0.20s;
@@ -199,7 +197,6 @@ header .active ul li{
   height: 70px;
   width: 100%;
   font-family: sans-serif;
-  font-size:small;
   list-style: none;
   margin-top: -50px;
   box-shadow: inset 0 -5px 15px -5px rgba(0, 0, 0, 0.4); 
@@ -262,5 +259,61 @@ header .active ul li{
   height: 33px; 
   width: 33px;
   transition: 0.4s;
+}
+.usrCarrito{
+  width: 20%; 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-evenly; 
+  margin-left: 20px;
+}
+
+.nvbr{
+  width: 80%; 
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-start; 
+  gap: 20px;
+}
+
+@media (max-width: 1123px) {
+  *{
+    font-size: 15px;
+  }
+}
+@media (max-width: 1080px) {
+  *{
+    font-size: 14px;
+  }
+}
+@media (max-width: 1062px) {
+  *{
+    font-size: 12px;
+  }
+}
+@media (max-width: 1050px) {
+  *{
+    font-size: 14px;
+    text-align: center;
+  }
+}
+@media (max-width: 930px) {
+  .usrCarrito{
+    margin-left: 0;
+  }
+}
+@media (max-width: 910px) {
+  .usrCarrito{
+    margin-left: -15px;
+  }
+}
+@media (max-width: 875px) {
+  .usrCarrito{
+    margin-left: -35px;
+  }
+  .nvbr{
+  width: 70%; 
+  justify-content: flex-start; 
+  }
 }
 </style>
