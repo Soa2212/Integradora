@@ -5,6 +5,21 @@ import { ref, computed } from "vue";
 const isHovered = ref([]);
 const showPopup = ref(false);
 const carritoP = ref([]); //Variable que se va ir a la base de datos
+const dialog = ref(false);
+const eliminar = ref(false);
+const dialogEliminar = ref(false);
+
+const seleccionados = ref([]);
+
+const eliminarArticulo = () => {
+  for (const id of seleccionados.value) {
+  const index = carritoP.value.findIndex(producto => producto.Articulo == id);
+  if (index !== -1) {
+    carritoP.value.splice(index, 1);
+  }
+}
+dialogEliminar.value = false
+}
 
 const productoPP = (id) => {
   showPopup.value = true;
@@ -220,12 +235,27 @@ const iniciarTemporizadorV = () => {
 </script>
 
 <template>
-  <div style="width: 100%; display: flex">
-    <div class="productos">
-      <p style="display: flex; justify-content: center; font-size: 26px">
+  {{ carritoP }}
+  {{ seleccionados }}
+  <div class="d-flex flex-column pa-5">
+    <v-dialog
+      v-model="dialog"
+      width="auto"
+    >
+      <template v-slot:activator="{ props }">
+        <v-btn style="width: min-content;"
+          color="primary"
+          v-bind="props"
+        >
+          Seleccionar productos
+        </v-btn>
+      </template>
+      <div class="productos">
+      <h1 class="d-flex justify-center text-h3">
         Productos
-      </p>
-      <v-row class="mt-3">
+      </h1>
+      <div>
+        <v-row class="mt-3">
         <v-col
           v-for="(producto, index) in productosConStock"
           :key="producto.id"
@@ -236,7 +266,7 @@ const iniciarTemporizadorV = () => {
             @mouseleave="setHovered(index, false)"
             height="280"
             width="200px"
-            class="d-flex flex-column tarjeta"
+            class="d-flex flex-column"
             style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
           >
             <v-img
@@ -273,8 +303,9 @@ const iniciarTemporizadorV = () => {
           </v-card>
         </v-col>
       </v-row>
+      </div>
+      
     </div>
-
     <div v-if="showPopup" class="popup-container">
       <div class="popup-content">
         <span
@@ -447,12 +478,70 @@ const iniciarTemporizadorV = () => {
         </div>
       </div>
     </div>
+    </v-dialog>
 
-    <div style="width: 44%; padding: 2em 1em">
-      <p style="display: flex; justify-content: center; font-size: 26px">
-        Orden Local
-      </p>
-      <div>{{ carritoP }}</div>
+    <div>
+      <h1 style="font-size: 1.5em;" class="mt-9">Resumen de pedido</h1>
+      <div>
+        <v-table class="mr-5">
+        <thead>
+          <tr>
+            <th v-if="eliminar" style="width:min-content;" class="text-center">Eliminar</th>
+            <th class="text-center">Articulo</th>
+            <th class="text-center">Imagen</th>
+            <th class="text-center">Talla</th>
+            <th class="text-center">Color</th>
+            <th class="text-center">Cantidad</th>
+            <th class="text-center">Precio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="art in carritoP" :key="art.id">
+            <td v-if="eliminar" style="width: 10px">
+              <v-checkbox
+                v-model="seleccionados"
+                class="d-flex justify-center align-center"
+                :value="art.Articulo"
+              ></v-checkbox>
+            </td>
+            <td class="text-center">{{ art.nombre }}</td>
+            <td class="text-center">
+              <img style="height: 100px; width: auto; margin: 1.5em" :src="art.imagen" alt="Imagen de producto" />
+            </td>
+            <td class="text-center">{{ art.talla }}</td>
+            <td class="text-center">{{ art.color }}</td>
+            <td class="text-center">{{ art.cantidad }}</td>
+            <td class="text-center">{{ art.precio }}</td>
+          </tr>
+        </tbody>
+      </v-table>
+      <div class="mt-5 d-flex justify-space-between">
+        <div>
+          <v-dialog
+      v-model="dialogEliminar"
+      width="auto"
+    >
+      <template v-slot:activator="{ props }">
+        <v-btn :="props" v-if="eliminar" @click="dialogEliminar=true" class="mr-5">Eliminar</v-btn>
+      </template>
+
+      <v-card>
+        <v-card-text>
+        Esta seguro que desea eliminar los articulos seleccionados?
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" block @click="eliminarArticulo">De acuerdo</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+          
+        </div>
+        <div>
+          <v-btn @click="eliminar=true" class="mr-5">Modificar articulos</v-btn>
+        <v-btn>Confirmar pedido</v-btn>
+        </div>
+      </div>
+      </div>
     </div>
   </div>
 </template>
@@ -463,77 +552,10 @@ const iniciarTemporizadorV = () => {
   font-family: "Montserrat", sans-serif;
   font-size: 17px;
 }
-.contenedor {
-  background-color: beige;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 50px;
-  width: 100%;
-  height: min-content;
-}
 
-.vista {
-  display: flex;
-  width: 80vw;
-  height: 90%;
-  background-color: beige;
-}
-
-.categorias {
-  width: 30%;
-  height: max-content;
-  padding-bottom: 170px;
-  margin-right: 10px;
-  background-color: white;
-  padding-left: 15px;
-  padding-top: 10px;
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
-}
-
-.CB {
-  background-color: white;
-}
-
-.lh {
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 10px;
-  border-radius: 50px;
-  width: 90%;
-  height: 5px;
-}
-.CTB {
-  font-size: 26px;
-  text-align: center;
-  margin-top: 25px;
-  margin-left: 70px;
-}
-
-.CTB:hover {
-  /* Sombras al hacer hover */
-  color: rgb(28, 172, 216);
-  transition: 0.5s;
-}
-
-.CBB {
-  color: #837f7f;
-  margin-top: 7px;
-  transition: 0.3s;
-  margin-bottom: 7px;
-}
-
-.CBB:hover {
-  /* Sombras al hacer hover */
-  color: rgb(0, 0, 0);
-  font-size: 24px;
-  transition: 0.6s;
-}
 .productos {
-  width: 55%;
-  height: 100%;
   background-color: white;
-  padding: 2em 1em;
+  padding: 2em;
 }
 
 .tarjeta {
@@ -564,14 +586,8 @@ const iniciarTemporizadorV = () => {
   margin-top: 40px;
 }
 s .fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
 .fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
+
 .popup-container {
   position: fixed;
   top: 0;
@@ -616,17 +632,6 @@ s .fade-enter-active,
   transition: 0.55s;
 }
 
-.linea {
-  width: 1px;
-  background-color: rgba(193, 180, 180, 0.76);
-}
-.CTPP {
-  display: flex;
-  flex-direction: row;
-  justify-items: center;
-  color: gray;
-  font-size: 13px;
-}
 .botnsP {
   font-size: 15px;
   margin-top: 10px;
@@ -643,11 +648,6 @@ s .fade-enter-active,
   color: white;
 }
 
-.botnsEst:hover {
-  color: white;
-  background-color: black;
-  transition: 0.5s;
-}
 .inpQA {
   width: 90px;
   height: 50px;
@@ -767,16 +767,6 @@ input[type="number"] {
   margin-top: -680px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Transición para la pestaña emergente */
-.pestanita-enter-active,
-.pestanita-leave-active {
-  transition: opacity 0.3s;
-}
-
-.pestanita-enter, .pestanita-leave-to /* .pestanita-leave-active in <2.1.8 */ {
-  opacity: 0;
 }
 
 .BannerNP {
