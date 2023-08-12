@@ -59,8 +59,14 @@ const tieneToken = tokenStore.tieneToken;
       <li>
         <li ><img src="../assets/user.png" alt="" class="usrIMG" /></li>
           <ul class="menu-drop" style="font-size: 20px; width: 250px;">
+            <li>
+              <RouterLink to="Pedidos" v-if="tieneToken">Pedidos 
+                <v-icon class="mdi-border-color">a</v-icon>
+              </RouterLink>
+            </li>
               <li><RouterLink to="LoginView" v-if="!tieneToken">Iniciar Sesion</RouterLink>
-                <a @click="logout()"  v-else>Cerrar Sesion</a></li>
+                <a @click="logout()"  v-else>Cerrar Sesion</a>
+                </li>
               
           </ul>
       </li>

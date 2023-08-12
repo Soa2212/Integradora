@@ -64,6 +64,11 @@ const routes = [
     path: "/AdminPedido",
     name: "AdminPed",
     component: () => import("@/components/AdminPedidos.vue"),
+  },
+  {
+    path: "/Pedidos",
+    name: "Pedidos",
+    component: () => import("@/components/Pedidos.vue"),
   }
 ];
 

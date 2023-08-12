@@ -19,4 +19,9 @@ export const useIdStore = defineStore("Id", {
       localStorage.removeItem("IdLS");
     },
   },
+  getters: {
+    getIdLS() {
+      return this.IdLS;
+    },
+  },
 });
