@@ -8,6 +8,7 @@ const carritoP = ref([]); //Variable que se va ir a la base de datos
 const dialog = ref(false);
 const eliminar = ref(false);
 const dialogEliminar = ref(false);
+const dialogConfirmar = ref(false);
 
 const seleccionados = ref([]);
 
@@ -19,6 +20,15 @@ const eliminarArticulo = () => {
   }
 }
 dialogEliminar.value = false
+}
+
+const realizarPedido = () => {
+  dialogConfirmar.value = false;
+}
+
+const cancelarSeleccion = () => {
+  eliminar.value = false;
+  seleccionados.value = [];
 }
 
 const productoPP = (id) => {
@@ -235,8 +245,6 @@ const iniciarTemporizadorV = () => {
 </script>
 
 <template>
-  {{ carritoP }}
-  {{ seleccionados }}
   <div class="d-flex flex-column pa-5">
     <v-dialog
       v-model="dialog"
@@ -523,6 +531,7 @@ const iniciarTemporizadorV = () => {
     >
       <template v-slot:activator="{ props }">
         <v-btn :="props" v-if="eliminar" @click="dialogEliminar=true" class="mr-5">Eliminar</v-btn>
+        <v-btn v-if="eliminar" @click="cancelarSeleccion" class="mr-5">Cancelar</v-btn>
       </template>
 
       <v-card>
@@ -538,7 +547,23 @@ const iniciarTemporizadorV = () => {
         </div>
         <div>
           <v-btn @click="eliminar=true" class="mr-5">Modificar articulos</v-btn>
-        <v-btn>Confirmar pedido</v-btn>
+          <v-dialog
+      v-model="dialogConfirmar"
+      width="auto"
+    >
+      <template v-slot:activator="{ props }">
+        <v-btn :="props" @click="dialogConfirmar=true" class="mr-5">Confirmar pedido</v-btn>
+      </template>
+
+      <v-card>
+        <v-card-text>
+        Esta seguro que desea realizar el pedido?
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" block @click="realizarPedido">De acuerdo</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
         </div>
       </div>
       </div>
