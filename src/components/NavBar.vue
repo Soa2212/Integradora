@@ -58,7 +58,7 @@ const tieneToken = tokenStore.tieneToken;
       <RouterLink to="/Carrito"><img src="../assets/carrito.png" alt=""  class="carrIMG"> </RouterLink>
       <li>
         <li ><img src="../assets/user.png" alt="" class="usrIMG" /></li>
-          <ul class="menu-drop" style="font-size: 20px; width: 250px;">
+          <ul class="menu-drop" style=" width: 250px;">
             <li v-if="tieneToken">
               <RouterLink to="Pedidos">Pedidos 
                 <v-icon class="mdi-border-color">a</v-icon>
@@ -163,7 +163,6 @@ header .active ul li{
 .menu-drop{
   position: absolute;
   text-align: center;
-  font-size: 13px;
   display: none;
   list-style: none;
   margin-top: -5px;
@@ -184,7 +183,6 @@ header .active ul li{
   height: 85px;
   width: 100%;
   font-family: sans-serif;
-  font-size:small;
   list-style: none;
   margin-top: -7px;
   box-shadow: inset 0 -5px 15px -5px rgba(0, 0, 0, 0.2); 
@@ -199,7 +197,6 @@ header .active ul li{
   height: 70px;
   width: 100%;
   font-family: sans-serif;
-  font-size:small;
   list-style: none;
   margin-top: -50px;
   box-shadow: inset 0 -5px 15px -5px rgba(0, 0, 0, 0.4); 
