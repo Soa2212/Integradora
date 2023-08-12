@@ -528,6 +528,7 @@ const prodCategoriaDEF = (id) => {
 
 .CB {
   background-color: white;
+  widows: 100%;
 }
 
 .lh {
@@ -538,10 +539,11 @@ const prodCategoriaDEF = (id) => {
   height: 5px;
 }
 .CTB {
+  width: 100%;
   font-size: 26px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
   margin-top: 25px;
-  margin-left: 70px;
 }
 
 .CTB:hover {
@@ -838,5 +840,10 @@ input[type="number"] {
   border-bottom: 1px solid #ccc;
   border-radius: 50px;
   height: 5px;
+}
+
+@media (max-width: 1000px) {
+  /* Estilos que se aplicarán cuando el ancho de la pantalla sea 1000px o menos */
+  /* Agrega aquí tus reglas de estilo */
 }
 </style>
