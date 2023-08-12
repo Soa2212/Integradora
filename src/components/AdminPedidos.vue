@@ -247,8 +247,6 @@ const iniciarTemporizadorV = () => {
 </script>
 
 <template>
-  {{ carritoP }}
-  {{ seleccionados }}
   <div class="d-flex flex-column pa-5">
     <v-dialog
       v-model="dialog"

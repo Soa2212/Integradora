@@ -35,6 +35,15 @@ let letras = /[a-zA-Z]/;
 
 const seleccionados = ref([]);
 
+const cancelarDetalle = () => {
+  detallar.value = false;
+  nuevoArticulo.value.producto = '';
+  nuevoArticulo.value.cantidad = '';
+  nuevoArticulo.value.talla_numerica = '33';
+  nuevoArticulo.value.talla_ropa = '7';
+  nuevoArticulo.value.color = '17';
+}
+
 const nuevoProducto = ref({
   nombre: "",
   precio: "",
@@ -96,7 +105,7 @@ const borrarDatosArticulo = () => {
   nuevoArticulo.value.producto = '';
   nuevoArticulo.value.cantidad = '';
   nuevoArticulo.value.talla_numerica = '33';
-  nuevoArticulo.value.talla_numerica = '7';
+  nuevoArticulo.value.talla_ropa = '7';
   nuevoArticulo.value.color = '17';
   borrarDatosProducto();
 }
@@ -173,6 +182,7 @@ const agregarProducto = () => {
 const verificarArticuloTallaNum = (id) => {
   if (id == 33) {
     agregarColor.value = false;
+    nuevoArticulo.value.color = '17'
     agregarTallaRopa.value = true;
   }
   else if (id !== 33) {
@@ -185,13 +195,20 @@ const verificarArticuloTallaNum = (id) => {
 const verificarArticuloTallaRopa = (id) => {
   if (id == 7 && nuevoArticulo.value.talla_numerica !== 33) {
     agregarColor.value = false;
+    agregarTallaNum.value = true;
+    aviso.value = '';
   }
   else if (id !== 7) {
     agregarTallaNum.value = false;
     agregarColor.value = true;
+    aviso.value = '';
   }
   else if (id == 7 && nuevoArticulo.value.talla_numerica == 33){
     aviso.value = 'Su articulo no tiene talla, por ende no puede tener color. Modifique las tallas si necesita un color';
+    nuevoArticulo.value.color = '17'
+    agregarTallaNum.value = true;
+    agregarTallaRopa.value = true;
+    agregarColor.value = false;
   }
 }
 
@@ -396,7 +413,7 @@ const agregarArticulo = () => {
             <v-btn
               color="primary"
               variant="text"
-              @click="detallar = false"
+              @click="cancelarDetalle"
             >
               Cerrar
             </v-btn>
@@ -481,7 +498,7 @@ const agregarArticulo = () => {
       </v-dialog>
     </div>
     <div class="productos">
-      <v-col v-for="producto in productos" cols="4">
+      <v-col v-for="producto in productos" cols="12" sm="12" md="6" lg="4">
         <v-card
           class="d-flex flex-column justify-center align-center pa-3"
           style="height: 15em"
