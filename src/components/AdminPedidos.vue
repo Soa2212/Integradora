@@ -17,6 +17,7 @@ const eliminarArticulo = () => {
   const index = carritoP.value.findIndex(producto => producto.Articulo == id);
   if (index !== -1) {
     carritoP.value.splice(index, 1);
+    seleccionados.value = [];
   }
 }
 dialogEliminar.value = false
@@ -24,6 +25,7 @@ dialogEliminar.value = false
 
 const realizarPedido = () => {
   dialogConfirmar.value = false;
+  carritoP.value = [];
 }
 
 const cancelarSeleccion = () => {
@@ -245,6 +247,8 @@ const iniciarTemporizadorV = () => {
 </script>
 
 <template>
+  {{ carritoP }}
+  {{ seleccionados }}
   <div class="d-flex flex-column pa-5">
     <v-dialog
       v-model="dialog"
@@ -258,23 +262,23 @@ const iniciarTemporizadorV = () => {
           Seleccionar productos
         </v-btn>
       </template>
-      <div class="productos">
-      <h1 class="d-flex justify-center text-h3">
+      <v-card class="pa-5">
+      <h1 class="d-flex justify-center text-h3 mt-3 mb-1">
         Productos
       </h1>
-      <div>
-        <v-row class="mt-3">
-        <v-col
+      <div class="d-flex align-center">
+        <v-row class="mt-3 d-flex ">
+        <v-col class="d-flex justify-center"
           v-for="(producto, index) in productosConStock"
           :key="producto.id"
-          cols="4"
+          cols="6" sm="6" md="4" lg="3"
         >
           <v-card
             @mouseover="setHovered(index, true)"
             @mouseleave="setHovered(index, false)"
             height="280"
-            width="200px"
-            class="d-flex flex-column"
+            width="16em"
+            class="d-flex flex-column mb-3"
             style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
           >
             <v-img
@@ -312,8 +316,8 @@ const iniciarTemporizadorV = () => {
         </v-col>
       </v-row>
       </div>
-      
-    </div>
+    </v-card>
+
     <div v-if="showPopup" class="popup-container">
       <div class="popup-content">
         <span
@@ -580,7 +584,6 @@ const iniciarTemporizadorV = () => {
 
 .productos {
   background-color: white;
-  padding: 2em;
 }
 
 .tarjeta {
