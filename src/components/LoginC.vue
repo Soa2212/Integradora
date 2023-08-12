@@ -3,17 +3,20 @@ import { ref } from "vue";
 import { useTokenStore } from "@/stores/TokenUser";
 import { useTipoStore } from "@/stores/TipoUSR";
 import { useEmailStore } from "@/stores/EmailUSR";
+import { useIdStore } from "@/stores/IdUSR";
 import Loading from "@/components/Loading.vue";
 
 const Email = useEmailStore();
 const TipoUSR = useTipoStore();
 const TokenUser = useTokenStore();
+const IdUsr = useIdStore();
 const mail = ref("");
 const contrasena = ref("");
 let overlay = ref(false);
 const token = ref();
 const tipoUSR = ref();
 const emailusr = ref();
+const Idusr = ref();
 
 const data = ref({
   email: "",
@@ -42,6 +45,8 @@ function login() {
       token.value = responseData.data._token;
       tipoUSR.value = responseData.data.usuario.tipo;
       emailusr.value = responseData.data.usuario.email;
+      Idusr.value = responseData.data.usuario.id;
+      IdUsr.guardarIdEnLocalStorage(Idusr.value);
       TipoUSR.guardarTipoEnLocalStorage(tipoUSR.value);
       Email.guardarEmailEnLocalStorage(emailusr.value);
       TokenUser.guardarTokenEnLocalStorage(token.value); // Guardar el valor del token en almacenamiento local
