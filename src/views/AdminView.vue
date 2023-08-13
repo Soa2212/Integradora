@@ -29,8 +29,8 @@ const logout = () => {
 <template>
   <v-app id="inspire">
     <v-navigation-drawer v-model="drawer">
-      <v-sheet color="grey-lighten-4" class="pa-4" style="text-align: center;">
-        <v-avatar class="mb-4" color="grey-darken-1" size="64"></v-avatar>
+      <v-sheet color="grey-lighten-4" class="pa-4" style="display: flex; flex-direction: column; align-items: center;">
+        <v-img src="@/assets/UsrIcon.png" style="width: 60px; height: 60px;"></v-img>
 
         <div>{{contenidoEmailLS}}</div>
       </v-sheet>
