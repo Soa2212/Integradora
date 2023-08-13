@@ -403,6 +403,7 @@ const popupF = () => {
                             articulo.cantidad
                           )
                         "
+                        class="btnTallas"
                         v-if="articulo.tall_ropa !== 'No tiene'"
                       >
                         {{ articulo.tall_ropa }}
