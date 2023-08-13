@@ -107,7 +107,10 @@ objeto.value.tipo='';
 
 const tab = ref(null);
 const dialog = ref(null);
-const idOrden = ref(null);
+const orden = ref({
+  estado: '',
+  orden: ''
+});
 
 const ordenesEnProceso = ref({});
 const detalleOrden = ref({});
@@ -123,7 +126,7 @@ onMounted(() => {
 })
 
 const mostrarDetalleOrden = (id) => {
-  idOrden.value = id;
+  orden.value.orden = id;
   fetch(`http://localhost/detalleOrden/${id}`)
   .then((res) => res.json())
   .then((datos) => (detalleOrden.value = datos.data));
@@ -131,8 +134,22 @@ const mostrarDetalleOrden = (id) => {
 
 const aceptarOrden = () => {
   dialog.value = false
-  console.log(idOrden.value);
-  mostrarOrdenesProceso();
+  orden.value.estado = 'aceptada'
+  fetch("http://localhost/estadoOrden", {
+      method: "POST",
+      body: JSON.stringify(orden.value)
+    });
+  setTimeout(mostrarOrdenesProceso, 500);
+}
+
+const cancelarOrden = () => {
+  dialog.value = false
+  orden.value.estado = 'cancelada'
+  fetch("http://localhost/estadoOrden", {
+      method: "POST",
+      body: JSON.stringify(orden.value)
+    });
+  setTimeout(mostrarOrdenesProceso, 500);
 }
 </script>
 
@@ -206,7 +223,7 @@ const aceptarOrden = () => {
                   </v-table>
                   <v-card-actions class="d-flex justify-end">
                     <v-btn @click="aceptarOrden()" class="mt-5 mb-5">Aceptar orden</v-btn>
-                    <v-btn class="ma-5">Cancelar orden</v-btn>
+                    <v-btn @click="cancelarOrden()" class="ma-5">Cancelar orden</v-btn>
                   </v-card-actions>     
                 </v-card>
               </v-dialog>
