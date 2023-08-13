@@ -521,7 +521,7 @@ const iniciarTemporizadorV = () => {
             <td class="text-center">{{ art.talla }}</td>
             <td class="text-center">{{ art.color }}</td>
             <td class="text-center">{{ art.cantidad }}</td>
-            <td class="text-center">{{ art.precio }}</td>
+            <td class="text-center">{{ art.precio * art.cantidad }}</td>
           </tr>
         </tbody>
       </v-table>
