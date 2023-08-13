@@ -23,5 +23,8 @@ export const useTipoStore = defineStore("Tipo", {
     tieneTipo() {
       return this.TipoLS === "admin" || this.TipoLS === "dueño";
     },
+    getTipoLS() {
+      return this.TipoLS;
+    }
   },
 });

@@ -29,10 +29,17 @@ const logout = () => {
 <template>
   <v-app id="inspire">
     <v-navigation-drawer v-model="drawer">
-      <v-sheet color="grey-lighten-4" class="pa-4" style="display: flex; flex-direction: column; align-items: center;">
-        <v-img src="@/assets/UsrIcon.png" style="width: 60px; height: 60px;"></v-img>
+      <v-sheet
+        color="grey-lighten-4"
+        class="pa-4"
+        style="display: flex; flex-direction: column; align-items: center"
+      >
+        <v-img
+          src="@/assets/UsrIcon.png"
+          style="width: 60px; height: 60px"
+        ></v-img>
 
-        <div>{{contenidoEmailLS}}</div>
+        <div>{{ contenidoEmailLS }}</div>
       </v-sheet>
 
       <v-divider></v-divider>
@@ -43,7 +50,7 @@ const logout = () => {
             <v-icon>{{ icon }}</v-icon>
           </template>
 
-          <router-link
+          <router-link 
             :to="{ name: link }"
             style="text-decoration: none; color: black"
             ><v-list-item-title>{{ text }}</v-list-item-title></router-link
@@ -51,7 +58,8 @@ const logout = () => {
         </v-list-item>
         <v-list-item>
           <v-btn @click="logout()"
-            ><v-icon class="mdi-logout" style="color: #767676;">a</v-icon>Cerrar Sesion</v-btn
+            ><v-icon class="mdi-logout" style="color: #767676">a</v-icon>Cerrar
+            Sesion</v-btn
           >
         </v-list-item>
       </v-list>
