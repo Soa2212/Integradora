@@ -20,13 +20,17 @@ const { handleSubmit, handleReset } = useForm({
       return "Tu nombre debe tener al menos 2 letras.";
     },
     email(value) {
-      if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) {
+      // Expresión regular mejorada para validar correos electrónicos
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+      if (emailRegex.test(value)) {
         usuario.value.email = value;
         return true;
       }
 
-      return "Tu email debe tener un dominio valido.";
+      return "Por favor, ingresa una dirección de correo electrónico válida.";
     },
+
     checkbox(value) {
       if (value === "1") return true;
 
@@ -54,9 +58,9 @@ const submit = handleSubmit((values) => {
     body: JSON.stringify(usuario.value),
   });
   handleReset();
-  usuario.value.nombre = '';
-  usuario.value.email = '';
-  usuario.value.password = '';
+  usuario.value.nombre = "";
+  usuario.value.email = "";
+  usuario.value.password = "";
 });
 </script>
 <template>
@@ -110,9 +114,7 @@ const submit = handleSubmit((values) => {
 
       <div class="btnsc">
         <div style="width: 65%; display: flex; justify-content: end">
-          <v-btn class="form__submit1" type="submit"
-            >submit</v-btn
-          >
+          <v-btn class="form__submit1" type="submit">submit</v-btn>
         </div>
 
         <div style="width: 30%; display: flex; justify-content: center">
