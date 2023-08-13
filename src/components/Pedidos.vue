@@ -3,8 +3,8 @@ import { ref } from "vue";
 import { useIdStore } from "@/stores/IdUSR";
 const Idusr = useIdStore();
 const Id = Idusr.getIdLS;
+
 let compra = ref([]);
-let detalle = ref([]);
 let objeto = ref({
   id: "",
   ordenid: "",
@@ -16,13 +16,6 @@ fetch("http://localhost/comprasusuario", {
 })
   .then((response) => response.json())
   .then((data) => (compra.value = data.data));
-</script>
-<script>
-export default {
-  data: () => ({
-    show: false,
-  }),
-};
 </script>
 <template>
   <template v-if="compra.length === 0">
@@ -72,25 +65,41 @@ export default {
   <template v-else>
     <div class="contenedor">
       <div class="tarjeta">
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+            margin-top: 30px;
+          "
+        >
+          <p>
+            <strong style="font-size: 30px"
+              >Explora tu Historial de Compras.</strong
+            >
+          </p>
+        </div>
         <div>
           <v-table theme="width">
             <thead>
               <tr>
-                <th class="text-left">#Orden</th>
-                <th class="text-left">fecha</th>
+                <th class="text-center">#Orden</th>
+                <th class="text-center">Fecha</th>
 
-                <th class="text-left">cantidad de articulos</th>
-                <th class="text-left">estado</th>
-                <th class="text-left">total</th>
+                <th class="text-center">Cantidad de articulos</th>
+                <th class="text-center">Estado</th>
+                <th class="text-center">Total</th>
               </tr>
             </thead>
             <tbody v-for="item in compra" :key="item.orden">
               <tr>
-                <td>{{ item.orden }}</td>
-                <td>{{ item.fecha }}</td>
-                <td>{{ item.cantidad_articulos }}</td>
-                <td>{{ item.estado }}</td>
-                <td>{{ item.total }}</td>
+                <td style="text-align: center">{{ item.orden }}</td>
+                <td style="text-align: center">{{ item.fecha }}</td>
+                <td style="text-align: center">
+                  {{ item.cantidad_articulos }}
+                </td>
+                <td style="text-align: center">{{ item.estado }}</td>
+                <td style="text-align: center">{{ item.total }}</td>
               </tr>
             </tbody>
           </v-table>
