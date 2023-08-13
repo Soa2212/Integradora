@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref,onMounted } from "vue";
 import { useTokenStore } from "@/stores/TokenUser";
 import { useTipoStore } from "@/stores/TipoUSR";
 import { useEmailStore } from "@/stores/EmailUSR";
@@ -10,14 +10,20 @@ const Email = useEmailStore();
 const contenidoEmailLS = Email.getEmailLS;
 
 const drawer = ref(null);
+const agregarUsuarios = ["mdi-account", "Agregar usuario", "AdminAdd"];
 
 const links = [
   ["mdi-store", "Productos", "AdminPro"],
   ["mdi-tag", "Categorias", "AdminCat"],
   ["mdi-home-analytics", "Analiticas", "AdminRep"],
-  ["mdi-currency-usd", "Realizar pedido", "AdminPed"],
-  ["mdi-account", "Agregar usuario", "AdminAdd"],
+  ["mdi-currency-usd", "Realizar pedido", "AdminPed"]
 ];
+
+onMounted(() => {
+  if(TipoUSR.getTipoLS == 'dueño'){
+  links.push(agregarUsuarios)
+}
+})
 
 const logout = () => {
   tokenStore.eliminarTokenDelLocalStorage();
