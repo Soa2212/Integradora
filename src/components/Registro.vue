@@ -61,7 +61,9 @@ const submit = handleSubmit((values) => {
   usuario.value.nombre = "";
   usuario.value.email = "";
   usuario.value.password = "";
+  location.reload();
 });
+
 </script>
 <template>
   <div class="cont">
@@ -114,11 +116,11 @@ const submit = handleSubmit((values) => {
 
       <div class="btnsc">
         <div style="width: 65%; display: flex; justify-content: end">
-          <v-btn class="form__submit1" type="submit">submit</v-btn>
+          <v-btn class="form__submit1" type="submit">Registrarse</v-btn>
         </div>
 
         <div style="width: 30%; display: flex; justify-content: center">
-          <v-btn class="form__submit2" @click="handleReset">clear</v-btn>
+          <v-btn class="form__submit2" @click="handleReset">Vaciar</v-btn>
         </div>
       </div>
     </form>
