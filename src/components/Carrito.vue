@@ -83,9 +83,8 @@ const calcularTotalParcial = (item) => {
 const total = ref(0);
 
 const actualizarTotal = () => {
-  total.value = carritoLS.reduce(
-    (total, item) => total + calcularTotalParcial(item),
-    0
+  total.value = Math.ceil(
+    carritoLS.reduce((total, item) => total + calcularTotalParcial(item), 0)
   );
 };
 
