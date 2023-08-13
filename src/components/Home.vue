@@ -88,24 +88,24 @@ const productosConStock = computed(() => {
             :key="producto.id"
             cols="3"
           >
-            <v-card
-              @mouseover="setHovered(index, true)"
-              @mouseleave="setHovered(index, false)"
-              height="360"
-              class="d-flex flex-column tarjeta"
-              style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
+            <router-link
+              to="/ProductosView"
+              style="text-decoration: none; color: black"
             >
-              <v-img
-                style="border-radius: 10px"
-                height="100"
-                :src="producto.imagen1"
-                cover
-              ></v-img>
-              <div class="informacion" :class="{ hovered: isHovered[index] }">
-                <router-link
-                  to="/ProductosView"
-                  style="text-decoration: none; color: black"
-                >
+              <v-card
+                @mouseover="setHovered(index, true)"
+                @mouseleave="setHovered(index, false)"
+                height="360"
+                class="d-flex flex-column tarjeta"
+                style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
+              >
+                <v-img
+                  style="border-radius: 10px"
+                  height="100"
+                  :src="producto.imagen1"
+                  cover
+                ></v-img>
+                <div class="informacion" :class="{ hovered: isHovered[index] }">
                   <p style="font-size: 15px; text-align: center">
                     {{ producto.categoria }}
                   </p>
@@ -117,9 +117,9 @@ const productosConStock = computed(() => {
                   <h2 style="font-size: 15px; text-align: center">
                     $ {{ producto.precio }}
                   </h2>
-                </router-link>
-              </div>
-            </v-card>
+                </div>
+              </v-card>
+            </router-link>
           </v-col>
         </v-row>
       </div>

@@ -281,6 +281,7 @@ const popupF = () => {
             cols="4"
           >
             <button
+              style="width: 100%"
               @click="
                 productoPP(producto.id);
                 productShow(
@@ -292,10 +293,10 @@ const popupF = () => {
               "
             >
               <v-card
+                class="d-flex flex-column tarjeta"
                 @mouseover="setHovered(index, true)"
                 @mouseleave="setHovered(index, false)"
                 height="360"
-                class="d-flex flex-column tarjeta"
                 style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
               >
                 <v-img
@@ -443,7 +444,7 @@ const popupF = () => {
                         -
                       </button>
                     </div>
-                    <div style="width: 70%">
+                    <div style="width: 70%; background-color: ">
                       <button
                         style="margin-top: 10px"
                         class="botnsEstF"
@@ -490,7 +491,7 @@ const popupF = () => {
                   </div>
                 </div>
               </div>
-              <div style="width: 100%">
+              <div style="width: 100%; margin-top: 10px">
                 <div class="linea-horizontal"></div>
                 <p class="descArt">{{ productBanner.descripcion }}</p>
               </div>
@@ -587,6 +588,7 @@ const popupF = () => {
 
 .tarjeta {
   border-radius: 15px;
+  width: 100%;
   position: relative;
   overflow: hidden;
   transition: transform 0.5s;
@@ -646,7 +648,7 @@ s .fade-enter-active,
   background-color: white;
   display: flex;
   width: 55%;
-  height: 60%;
+  height: 65%;
   padding: 20px;
   border-radius: 15px;
   position: relative; /* Añadido para posicionar el botón de cierre */

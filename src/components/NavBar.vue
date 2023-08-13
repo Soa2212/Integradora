@@ -40,14 +40,17 @@ const logout=()=>{
 
 const tokenStore = useTokenStore();
 const tieneToken = tokenStore.tieneToken;
+
 </script>
 
 <template>
 
 <header>
 <nav :class="{ active: isNavActive }" class="nav" >     
-  <ul class="menu" :class="{ menuDD: isNavActive }">
-    <RouterLink to="HomeView" :class="{ IMGD: isNavActive }" ><img src="../assets/Protecc_Seg.png" alt="Logo" style="height: 65px; width: 215px; margin-left: 40px; margin-top: 10px;"></RouterLink>
+  <ul class="menu" :class="{ menuDD: isNavActive  }">
+    <RouterLink to="HomeView" :class="{ IMGD: isNavActive }" >
+      <img src="../assets/Protecc_Seg.png" alt="Logo" style="height: 65px; width: 215px; margin-left: 40px; margin-top: 10px;">
+    </RouterLink>
       <div class="nvbr">
         <li><RouterLink to="HomeView" >Inicio</RouterLink></li>
         <li><RouterLink to="ProductosView">Catalogo</RouterLink></li> 
@@ -55,9 +58,11 @@ const tieneToken = tokenStore.tieneToken;
         <li><RouterLink to="AcercaView">Acerca de</RouterLink></li>
     </div>
     <div class="usrCarrito">
-      <RouterLink to="/Carrito"><img src="../assets/carrito.png" alt=""  class="carrIMG"> </RouterLink>
+      <RouterLink to="/Carrito">
+        <img src="../assets/carrito.png" alt=""  class="carrIMG"> 
+      </RouterLink>
       <li>
-        <li ><img src="../assets/user.png" alt="" class="usrIMG" /></li>
+        <li><img src="../assets/user.png" alt="" class="usrIMG"/></li>
           <ul class="menu-drop" style=" width: 250px;">
             <li v-if="tieneToken">
               <RouterLink to="Pedidos">Pedidos 
@@ -268,6 +273,7 @@ header .active ul li{
   margin-left: 20px;
 }
 
+
 .nvbr{
   width: 80%; 
   display: flex; 
@@ -275,7 +281,13 @@ header .active ul li{
   justify-content: flex-start; 
   gap: 20px;
 }
+@media (max-width: 1188px) {
+  *{
+    font-size: 15px;
+    text-align: center;
 
+  }
+}
 @media (max-width: 1123px) {
   *{
     font-size: 15px;
@@ -294,7 +306,6 @@ header .active ul li{
 @media (max-width: 1050px) {
   *{
     font-size: 14px;
-    text-align: center;
   }
 }
 @media (max-width: 930px) {
@@ -307,13 +318,7 @@ header .active ul li{
     margin-left: -15px;
   }
 }
-@media (max-width: 875px) {
-  .usrCarrito{
-    margin-left: -35px;
-  }
-  .nvbr{
-  width: 70%; 
-  justify-content: flex-start; 
-  }
-}
+
+
+
 </style>
