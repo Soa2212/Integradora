@@ -247,6 +247,7 @@ const prodCategoriaDEF = (id) => {
 const popupF = () => {
   setTimeout(() => {
     showPopup.value = false;
+    defArticulo();
   }, 720);
 };
 </script>
@@ -324,16 +325,14 @@ const popupF = () => {
         </v-row>
       </div>
 
-      <div :class="['popup-container', { hide: !showPopup }]">
-        <div class="popup-content">
-          <span
-            class="close-button"
-            @click="
-              showPopup = false;
-              defArticulo();
-            "
-            >✖</span
-          >
+      <div
+        :class="['popup-container', { hide: !showPopup }]"
+        @click="
+          showPopup = false;
+          defArticulo();
+        "
+      >
+        <div class="popup-content" @click.stop>
           <div style="width: 100%; padding: 20px">
             <div
               style="display: flex; width: 100%; height: 100%; flex-wrap: wrap"
