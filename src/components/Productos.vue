@@ -34,10 +34,10 @@ const Articulos = (id) => {
         // Asignar las propiedades 'cantidad' y 'articulo' del primer objeto en ArticulosProd.value
         amountArticulo.value = ArticulosProd.value[0].cantidad;
         idArticulo.value = ArticulosProd.value[0].articulo;
-        if (ArticulosProd.value[0].tall_ropa != "No tiene") {
+        if (ArticulosProd.value[0].tall_ropa != "NA") {
           tallaArticulo.value = ArticulosProd.value[0].tall_ropa;
         }
-        if (ArticulosProd.value[0].TALLA_NUMERICA != "No tiene") {
+        if (ArticulosProd.value[0].TALLA_NUMERICA != "NA") {
           tallaArticulo.value = ArticulosProd.value[0].TALLA_NUMERICA;
         }
         colorArticulo.value = ArticulosProd.value[0].color;
@@ -157,8 +157,8 @@ const shouldDisplayTalla = computed(() => {
   if (
     ArticulosProd.value &&
     ArticulosProd.value.length > 0 &&
-    (ArticulosProd.value[0].talla_numerica !== "No tiene" ||
-      ArticulosProd.value[0].talla_ropa !== "No tiene")
+    (ArticulosProd.value[0].talla_numerica !== "NA" ||
+      ArticulosProd.value[0].talla_ropa !== "NA")
   ) {
     return true;
   }
@@ -166,7 +166,7 @@ const shouldDisplayTalla = computed(() => {
 });
 
 const shouldDisplayColor = computed(() => {
-  return colorArticulo.value !== "No tiene" && colorArticulo.value !== "0";
+  return colorArticulo.value !== "NA" && colorArticulo.value !== "0";
 });
 
 //Variables que me sirven para elegir la cantidad deseada evitando que elija datos erroneos
@@ -390,7 +390,7 @@ const popupF = () => {
                           )
                         "
                         class="btnTallas"
-                        v-if="articulo.TALLA_NUMERICA !== 'No tiene'"
+                        v-if="articulo.TALLA_NUMERICA !== 'NA'"
                       >
                         {{ articulo.TALLA_NUMERICA }}
                       </button>
@@ -404,7 +404,7 @@ const popupF = () => {
                           )
                         "
                         class="btnTallas"
-                        v-if="articulo.tall_ropa !== 'No tiene'"
+                        v-if="articulo.tall_ropa !== 'NA'"
                       >
                         {{ articulo.tall_ropa }}
                       </button>

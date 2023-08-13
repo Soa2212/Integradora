@@ -1,6 +1,4 @@
-<script setup>
-
-</script>
+<script setup></script>
 <template>
   <footer class="footer">
     <div class="contenedor-foot">
@@ -14,17 +12,16 @@
       </div>
       <div class="content-foo">
         <h4>ubicación</h4>
-        <p> Av. Cruz del Sur no. 5000 local 5e
-
-Col. Las Águilas. Zapopan, Jal.</p>
+        <p>
+          Av. Cruz del Sur no. 5000 local 5e Col. Las Águilas. Zapopan, Jal.
+        </p>
       </div>
     </div>
     <h2 class="titulo-final">&copy; Actividad Segura</h2>
   </footer>
-
 </template>
 
-<style scoped> 
+<style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 * {
   font-family: "Montserrat", sans-serif;
@@ -64,10 +61,9 @@ Col. Las Águilas. Zapopan, Jal.</p>
   margin-top: 20px;
   color: #9e9797;
 }
-.tarjetas{
+.tarjetas {
   width: 75%;
   display: flex;
   flex-direction: column;
 }
-
 </style>
