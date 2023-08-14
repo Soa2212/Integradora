@@ -134,7 +134,7 @@ const mostrarDetalleOrden = (id) => {
 
 const aceptarOrden = () => {
   dialog.value = false
-  orden.value.estado = 'aceptada'
+  orden.value.estado = 'Aceptada'
   fetch("http://localhost/estadoOrden", {
       method: "POST",
       body: JSON.stringify(orden.value)
