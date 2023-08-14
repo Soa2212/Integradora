@@ -76,7 +76,7 @@ fetch("http://localhost/comprasusuario", {
         >
           <p>
             <strong style="font-size: 30px"
-              >Explora tu Historial de Compras.</strong
+              >Explora tu Historial de Pedidos.</strong
             >
           </p>
         </div>
