@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { useIdStore } from "@/stores/IdUSR";
 const Idusr = useIdStore();
-const Id = Idusr.getIdLS;
+const Id = Idusr.IdLS;
 
 let compra = ref([]);
 let objeto = ref({
