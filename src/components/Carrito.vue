@@ -17,7 +17,7 @@ const id = IdUsr.IdLS; // Acceder a la variable IdLS desde el store
 const carritoStore = useCarritoStore();
 const mostrarModal = ref(false);
 let temporizador = null;
-const tiempoVisible = 9000; // Tiempo en milisegundos
+const tiempoVisible = 4000; // Tiempo en milisegundos
 
 // Obtén la variable carritoLS del store
 const carritoLS = carritoStore.carritoLS;
@@ -99,9 +99,11 @@ watch(carritoLS, () => {
 const objCar = ref({
   articulo: "",
   cantidad: "",
-  usuario:""
+  usuario: "",
+  orden: "",
 }); //Poner la orden activa para asi tener en cuenta el proceso
 
+const Orden = ref("");
 
 //Faltara que haga el proceso que permita agregarlo a una orden por medio de un usuario
 const finalizarCompra = () => {
@@ -109,33 +111,45 @@ const finalizarCompra = () => {
     Articulo: item.Articulo,
     cantidad: item.cantidad,
   }));
-  objCar.value.usuario=id;
-  console.log(objCar.value.usuario);
-  console.log("Carrito para la BD");
-  console.log(carritoParaCompra);
-  for (let i = 0; i < carritoParaCompra.length; i++) {
-    console.log(carritoParaCompra[i]);
-    objCar.value.articulo = carritoParaCompra[i].Articulo;
-    objCar.value.cantidad = carritoParaCompra[i].cantidad;
-    console.log(objCar.value);
-    console.log(JSON.stringify(objCar.value));
-    fetch("http://localhost/detallar", {
-      method: "POST",
-      body: JSON.stringify(objCar.value),
+  objCar.value.usuario = id;
+
+  fetch("http://localhost/ordenUS/" + objCar.value.usuario)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Hubo un problema con la solicitud.");
+      }
+      return response.json();
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Hubo un problema con la solicitud.");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error en la solicitud:", error);
-      });
-  }
+    .then((data) => {
+      Orden.value = data.data;
+
+      // Realizar el ciclo aquí, dentro del segundo then
+      for (let i = 0; i < carritoParaCompra.length; i++) {
+        objCar.value.articulo = carritoParaCompra[i].Articulo;
+        objCar.value.cantidad = carritoParaCompra[i].cantidad;
+        objCar.value.orden = Orden.value;
+
+        fetch("http://localhost/detallar", {
+          method: "POST",
+          body: JSON.stringify(objCar.value),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Hubo un problema con la solicitud.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => {
+            console.error("Error en la solicitud:", error);
+          });
+      }
+    })
+    .catch((error) => {
+      console.error("Error en la solicitud:", error);
+    });
   mostrarPestana();
 };
 
