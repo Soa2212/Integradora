@@ -4,6 +4,7 @@ import { useCarritoStore } from "@/stores/carrito";
 import { RouterLink } from "vue-router";
 import { useTokenStore } from "@/stores/TokenUser";
 import { useIdStore } from "@/stores/IdUSR";
+import { useOrdIDStore } from '@/stores/OrdID'
 import BloqLog from "@/components/BloqLog.vue";
 const tokenStore = useTokenStore();
 const tieneToken = tokenStore.tieneToken;
@@ -12,12 +13,15 @@ const tieneToken = tokenStore.tieneToken;
 const IdUsr = useIdStore();
 const id = IdUsr.IdLS; // Acceder a la variable IdLS desde el store
 
+const OrdID=useOrdIDStore();
+const ordenID=ref(OrdID.OrdIDLS);
+
 //Variable que contiene la id es la id de arriba
 
 const carritoStore = useCarritoStore();
 const mostrarModal = ref(false);
 let temporizador = null;
-const tiempoVisible = 9000; // Tiempo en milisegundos
+const tiempoVisible = 4000; // Tiempo en milisegundos
 
 // Obtén la variable carritoLS del store
 const carritoLS = carritoStore.carritoLS;
@@ -99,12 +103,15 @@ watch(carritoLS, () => {
 const objCar = ref({
   articulo: "",
   cantidad: "",
-  usuario:""
+  usuario:"",
+  orden:"",
+  n:0
 }); //Poner la orden activa para asi tener en cuenta el proceso
-
+const ordenJuas=ref();
 
 //Faltara que haga el proceso que permita agregarlo a una orden por medio de un usuario
 const finalizarCompra = () => {
+
   const carritoParaCompra = carritoLS.map((item) => ({
     Articulo: item.Articulo,
     cantidad: item.cantidad,
@@ -113,8 +120,28 @@ const finalizarCompra = () => {
   console.log(objCar.value.usuario);
   console.log("Carrito para la BD");
   console.log(carritoParaCompra);
+
+  fetch('http://localhost/ordenUS/'+objCar.value.usuario)
+  .then((response) => {
+        if (!response.ok) {
+          throw new Error("Hubo un problema con la solicitud.");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        objCar.value.orden=data.data
+        console.log(objCar.value.orden)
+      })
+      .catch((error) => {
+        console.error("Error en la solicitud:", error);
+      });
+  
+
+
   for (let i = 0; i < carritoParaCompra.length; i++) {
     console.log(carritoParaCompra[i]);
+    console.log(objCar.value.orden)
     objCar.value.articulo = carritoParaCompra[i].Articulo;
     objCar.value.cantidad = carritoParaCompra[i].cantidad;
     console.log(objCar.value);
@@ -136,8 +163,14 @@ const finalizarCompra = () => {
         console.error("Error en la solicitud:", error);
       });
   }
+  
+  
   mostrarPestana();
 };
+
+const ordenUsuario =(ord)=>{
+  
+}
 
 const mostrarPestana = () => {
   mostrarModal.value = true;
