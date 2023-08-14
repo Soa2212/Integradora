@@ -16,7 +16,8 @@ const links = [
   ["mdi-store", "Productos", "AdminPro"],
   ["mdi-tag", "Categorias", "AdminCat"],
   ["mdi-home-analytics", "Analiticas", "AdminRep"],
-  ["mdi-currency-usd", "Realizar pedido", "AdminPed"]
+  ["mdi-currency-usd", "Realizar pedido", "AdminPed"],
+  ["mdi-store-alert", "Actualizar stock", "Stock"]
 ];
 
 onMounted(() => {
