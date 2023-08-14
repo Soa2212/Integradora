@@ -113,6 +113,7 @@ const orden = ref({
 });
 
 const ordenesEnProceso = ref({});
+const ordenesAceptadas = ref({})
 const detalleOrden = ref({});
 
 const mostrarOrdenesProceso = () => {
@@ -121,8 +122,15 @@ const mostrarOrdenesProceso = () => {
 .then((datos) => (ordenesEnProceso.value = datos.data));
 }
 
+const mostrarOrdenesAceptadas = () => {
+  fetch("http://localhost/ordenesAceptadas")
+.then((res) => res.json())
+.then((datos) => (ordenesAceptadas.value = datos.data));
+}
+
 onMounted(() => {
   mostrarOrdenesProceso()
+  mostrarOrdenesAceptadas()
 })
 
 const mostrarDetalleOrden = (id) => {
@@ -151,6 +159,28 @@ const cancelarOrden = () => {
     });
   setTimeout(mostrarOrdenesProceso, 500);
 }
+
+const completarOrden = (id) => {
+  dialog.value = false
+  orden.value.orden = id
+  orden.value.estado = 'Completada'
+  fetch("http://localhost/estadoOrden", {
+      method: "POST",
+      body: JSON.stringify(orden.value)
+    });
+  setTimeout(mostrarOrdenesAceptadas, 500);
+}
+
+const cancelarOrdenAceptada = (id) => {
+  dialog.value = false
+  orden.value.orden = id
+  orden.value.estado = 'cancelada'
+  fetch("http://localhost/estadoOrden", {
+      method: "POST",
+      body: JSON.stringify(orden.value)
+    });
+  setTimeout(mostrarOrdenesAceptadas, 500);
+}
 </script>
 
 <template>
@@ -164,6 +194,7 @@ const cancelarOrden = () => {
       <v-tab value="one">Ventas por cancelar/aprobar</v-tab>
       <v-tab value="two">Ventas</v-tab>
       <v-tab value="three">Articulos no vendidos</v-tab>
+      <v-tab @click="mostrarOrdenesAceptadas" value="four">Ordenes por completar</v-tab>
     </v-tabs>
 
     <v-card-text>
@@ -339,6 +370,32 @@ const cancelarOrden = () => {
                     </tr>
                   </tbody>
                 </v-table></div>
+        </v-window-item>
+        <v-window-item value="four">
+          <v-table>
+            <thead>
+              <tr>
+                <th class="text-center">ID orden</th>
+                <th class="text-center">Fecha de orden</th>
+                <th class="text-center">Estado de venta</th>
+                <th class="text-center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="orden in ordenesAceptadas"
+                :key="orden.id"
+              >
+                <td class="text-center">{{ orden.id }}</td>
+                <td class="text-center">{{ orden.FechaOrden }}</td>
+                <td class="text-center">{{ orden.Estado_Venta }}</td>
+                <td class="text-center d-flex justify-center align-center">
+                  <v-btn class="mr-3" @click="completarOrden(orden.id)">Completar</v-btn>
+                  <v-btn @click="cancelarOrdenAceptada(orden.id)">Cancelar</v-btn>
+                </td>
+              </tr>
+            </tbody>
+          </v-table>
         </v-window-item>
       </v-window>
     </v-card-text>
