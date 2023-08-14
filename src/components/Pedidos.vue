@@ -4,6 +4,7 @@ import { useIdStore } from "@/stores/IdUSR";
 const Idusr = useIdStore();
 const Id = Idusr.IdLS;
 
+
 let compra = ref([]);
 let objeto = ref({
   id: "",

@@ -4,7 +4,6 @@ import { useCarritoStore } from "@/stores/carrito";
 import { RouterLink } from "vue-router";
 import { useTokenStore } from "@/stores/TokenUser";
 import { useIdStore } from "@/stores/IdUSR";
-import { useOrdIDStore } from '@/stores/OrdID'
 import BloqLog from "@/components/BloqLog.vue";
 const tokenStore = useTokenStore();
 const tieneToken = tokenStore.tieneToken;
@@ -12,9 +11,6 @@ const tieneToken = tokenStore.tieneToken;
 // Obtén la instancia del store
 const IdUsr = useIdStore();
 const id = IdUsr.IdLS; // Acceder a la variable IdLS desde el store
-
-const OrdID=useOrdIDStore();
-const ordenID=ref(OrdID.OrdIDLS);
 
 //Variable que contiene la id es la id de arriba
 
@@ -103,74 +99,59 @@ watch(carritoLS, () => {
 const objCar = ref({
   articulo: "",
   cantidad: "",
-  usuario:"",
-  orden:"",
-  n:0
+  usuario: "",
+  orden: "",
 }); //Poner la orden activa para asi tener en cuenta el proceso
-const ordenJuas=ref();
+
+const Orden = ref("");
 
 //Faltara que haga el proceso que permita agregarlo a una orden por medio de un usuario
 const finalizarCompra = () => {
-
   const carritoParaCompra = carritoLS.map((item) => ({
     Articulo: item.Articulo,
     cantidad: item.cantidad,
   }));
-  objCar.value.usuario=id;
-  console.log(objCar.value.usuario);
-  console.log("Carrito para la BD");
-  console.log(carritoParaCompra);
+  objCar.value.usuario = id;
 
-  fetch('http://localhost/ordenUS/'+objCar.value.usuario)
-  .then((response) => {
-        if (!response.ok) {
-          throw new Error("Hubo un problema con la solicitud.");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        objCar.value.orden=data.data
-        console.log(objCar.value.orden)
-      })
-      .catch((error) => {
-        console.error("Error en la solicitud:", error);
-      });
-  
-
-
-  for (let i = 0; i < carritoParaCompra.length; i++) {
-    console.log(carritoParaCompra[i]);
-    console.log(objCar.value.orden)
-    objCar.value.articulo = carritoParaCompra[i].Articulo;
-    objCar.value.cantidad = carritoParaCompra[i].cantidad;
-    console.log(objCar.value);
-    console.log(JSON.stringify(objCar.value));
-    fetch("http://localhost/detallar", {
-      method: "POST",
-      body: JSON.stringify(objCar.value),
+  fetch("http://localhost/ordenUS/" + objCar.value.usuario)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Hubo un problema con la solicitud.");
+      }
+      return response.json();
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Hubo un problema con la solicitud.");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error en la solicitud:", error);
-      });
-  }
-  
-  
+    .then((data) => {
+      Orden.value = data.data;
+
+      // Realizar el ciclo aquí, dentro del segundo then
+      for (let i = 0; i < carritoParaCompra.length; i++) {
+        objCar.value.articulo = carritoParaCompra[i].Articulo;
+        objCar.value.cantidad = carritoParaCompra[i].cantidad;
+        objCar.value.orden = Orden.value;
+
+        fetch("http://localhost/detallar", {
+          method: "POST",
+          body: JSON.stringify(objCar.value),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Hubo un problema con la solicitud.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => {
+            console.error("Error en la solicitud:", error);
+          });
+      }
+    })
+    .catch((error) => {
+      console.error("Error en la solicitud:", error);
+    });
   mostrarPestana();
 };
-
-const ordenUsuario =(ord)=>{
-  
-}
 
 const mostrarPestana = () => {
   mostrarModal.value = true;
