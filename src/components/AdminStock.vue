@@ -28,17 +28,14 @@ fetch(`http://localhost/articulosStock/${id}`)
 }
 
 const actualizarStock = (id) => {
-    dialogStock.value = false;
     articulos.value.id = id;
     fetch("http://localhost/actualizarStock", {
     method: "POST",
     body: JSON.stringify(articulos.value)
     })
-}
-
-const cancelar = () => {
-    dialogStock.value = false;
-    articulos.value.cantidad = '';
+    setTimeout(() => {
+      mostrarArticulos(articulos.value.producto)
+    }, 500)
 }
 
 onMounted(() => {
@@ -106,34 +103,9 @@ onMounted(() => {
         <td class="text-center">{{ art.TALLA_NUMERICA }}</td>
         <td class="text-center">{{ art.color }}</td>
         <td class="text-center">{{ art.cantidad }}</td>
-        <td class="text-center">
-            <v-dialog
-                v-model="dialogStock"
-                width="auto"
-                >
-                <template v-slot:activator="{ props }">
-                    <v-btn
-                    color="primary"
-                    v-bind="props"
-                    >
-                    Actualizar
-                    </v-btn>
-                </template>
-
-                <v-card class="pa-5">
-                    <v-card-text>
-                    Ingrese la nueva cantidad de stock:
-                    </v-card-text>
-                    <v-text-field v-model="articulos.cantidad"></v-text-field>
-                    <div class="d-flex justify-end">
-                        <v-btn color="primary" @click="cancelar">Cancelar</v-btn>
-                        <v-btn class="ml-3"
-                        :value="art.id_art"
-                        color="primary"  @click="actualizarStock(art.id_art)"
-                            >Actualizar</v-btn>
-                    </div>
-                </v-card>
-                </v-dialog>
+        <td class="text-center pa-5">
+          <v-text-field v-model="articulos.cantidad"></v-text-field>
+          <v-btn @click="actualizarStock(art.id_art)" class="ml-3">Actualizar</v-btn>
         </td>
       </tr>
     </tbody>
