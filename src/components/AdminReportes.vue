@@ -4,6 +4,12 @@ import { ref, onMounted } from "vue";
 // CODIGO ARANDA
 let reporteventatpo=ref([]);
 
+let detacant = ref({idart:'',cantidadart:''});
+
+const detalleCantidad=ref({});
+
+let detalleCantidadDos= [];
+
 const tipo=ref(['web','local','general','todo']);
 
 let objeto =ref({
@@ -113,8 +119,12 @@ const orden = ref({
 });
 
 const ordenesEnProceso = ref({});
-const ordenesAceptadas = ref({})
+const ordenesAceptadas = ref({});
 const detalleOrden = ref({});
+const cantidadArticulo = ref({
+  id: '',
+  cantidad: ''
+})
 
 const mostrarOrdenesProceso = () => {
   fetch("http://localhost/ordenesEnProceso")
@@ -138,6 +148,9 @@ const mostrarDetalleOrden = (id) => {
   fetch(`http://localhost/detalleOrden/${id}`)
   .then((res) => res.json())
   .then((datos) => (detalleOrden.value = datos.data));
+  fetch(`http://localhost/detalleOrden/${id}`)
+  .then((res) => res.json())
+  .then((datos) => (cantidadArticulo.value = datos.data));
 }
 
 const aceptarOrden = () => {
@@ -161,6 +174,8 @@ const cancelarOrden = () => {
 }
 
 const completarOrden = (id) => {
+  mostrarDetalleOrden(id)
+  descontarcant()
   dialog.value = false
   orden.value.orden = id
   orden.value.estado = 'Completada'
@@ -169,6 +184,17 @@ const completarOrden = (id) => {
       body: JSON.stringify(orden.value)
     });
   setTimeout(mostrarOrdenesAceptadas, 500);
+}
+
+const descontarcant=()=>{
+  for (let i = 0; i < detalleOrden.value.length; i++) {
+detacant.value.idart=detalleOrden.value[i].id;
+detacant.value.cantidadart=detalleOrden.value[i].cantidad;
+fetch('http://localhost/dlcant',{
+method: 'POST',
+body: JSON.stringify(detacant.value)
+})
+}
 }
 
 const cancelarOrdenAceptada = (id) => {
@@ -184,6 +210,9 @@ const cancelarOrdenAceptada = (id) => {
 </script>
 
 <template>
+  {{ detalleCantidad }}
+  {{ detalleOrden }}
+  {{ cantidadArticulo }}
   <h1 class="ml-5 mt-5">Reportes de ventas</h1>
   <v-app class="ma-5">
     <v-card>
@@ -235,6 +264,7 @@ const cancelarOrdenAceptada = (id) => {
                   <v-table>
                     <thead>
                       <tr>
+                        <th class="text-center">ID articulo</th>
                         <th class="text-center">Producto</th>
                         <th class="text-center">Talla</th>
                         <th class="text-center">Color</th>
@@ -244,6 +274,7 @@ const cancelarOrdenAceptada = (id) => {
                     </thead>
                     <tbody>
                       <tr v-for="orden in detalleOrden" :key="orden.id">
+                        <td class="text-center">{{ orden.id }}</td>
                         <td class="text-center">{{ orden.nombre }}</td>
                         <td class="text-center">{{ orden.talla }}</td>
                         <td class="text-center">{{ orden.color }}</td>
