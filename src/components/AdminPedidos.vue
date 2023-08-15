@@ -25,7 +25,6 @@ const finalizarCompra = () => {
     })
     .then((data) => {
       Orden.value = data.data;
-      console.log(copiaCarritoP);
       // Realizar el ciclo aquí, dentro del segundo then
       for (let i = 0; i < copiaCarritoP.length; i++) {
         const objCar = {
