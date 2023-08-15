@@ -63,7 +63,6 @@ const submit = handleSubmit((values) => {
   usuario.value.password = "";
   location.reload();
 });
-
 </script>
 <template>
   <div class="cont">
@@ -79,6 +78,11 @@ const submit = handleSubmit((values) => {
       >
         Registro
       </h2>
+      <p style="display: flex; justify-content: center; margin-bottom: 10px">
+        ¿Ya te encuentras registrado?
+
+        <RouterLink to="LoginView"> Entra aqui</RouterLink>
+      </p>
       <v-text-field
         v-model="name.value.value"
         :counter="10"

@@ -78,8 +78,8 @@ function mostrarMensajeError(mensaje) {
       >
         Inicio Sesion
       </h2>
-      <p class="form__paragraph">
-        Aun no tienes una cuenta?<RouterLink to="Registro">
+      <p>
+        ¿Aun no tienes una cuenta?<RouterLink to="Registro">
           Entra aqui</RouterLink
         >
       </p>
@@ -127,7 +127,7 @@ function mostrarMensajeError(mensaje) {
   background-color: #fff;
   margin: auto;
   width: 90%;
-  max-width: 500px;
+  max-width: 450px;
   max-height: 700px;
   padding: 4.5em 3em;
   border-radius: 10px;
