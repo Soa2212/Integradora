@@ -20,6 +20,10 @@ const agregarTallaRopa = ref(false);
 const agregarColor = ref(false);
 const aviso = ref('');
 
+const idProducto = ref({
+  id: ''
+})
+
 const producto = ref({
   nombre: ''
 });
@@ -135,6 +139,16 @@ const agregarNuevoArticulo = () => {
   nuevoArticulo.value.talla_ropa = '7';
   nuevoArticulo.value.color = '17';
   borrarDatosProducto();
+}
+
+const activarProducto = (id) => {
+  fetch("http://localhost/habilitarProd/"+id, {
+      method: "POST",
+    });
+    setTimeout(() => {
+      mostrarProductos();
+      mostrarProductosInactivos();
+    }, 500)
 }
 
 onMounted(() => {
@@ -547,7 +561,7 @@ const agregarArticulo = () => {
           }}</v-card-text>
           <div class="d-flex align-center">
             <p>Precio: ${{ producto.precio }}</p>
-            <v-btn class="ml-5 mb-2">Activar</v-btn>
+            <v-btn @click="activarProducto(producto.id)" class="ml-5 mb-2">Activar</v-btn>
           </div>
            
         </v-card>
