@@ -64,7 +64,7 @@ const logout = () => {
           >
         </v-list-item>
         <v-list-item>
-          <v-btn @click="logout()"
+          <v-btn @click="logout()" style="width: 100%;"
             ><v-icon class="mdi-logout" style="color: #767676">a</v-icon>Cerrar
             Sesion</v-btn
           >

@@ -28,16 +28,14 @@ fetch(`http://localhost/articulosStock/${id}`)
 }
 
 const actualizarStock = (id) => {
-    dialogStock.value = false;
     articulos.value.id = id;
     fetch("http://localhost/actualizarStock", {
     method: "POST",
     body: JSON.stringify(articulos.value)
     })
-}
-
-const cancelar = () => {
-    dialogStock.value = false;
+    setTimeout(() => {
+      mostrarArticulos(articulos.value.producto)
+    }, 500)
     articulos.value.cantidad = '';
 }
 
@@ -47,8 +45,6 @@ onMounted(() => {
 </script>
 
 <template>
-    {{ articulosProducto }}
-    {{ articulos }}
     <v-app class="pa-5">
         <h1 class="mb-3">Actualizar stock</h1>
         <v-dialog
@@ -69,7 +65,7 @@ onMounted(() => {
         <v-row>
         <v-col v-for="producto in productos" cols="12" sm="12" md="6" lg="4">
         <v-card
-          class="d-flex flex-column justify-center align-center"
+          class="d-flex flex-column justify-center align-center pb-5"
           style="height: 18em"
         >
           <v-img style="height: 100px" :src="producto.imagen1"></v-img>
@@ -100,43 +96,22 @@ onMounted(() => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="art in articulosProducto">
+      <tr v-for="art in articulosProducto" key="art.id_art">
         <td class="text-center">{{ art.producto }}</td>
         <td class="text-center">{{ art.TALLA_ROPA }}</td>
         <td class="text-center">{{ art.TALLA_NUMERICA }}</td>
         <td class="text-center">{{ art.color }}</td>
         <td class="text-center">{{ art.cantidad }}</td>
-        <td class="text-center">
-            <v-dialog
-                v-model="dialogStock"
-                width="auto"
-                >
-                <template v-slot:activator="{ props }">
-                    <v-btn
-                    color="primary"
-                    v-bind="props"
-                    >
-                    Actualizar
-                    </v-btn>
-                </template>
-
-                <v-card class="pa-5">
-                    <v-card-text>
-                    Ingrese la nueva cantidad de stock:
-                    </v-card-text>
-                    <v-text-field v-model="articulos.cantidad"></v-text-field>
-                    <div class="d-flex justify-end">
-                        <v-btn color="primary" @click="cancelar">Cancelar</v-btn>
-                        <v-btn class="ml-3"
-                        :value="art.id_art"
-                        color="primary"  @click="actualizarStock(art.id_art)"
-                            >Actualizar</v-btn>
-                    </div>
-                </v-card>
-                </v-dialog>
+        <td class="text-center pa-5"> 
+          <v-btn @click="actualizarStock(art.id_art)" class="ml-3">Actualizar</v-btn>
         </td>
       </tr>
     </tbody>
   </v-table>
+  <v-row class="d-flex justify-end mt-2">
+    <v-col cols="6" lg="2" md="4" sm="6">
+      <v-text-field label="Ingrese nueva cantidad" v-model="articulos.cantidad"></v-text-field>
+    </v-col>
+  </v-row>
     </v-app>
 </template>
