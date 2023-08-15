@@ -210,9 +210,6 @@ const cancelarOrdenAceptada = (id) => {
 </script>
 
 <template>
-  {{ detalleCantidad }}
-  {{ detalleOrden }}
-  {{ cantidadArticulo }}
   <h1 class="ml-5 mt-5">Reportes de ventas</h1>
   <v-app class="ma-5">
     <v-card>
