@@ -312,7 +312,6 @@ const iniciarTemporizadorV = () => {
   <div class="d-flex flex-column pa-5">
     <v-dialog v-model="dialog" width="auto">
       <template v-slot:activator="{ props }">
-        {{ carritoP }}
         <v-btn style="width: min-content" color="primary" v-bind="props">
           Seleccionar productos
         </v-btn>
