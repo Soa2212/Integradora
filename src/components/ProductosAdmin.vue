@@ -3,6 +3,7 @@ import { ref,onMounted} from "vue";
 import { useField, useForm } from 'vee-validate'
 
 const productos = ref({});
+const productosInactivos = ref({});
 const categorias = ref({});
 const eliminar = ref(false);
 const dialog = ref(false);
@@ -71,6 +72,12 @@ const mostrarProductos = () => {
   .then((datos) => (productos.value = datos.data));
 }
 
+const mostrarProductosInactivos = () => {
+  fetch("http://localhost/productosInactivos")
+  .then((res) => res.json())
+  .then((datos) => (productosInactivos.value = datos.data));
+}
+
 const mostrarCategorias = () =>{
   fetch("http://localhost/categorias")
   .then((res) => res.json())
@@ -132,6 +139,7 @@ const agregarNuevoArticulo = () => {
 
 onMounted(() => {
   mostrarProductos();
+  mostrarProductosInactivos();
   mostrarCategorias();
 });
 
@@ -143,6 +151,10 @@ const eliminarProducto = () => {
     });
     dialogDel.value = false;
     seleccionados.value = [];
+    setTimeout(() => {
+      mostrarProductos();
+      mostrarProductosInactivos();
+    }, 500)
   } else {
     alerta.value = true;
     dialogDel.value = false;
@@ -521,12 +533,32 @@ const agregarArticulo = () => {
         </v-card>
       </v-col>
     </div>
+    <h1 class="mt-5">Productos inactivos</h1>
+    <v-divider class="mb-5" thickness="2" color="black"></v-divider>
+    <div class="productosInactivos">
+      <v-col v-for="producto in productosInactivos" cols="12" sm="12" md="6" lg="4">
+        <v-card
+          class="d-flex flex-column justify-center align-center pa-3"
+          style="height: 15em"
+        >
+          <v-img style="height: 100px" :src="producto.imagen1"></v-img>
+          <v-card-text style="text-align: center">{{
+            producto.nombre
+          }}</v-card-text>
+          <div class="d-flex align-center">
+            <p>Precio: ${{ producto.precio }}</p>
+            <v-btn class="ml-5 mb-2">Activar</v-btn>
+          </div>
+           
+        </v-card>
+      </v-col>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .botones,
-.productos {
+.productos, .productosInactivos {
   display: flex;
   flex-wrap: wrap;
 }
