@@ -1,10 +1,71 @@
 <script setup>
 import { ref, computed } from "vue";
+import { useIdStore } from "@/stores/IdUSR";
+
+const IdUsr = useIdStore();
+const id = IdUsr.IdLS; // Acceder a la variable IdLS desde el store
+
+const Orden = ref("");
+const objCar = ref({
+  articulo: "",
+  cantidad: "",
+  usuario: "",
+  orden: "",
+});
+
+const finalizarCompra = () => {
+  const copiaCarritoP = [...carritoP.value];
+
+  fetch("http://localhost/ordenUS/" + id)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Hubo un problema con la solicitud.");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      Orden.value = data.data;
+      console.log(copiaCarritoP);
+      // Realizar el ciclo aquí, dentro del segundo then
+      for (let i = 0; i < copiaCarritoP.length; i++) {
+        const objCar = {
+          articulo: copiaCarritoP[i].Articulo,
+          cantidad: copiaCarritoP[i].cantidad,
+          orden: Orden.value,
+          usuario: id,
+        };
+       
+        fetch("http://localhost/detallar", {
+          method: "POST",
+          body: JSON.stringify(objCar),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Hubo un problema con la solicitud.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => {
+            console.error("Error en la solicitud:", error);
+          });
+      }
+    })
+    .catch((error) => {
+      console.error("Error en la solicitud:", error);
+    });
+};
 
 //Las tres primeras variables son para el popup cuando se agrega un producto al carrito o como yo le digo menu individual
 const isHovered = ref([]);
 const showPopup = ref(false);
-const carritoP = ref([]); //Variable que se va ir a la base de datos
+const carritoP = ref([]);
+const carritoX = ref({
+  Articulo: "",
+  cantidad: "",
+});
 const dialog = ref(false);
 const eliminar = ref(false);
 const dialogEliminar = ref(false);
@@ -14,24 +75,26 @@ const seleccionados = ref([]);
 
 const eliminarArticulo = () => {
   for (const id of seleccionados.value) {
-  const index = carritoP.value.findIndex(producto => producto.Articulo == id);
-  if (index !== -1) {
-    carritoP.value.splice(index, 1);
-    seleccionados.value = [];
+    const index = carritoP.value.findIndex(
+      (producto) => producto.Articulo == id
+    );
+    if (index !== -1) {
+      carritoP.value.splice(index, 1);
+      seleccionados.value = [];
+    }
   }
-}
-dialogEliminar.value = false
-}
+  dialogEliminar.value = false;
+};
 
 const realizarPedido = () => {
+  finalizarCompra();
   dialogConfirmar.value = false;
-  carritoP.value = [];
-}
+};
 
 const cancelarSeleccion = () => {
   eliminar.value = false;
   seleccionados.value = [];
-}
+};
 
 const productoPP = (id) => {
   showPopup.value = true;
@@ -243,331 +306,352 @@ const iniciarTemporizadorV = () => {
     mostrarModal2.value = false;
   }, tiempoVisible);
 };
-
 </script>
 
 <template>
   <div class="d-flex flex-column pa-5">
-    <v-dialog
-      v-model="dialog"
-      width="auto"
-    >
+    <v-dialog v-model="dialog" width="auto">
       <template v-slot:activator="{ props }">
-        <v-btn style="width: min-content;"
-          color="primary"
-          v-bind="props"
-        >
+        {{ carritoP }}
+        <v-btn style="width: min-content" color="primary" v-bind="props">
           Seleccionar productos
         </v-btn>
       </template>
       <v-card class="pa-5">
-      <h1 class="d-flex justify-center text-h3 mt-3 mb-1">
-        Productos
-      </h1>
-      <div class="d-flex align-center">
-        <v-row class="mt-3 d-flex ">
-        <v-col class="d-flex justify-center"
-          v-for="(producto, index) in productosConStock"
-          :key="producto.id"
-          cols="6" sm="6" md="4" lg="3"
-        >
-          <v-card
-            @mouseover="setHovered(index, true)"
-            @mouseleave="setHovered(index, false)"
-            height="280"
-            width="16em"
-            class="d-flex flex-column mb-3"
-            style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
-          >
-            <v-img
-              style="border-radius: 10px"
-              height="100"
-              :src="producto.imagen1"
-              cover
-            ></v-img>
-            <div class="informacion" :class="{ hovered: isHovered[index] }">
-              <button
-                @click="
-                  productoPP(producto.id);
-                  productShow(
-                    producto.nombre,
-                    producto.descripcion,
-                    producto.precio,
-                    producto.imagen1
-                  );
-                "
+        <h1 class="d-flex justify-center text-h3 mt-3 mb-1">Productos</h1>
+        <div class="d-flex align-center">
+          <v-row class="mt-3 d-flex">
+            <v-col
+              class="d-flex justify-center"
+              v-for="(producto, index) in productosConStock"
+              :key="producto.id"
+              cols="6"
+              sm="6"
+              md="4"
+              lg="3"
+            >
+              <v-card
+                @mouseover="setHovered(index, true)"
+                @mouseleave="setHovered(index, false)"
+                height="280"
+                width="16em"
+                class="d-flex flex-column mb-3"
+                style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
               >
-                <p style="font-size: 15px; text-align: center">
-                  {{ producto.categoria }}
-                </p>
-                <h3
-                  style="cursor: pointer; font-size: 15px; text-align: center"
-                >
-                  {{ producto.nombre }}
-                </h3>
-                <h2 style="font-size: 15px; text-align: center">
-                  $ {{ producto.precio }}
-                </h2>
-              </button>
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
-      </div>
-    </v-card>
-
-    <div v-if="showPopup" class="popup-container">
-      <div class="popup-content">
-        <span
-          class="close-button"
-          @click="
-            showPopup = false;
-            defArticulo();
-          "
-          >✖</span
-        >
-        <div style="width: 100%; padding: 20px">
-          <div
-            style="display: flex; width: 100%; height: 100%; flex-wrap: wrap"
-          >
-            <div style="width: 100%; display: flex">
-              <div style="width: 40%; display: flex; align-items: center">
-                <img
-                  :src="productBanner.imagen1"
-                  alt=""
-                  style="
-                    max-width: 250px;
-                    max-height: 250px;
-                    border-radius: 20px;
-                  "
-                />
-              </div>
-              <div
-                style="
-                  width: 60%;
-                  text-align: center;
-                  display: flex;
-                  flex-direction: column;
-                "
-              >
-                <p class="BannerNP">{{ productBanner.nombre }}</p>
-                <div class="BannerIO">
-                  <p style="margin-top: 10px">
-                    Costo ${{ productBanner.precio }}
-                  </p>
-                  <div v-if="shouldDisplayTalla">
-                    <p
-                      v-if="tallaArticulo != 'No seleccionada'"
-                      style="margin-top: 10px"
-                    >
-                      Talla: {{ tallaArticulo }}
-                    </p>
-                    <p v-if="shouldDisplayColor">Color: {{ colorArticulo }}</p>
-                  </div>
-                </div>
-
-                <div class="scroll">
-                  <div
-                    v-for="articulo in ArticulosProd"
-                    :key="articulo.articulo"
+                <v-img
+                  style="border-radius: 10px"
+                  height="100"
+                  :src="producto.imagen1"
+                  cover
+                ></v-img>
+                <div class="informacion" :class="{ hovered: isHovered[index] }">
+                  <button
+                    @click="
+                      productoPP(producto.id);
+                      productShow(
+                        producto.nombre,
+                        producto.descripcion,
+                        producto.precio,
+                        producto.imagen1
+                      );
+                    "
                   >
-                    <button
-                      @click="
-                        tallaArt(
-                          articulo.TALLA_NUMERICA,
-                          articulo.color,
-                          articulo.articulo,
-                          articulo.cantidad
-                        )
+                    <p style="font-size: 15px; text-align: center">
+                      {{ producto.categoria }}
+                    </p>
+                    <h3
+                      style="
+                        cursor: pointer;
+                        font-size: 15px;
+                        text-align: center;
                       "
-                      class="btnTallas"
-                      v-if="articulo.TALLA_NUMERICA !== 'NA'"
                     >
-                      {{ articulo.TALLA_NUMERICA }}
-                    </button>
-                    <button
-                      @click="
-                        tallaArt(
-                          articulo.tall_ropa,
-                          articulo.color,
-                          articulo.articulo,
-                          articulo.cantidad
-                        )
-                      "
-                      v-if="articulo.tall_ropa !== 'NA'"
-                    >
-                      {{ articulo.tall_ropa }}
-                    </button>
-                  </div>
+                      {{ producto.nombre }}
+                    </h3>
+                    <h2 style="font-size: 15px; text-align: center">
+                      $ {{ producto.precio }}
+                    </h2>
+                  </button>
+                </div>
+              </v-card>
+            </v-col>
+          </v-row>
+        </div>
+      </v-card>
+
+      <div v-if="showPopup" class="popup-container">
+        <div class="popup-content">
+          <span
+            class="close-button"
+            @click="
+              showPopup = false;
+              defArticulo();
+            "
+            >✖</span
+          >
+          <div style="width: 100%; padding: 20px">
+            <div
+              style="display: flex; width: 100%; height: 100%; flex-wrap: wrap"
+            >
+              <div style="width: 100%; display: flex">
+                <div style="width: 40%; display: flex; align-items: center">
+                  <img
+                    :src="productBanner.imagen1"
+                    alt=""
+                    style="
+                      max-width: 250px;
+                      max-height: 250px;
+                      border-radius: 20px;
+                    "
+                  />
                 </div>
                 <div
                   style="
-                    width: 100%;
+                    width: 60%;
+                    text-align: center;
                     display: flex;
-                    gap: 10px;
-                    justify-content: center;
-                    align-items: center;
+                    flex-direction: column;
                   "
                 >
+                  <p class="BannerNP">{{ productBanner.nombre }}</p>
+                  <div class="BannerIO">
+                    <p style="margin-top: 10px">
+                      Costo ${{ productBanner.precio }}
+                    </p>
+                    <div v-if="shouldDisplayTalla">
+                      <p
+                        v-if="tallaArticulo != 'No seleccionada'"
+                        style="margin-top: 10px"
+                      >
+                        Talla: {{ tallaArticulo }}
+                      </p>
+                      <p v-if="shouldDisplayColor">
+                        Color: {{ colorArticulo }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="scroll">
+                    <div
+                      v-for="articulo in ArticulosProd"
+                      :key="articulo.articulo"
+                    >
+                      <button
+                        @click="
+                          tallaArt(
+                            articulo.TALLA_NUMERICA,
+                            articulo.color,
+                            articulo.articulo,
+                            articulo.cantidad
+                          )
+                        "
+                        class="btnTallas"
+                        v-if="articulo.TALLA_NUMERICA !== 'NA'"
+                      >
+                        {{ articulo.TALLA_NUMERICA }}
+                      </button>
+                      <button
+                        @click="
+                          tallaArt(
+                            articulo.tall_ropa,
+                            articulo.color,
+                            articulo.articulo,
+                            articulo.cantidad
+                          )
+                        "
+                        v-if="articulo.tall_ropa !== 'NA'"
+                      >
+                        {{ articulo.tall_ropa }}
+                      </button>
+                    </div>
+                  </div>
                   <div
                     style="
-                      width: 30%;
-                      height: 100px;
-                      margin-right: -20px;
+                      width: 100%;
                       display: flex;
-                      justify-content: end;
+                      gap: 10px;
+                      justify-content: center;
                       align-items: center;
                     "
                   >
-                    <button @click="IinputValue" class="btnA">+</button>
-                    <input
-                      type="number"
-                      v-model="inputValue"
-                      @input="onInputChange"
-                      class="inpQA"
-                    />
-                    <button
-                      @click="DinputValue"
-                      class="btnA"
-                      style="font-size: 30px"
-                    >
-                      -
-                    </button>
-                  </div>
-                  <div style="width: 70%">
-                    <button
-                      style="margin-top: 10px"
-                      class="botnsEstF"
-                      @click="
-                        guardarProducto(
-                          idArticulo,
-                          amountArticulo,
-                          inputValue,
-                          productBanner.nombre,
-                          productBanner.imagen1,
-                          productBanner.precio,
-                          tallaArticulo,
-                          colorArticulo
-                        )
+                    <div
+                      style="
+                        width: 30%;
+                        height: 100px;
+                        margin-right: -20px;
+                        display: flex;
+                        justify-content: end;
+                        align-items: center;
                       "
                     >
-                      <strong class="botnsP">AGREGAR AL CARRITO</strong>
-                    </button>
-                    <transition
-                      name="pestanita"
-                      @after-enter="iniciarTemporizador"
-                    >
-                      <div v-if="mostrarModal" class="modal">
-                        <div class="modal-contenido">
-                          <p>
-                            No puedes agregar mas
-                            {{ productBanner.nombre }} al carrito.
-                          </p>
+                      <button @click="IinputValue" class="btnA">+</button>
+                      <input
+                        type="number"
+                        v-model="inputValue"
+                        @input="onInputChange"
+                        class="inpQA"
+                      />
+                      <button
+                        @click="DinputValue"
+                        class="btnA"
+                        style="font-size: 30px"
+                      >
+                        -
+                      </button>
+                    </div>
+                    <div style="width: 70%">
+                      <button
+                        style="margin-top: 10px"
+                        class="botnsEstF"
+                        @click="
+                          guardarProducto(
+                            idArticulo,
+                            amountArticulo,
+                            inputValue,
+                            productBanner.nombre,
+                            productBanner.imagen1,
+                            productBanner.precio,
+                            tallaArticulo,
+                            colorArticulo
+                          )
+                        "
+                      >
+                        <strong class="botnsP">AGREGAR AL CARRITO</strong>
+                      </button>
+                      <transition
+                        name="pestanita"
+                        @after-enter="iniciarTemporizador"
+                      >
+                        <div v-if="mostrarModal" class="modal">
+                          <div class="modal-contenido">
+                            <p>
+                              No puedes agregar mas
+                              {{ productBanner.nombre }} al carrito.
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </transition>
-                    <transition
-                      name="pestanita"
-                      @after-enter="iniciarTemporizadorV"
-                    >
-                      <div v-if="mostrarModal2" class="modal2">
-                        <div class="modal-contenido2">
-                          <p>Producto agregado con exito al carrito.</p>
+                      </transition>
+                      <transition
+                        name="pestanita"
+                        @after-enter="iniciarTemporizadorV"
+                      >
+                        <div v-if="mostrarModal2" class="modal2">
+                          <div class="modal-contenido2">
+                            <p>Producto agregado con exito al carrito.</p>
+                          </div>
                         </div>
-                      </div>
-                    </transition>
+                      </transition>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div style="width: 100%">
-              <div class="linea-horizontal"></div>
-              <p class="descArt">{{ productBanner.descripcion }}</p>
+              <div style="width: 100%">
+                <div class="linea-horizontal"></div>
+                <p class="descArt">{{ productBanner.descripcion }}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </v-dialog>
 
     <div>
-      <h1 style="font-size: 1.5em;" class="mt-9">Resumen de pedido</h1>
+      <h1 style="font-size: 1.5em" class="mt-9">Resumen de pedido</h1>
       <div>
         <v-table class="mr-5">
-        <thead>
-          <tr>
-            <th v-if="eliminar" style="width:min-content;" class="text-center">Eliminar</th>
-            <th class="text-center">Articulo</th>
-            <th class="text-center">Imagen</th>
-            <th class="text-center">Talla</th>
-            <th class="text-center">Color</th>
-            <th class="text-center">Cantidad</th>
-            <th class="text-center">Precio</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="art in carritoP" :key="art.id">
-            <td v-if="eliminar" style="width: 10px">
-              <v-checkbox
-                v-model="seleccionados"
-                class="d-flex justify-center align-center"
-                :value="art.Articulo"
-              ></v-checkbox>
-            </td>
-            <td class="text-center">{{ art.nombre }}</td>
-            <td class="text-center">
-              <img style="height: 100px; width: auto; margin: 1.5em" :src="art.imagen" alt="Imagen de producto" />
-            </td>
-            <td class="text-center">{{ art.talla }}</td>
-            <td class="text-center">{{ art.color }}</td>
-            <td class="text-center">{{ art.cantidad }}</td>
-            <td class="text-center">{{ art.precio * art.cantidad }}</td>
-          </tr>
-        </tbody>
-      </v-table>
-      <div class="mt-5 d-flex justify-space-between">
-        <div>
-          <v-dialog
-      v-model="dialogEliminar"
-      width="auto"
-    >
-      <template v-slot:activator="{ props }">
-        <v-btn :="props" v-if="eliminar" @click="dialogEliminar=true" class="mr-5">Eliminar</v-btn>
-        <v-btn v-if="eliminar" @click="cancelarSeleccion" class="mr-5">Cancelar</v-btn>
-      </template>
+          <thead>
+            <tr>
+              <th
+                v-if="eliminar"
+                style="width: min-content"
+                class="text-center"
+              >
+                Eliminar
+              </th>
+              <th class="text-center">Articulo</th>
+              <th class="text-center">Imagen</th>
+              <th class="text-center">Talla</th>
+              <th class="text-center">Color</th>
+              <th class="text-center">Cantidad</th>
+              <th class="text-center">Precio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="art in carritoP" :key="art.id">
+              <td v-if="eliminar" style="width: 10px">
+                <v-checkbox
+                  v-model="seleccionados"
+                  class="d-flex justify-center align-center"
+                  :value="art.Articulo"
+                ></v-checkbox>
+              </td>
+              <td class="text-center">{{ art.nombre }}</td>
+              <td class="text-center">
+                <img
+                  style="height: 100px; width: auto; margin: 1.5em"
+                  :src="art.imagen"
+                  alt="Imagen de producto"
+                />
+              </td>
+              <td class="text-center">{{ art.talla }}</td>
+              <td class="text-center">{{ art.color }}</td>
+              <td class="text-center">{{ art.cantidad }}</td>
+              <td class="text-center">{{ art.precio * art.cantidad }}</td>
+            </tr>
+          </tbody>
+        </v-table>
+        <div class="mt-5 d-flex justify-space-between">
+          <div>
+            <v-dialog v-model="dialogEliminar" width="auto">
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  :="props"
+                  v-if="eliminar"
+                  @click="dialogEliminar = true"
+                  class="mr-5"
+                  >Eliminar</v-btn
+                >
+                <v-btn v-if="eliminar" @click="cancelarSeleccion" class="mr-5"
+                  >Cancelar</v-btn
+                >
+              </template>
 
-      <v-card>
-        <v-card-text>
-        Esta seguro que desea eliminar los articulos seleccionados?
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" block @click="eliminarArticulo">De acuerdo</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-          
-        </div>
-        <div>
-          <v-btn @click="eliminar=true" class="mr-5">Modificar articulos</v-btn>
-          <v-dialog
-      v-model="dialogConfirmar"
-      width="auto"
-    >
-      <template v-slot:activator="{ props }">
-        <v-btn :="props" @click="dialogConfirmar=true" class="mr-5">Confirmar pedido</v-btn>
-      </template>
+              <v-card>
+                <v-card-text>
+                  Esta seguro que desea eliminar los articulos seleccionados?
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn color="primary" block @click="eliminarArticulo"
+                    >De acuerdo</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </div>
+          <div>
+            <v-btn @click="eliminar = true" class="mr-5"
+              >Modificar articulos</v-btn
+            >
+            <v-dialog v-model="dialogConfirmar" width="auto">
+              <template v-slot:activator="{ props }">
+                <v-btn :="props" @click="dialogConfirmar = true" class="mr-5"
+                  >Confirmar pedido</v-btn
+                >
+              </template>
 
-      <v-card>
-        <v-card-text>
-        Esta seguro que desea realizar el pedido?
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" block @click="realizarPedido">De acuerdo</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+              <v-card>
+                <v-card-text>
+                  Esta seguro que desea realizar el pedido?
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn color="primary" block @click="realizarPedido"
+                    >De acuerdo</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </div>
         </div>
-      </div>
       </div>
     </div>
   </div>
@@ -613,7 +697,6 @@ const iniciarTemporizadorV = () => {
 }
 s .fade-enter-active,
 .fade-enter,
-
 .popup-container {
   position: fixed;
   top: 0;
