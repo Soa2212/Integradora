@@ -43,6 +43,7 @@ const Articulos = (id) => {
         colorArticulo.value = ArticulosProd.value[0].color;
       }
     });
+    console.log(ArticulosProd)
 };
 
 const categorias = ref([]);
@@ -364,7 +365,10 @@ const popupF = () => {
                     </p>
                     <div v-if="shouldDisplayTalla">
                       <p
-                        v-if="tallaArticulo != 'No seleccionada'"
+                        v-if="
+                          tallaArticulo != 'No seleccionada' &&
+                          tallaArticulo != 'NA'
+                        "
                         style="margin-top: 10px"
                       >
                         Talla: {{ tallaArticulo }}
@@ -380,34 +384,60 @@ const popupF = () => {
                       v-for="articulo in ArticulosProd"
                       :key="articulo.articulo"
                     >
-                      <button
-                        @click="
-                          tallaArt(
-                            articulo.TALLA_NUMERICA,
-                            articulo.color,
-                            articulo.articulo,
-                            articulo.cantidad
-                          )
+                      <div
+                        v-if="
+                          articulo.TALLA_NUMERICA == 'NA' &&
+                          articulo.tall_ropa == 'NA'
                         "
-                        class="btnTallas"
-                        v-if="articulo.TALLA_NUMERICA !== 'NA'"
                       >
-                        {{ articulo.TALLA_NUMERICA }}
-                      </button>
-                      <button
-                        @click="
-                          tallaArt(
-                            articulo.tall_ropa,
-                            articulo.color,
-                            articulo.articulo,
-                            articulo.cantidad
-                          )
-                        "
-                        class="btnTallas"
-                        v-if="articulo.tall_ropa !== 'NA'"
-                      >
-                        {{ articulo.tall_ropa }}
-                      </button>
+                        <button
+                          @click="
+                            tallaArt(
+                              articulo.TALLA_NUMERICA,
+                              articulo.color,
+                              articulo.articulo,
+                              articulo.cantidad
+                            )
+                          "
+                          class="btnTallas2"
+                          style="font-size: 12px; min-width: 40px;"
+                          v-if="articulo.color !== 'NA'"
+                        >
+                          {{ articulo.color }}
+                        </button>
+                      </div>
+                      <div v-else>
+                        <button
+                          @click="
+                            tallaArt(
+                              articulo.TALLA_NUMERICA,
+                              articulo.color,
+                              articulo.articulo,
+                              articulo.cantidad
+                            )
+                          "
+                          class="btnTallas"
+                          style="font-size: 16px; min-width: 40px;"
+                          v-if="articulo.TALLA_NUMERICA !== 'NA'"
+                        >
+                          {{ articulo.TALLA_NUMERICA }}
+                        </button>
+                        <button
+                          @click="
+                            tallaArt(
+                              articulo.tall_ropa,
+                              articulo.color,
+                              articulo.articulo,
+                              articulo.cantidad
+                            )
+                          "
+                          class="btnTallas"
+                          style="font-size: 16px; min-width: 40px;"
+                          v-if="articulo.tall_ropa !== 'NA'"
+                        >
+                          {{ articulo.tall_ropa }}
+                        </button>
+                      </div>
                     </div>
                   </div>
                   <div
@@ -758,8 +788,26 @@ input[type="number"] {
   margin-left: 5px;
   background-color: #f7f8fa;
 }
-
 .btnTallas:hover {
+  background-color: black;
+  color: white;
+  transition: 0.5s;
+}
+
+.btnTallas2:hover {
+  background-color: black;
+  color: white;
+  transition: 0.5s;
+}
+
+.btnTallas2 {
+  height: 40px;
+  margin-left: 5px;
+  background-color: #f7f8fa;
+  
+}
+
+.btnTallas2:hover {
   background-color: black;
   color: white;
   transition: 0.5s;
@@ -781,7 +829,7 @@ input[type="number"] {
 
 .scroll button {
   /* Estilo para los botones de las tallas */
-  width: 40px; /* Establece el ancho deseado para los botones */
+  max-width: max-content; /* Establece el ancho deseado para los botones */
   flex-shrink: 0; /* Evita que los botones se reduzcan si hay muchos en una fila */
 }
 
