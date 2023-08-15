@@ -131,6 +131,7 @@ const borrarDatosProducto = () => {
 
 const agregarNuevoArticulo = () => {
   crearNuevoArticulo.value = false;
+  agregarTallaNum.value = true;
   agregarTallaRopa.value = false;
   agregarColor.value = false;
   detallar.value = true;
@@ -207,7 +208,7 @@ const agregarProducto = () => {
 
 const verificarArticuloTallaNum = (id) => {
   if (id == 33) {
-    agregarColor.value = false;
+    agregarColor.value = true;
     nuevoArticulo.value.color = '17'
     agregarTallaRopa.value = true;
   }
@@ -220,7 +221,7 @@ const verificarArticuloTallaNum = (id) => {
 
 const verificarArticuloTallaRopa = (id) => {
   if (id == 7 && nuevoArticulo.value.talla_numerica !== 33) {
-    agregarColor.value = false;
+    agregarColor.value = true;
     agregarTallaNum.value = true;
     aviso.value = '';
   }
@@ -230,11 +231,10 @@ const verificarArticuloTallaRopa = (id) => {
     aviso.value = '';
   }
   else if (id == 7 && nuevoArticulo.value.talla_numerica == 33){
-    aviso.value = 'Su articulo no tiene talla, por ende no puede tener color. Modifique las tallas si necesita un color';
-    nuevoArticulo.value.color = '17'
     agregarTallaNum.value = true;
     agregarTallaRopa.value = true;
-    agregarColor.value = false;
+    agregarColor.value = true;
+    aviso.value = 'AVISO: Su artículo actualmente no tiene talla';
   }
 }
 
