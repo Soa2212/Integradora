@@ -81,7 +81,6 @@ const submit = handleSubmit((values) => {
 });
 </script>
 <template>
-  {{ correoExiste }}
   <div class="cont">
     <form @submit.prevent="submit">
       <h2
