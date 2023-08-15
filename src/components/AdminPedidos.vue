@@ -16,7 +16,7 @@ const objCar = ref({
 const finalizarCompra = () => {
   const copiaCarritoP = [...carritoP.value];
 
-  fetch("http://localhost/ordenUS/" + id)
+  fetch("http://localhost/ordenUSL/" + id)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Hubo un problema con la solicitud.");
@@ -55,6 +55,7 @@ const finalizarCompra = () => {
     .catch((error) => {
       console.error("Error en la solicitud:", error);
     });
+    location.reload()
 };
 
 //Las tres primeras variables son para el popup cuando se agrega un producto al carrito o como yo le digo menu individual
