@@ -9,6 +9,8 @@ const usuario = ref({
   tipo: "normal",
 });
 
+const avisoEmail = ref('');
+
 const { handleSubmit, handleReset } = useForm({
   validationSchema: {
     name(value) {
@@ -52,19 +54,34 @@ const contraseña = useField("contraseña");
 const confcontraseña = useField("confcontraseña");
 const checkbox = useField("checkbox");
 
+const correoExiste = ref({
+  bcorreo: ''
+});
+
 const submit = handleSubmit((values) => {
-  fetch("http://localhost/agregarUser", {
+  fetch("http://localhost/verificarEmail", {
     method: "POST",
     body: JSON.stringify(usuario.value),
+  })
+  .then(res => res.json())
+  .then(data => {
+    correoExiste.value.bcorreo = data.data[0].bcorreo
+    if (correoExiste.value.bcorreo == 1) {
+      avisoEmail.value = 'El correo utilizado ya está registrado. Por favor use otro*';
+    } else if (correoExiste.value.bcorreo == 0){
+      fetch("http://localhost/agregarUser", {
+      method: "POST",
+      body: JSON.stringify(usuario.value),
+      })
+      avisoEmail.value = '';
+      handleReset();
+      location.reload();
+    }
   });
-  handleReset();
-  usuario.value.nombre = "";
-  usuario.value.email = "";
-  usuario.value.password = "";
-  location.reload();
 });
 </script>
 <template>
+  {{ correoExiste }}
   <div class="cont">
     <form @submit.prevent="submit">
       <h2
@@ -117,6 +134,10 @@ const submit = handleSubmit((values) => {
         label="Validar"
         type="checkbox"
       ></v-checkbox>
+
+      <p style="color: rgb(177, 0, 0);" class="mb-5 d-flex justify-center">
+        {{ avisoEmail }}
+      </p>
 
       <div class="btnsc">
         <div style="width: 65%; display: flex; justify-content: end">
