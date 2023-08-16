@@ -55,7 +55,7 @@ const finalizarCompra = () => {
     .catch((error) => {
       console.error("Error en la solicitud:", error);
     });
-    location.reload()
+  location.reload();
 };
 
 //Las tres primeras variables son para el popup cuando se agrega un producto al carrito o como yo le digo menu individual
@@ -191,6 +191,13 @@ function guardarProducto(
     mostrarPestana();
   }
 }
+
+const popupF = () => {
+  setTimeout(() => {
+    showPopup.value = false;
+    defArticulo();
+  }, 720);
+};
 
 //El objeto de abajo y la funcion que le sigue es para mostra ciertas caracteristicas cuando se seleccione un producto
 const productBanner = ref({
@@ -329,31 +336,34 @@ const iniciarTemporizadorV = () => {
               md="4"
               lg="3"
             >
-              <v-card
-                @mouseover="setHovered(index, true)"
-                @mouseleave="setHovered(index, false)"
-                height="280"
-                width="16em"
-                class="d-flex flex-column mb-3"
-                style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
+              <button
+                @click="
+                  productoPP(producto.id);
+                  productShow(
+                    producto.nombre,
+                    producto.descripcion,
+                    producto.precio,
+                    producto.imagen1
+                  );
+                "
               >
-                <v-img
-                  style="border-radius: 10px"
-                  height="100"
-                  :src="producto.imagen1"
-                  cover
-                ></v-img>
-                <div class="informacion" :class="{ hovered: isHovered[index] }">
-                  <button
-                    @click="
-                      productoPP(producto.id);
-                      productShow(
-                        producto.nombre,
-                        producto.descripcion,
-                        producto.precio,
-                        producto.imagen1
-                      );
-                    "
+                <v-card
+                  @mouseover="setHovered(index, true)"
+                  @mouseleave="setHovered(index, false)"
+                  height="280"
+                  width="16em"
+                  class="d-flex flex-column mb-3"
+                  style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
+                >
+                  <v-img
+                    style="border-radius: 10px"
+                    height="100"
+                    :src="producto.imagen1"
+                    cover
+                  ></v-img>
+                  <div
+                    class="informacion"
+                    :class="{ hovered: isHovered[index] }"
                   >
                     <p style="font-size: 15px; text-align: center">
                       {{ producto.categoria }}
@@ -370,36 +380,32 @@ const iniciarTemporizadorV = () => {
                     <h2 style="font-size: 15px; text-align: center">
                       $ {{ producto.precio }}
                     </h2>
-                  </button>
-                </div>
-              </v-card>
+                  </div>
+                </v-card>
+              </button>
             </v-col>
           </v-row>
         </div>
       </v-card>
 
-      <div v-if="showPopup" class="popup-container">
-        <div class="popup-content">
-          <span
-            class="close-button"
-            @click="
-              showPopup = false;
-              defArticulo();
-            "
-            >✖</span
-          >
-          <div style="width: 100%; padding: 20px">
-            <div
-              style="display: flex; width: 100%; height: 100%; flex-wrap: wrap"
-            >
+      <div
+        :class="['popup-container', { hide: !showPopup }]"
+        @click="
+          showPopup = false;
+          defArticulo();
+        "
+      >
+        <div class="popup-content" @click.stop>
+          <div class="popup">
+            <div class="popup2">
               <div style="width: 100%; display: flex">
-                <div style="width: 40%; display: flex; align-items: center">
+                <div class="popupIMG">
                   <img
                     :src="productBanner.imagen1"
                     alt=""
                     style="
-                      max-width: 250px;
-                      max-height: 250px;
+                      max-width: 225px;
+                      max-height: 225px;
                       border-radius: 20px;
                     "
                   />
@@ -419,7 +425,10 @@ const iniciarTemporizadorV = () => {
                     </p>
                     <div v-if="shouldDisplayTalla">
                       <p
-                        v-if="tallaArticulo != 'No seleccionada'"
+                        v-if="
+                          tallaArticulo != 'No seleccionada' &&
+                          tallaArticulo != 'NA'
+                        "
                         style="margin-top: 10px"
                       >
                         Talla: {{ tallaArticulo }}
@@ -435,33 +444,61 @@ const iniciarTemporizadorV = () => {
                       v-for="articulo in ArticulosProd"
                       :key="articulo.articulo"
                     >
-                      <button
-                        @click="
-                          tallaArt(
-                            articulo.TALLA_NUMERICA,
-                            articulo.color,
-                            articulo.articulo,
-                            articulo.cantidad
-                          )
+                      <div
+                        v-if="
+                          articulo.TALLA_NUMERICA == 'NA' &&
+                          articulo.tall_ropa == 'NA'
                         "
-                        class="btnTallas"
-                        v-if="articulo.TALLA_NUMERICA !== 'NA'"
                       >
-                        {{ articulo.TALLA_NUMERICA }}
-                      </button>
-                      <button
-                        @click="
-                          tallaArt(
-                            articulo.tall_ropa,
-                            articulo.color,
-                            articulo.articulo,
-                            articulo.cantidad
-                          )
-                        "
-                        v-if="articulo.tall_ropa !== 'NA'"
-                      >
-                        {{ articulo.tall_ropa }}
-                      </button>
+                        <button
+                          @click="
+                            tallaArt(
+                              articulo.TALLA_NUMERICA,
+                              articulo.color,
+                              articulo.articulo,
+                              articulo.cantidad
+                            )
+                          "
+                          class="btnTallas2"
+                          style="font-size: 12px; min-width: 40px"
+                          v-if="articulo.color !== 'NA'"
+                        >
+                          {{ articulo.color }}
+                        </button>
+                      </div>
+                      <div v-else>
+                        <button
+                          @click="
+                            tallaArt(
+                              articulo.TALLA_NUMERICA,
+                              articulo.color,
+                              articulo.articulo,
+                              articulo.cantidad
+                            )
+                          "
+                          class="btnTallas"
+                          style="font-size: 16px; min-width: 40px"
+                          v-if="articulo.TALLA_NUMERICA !== 'NA'"
+                        >
+                          {{ articulo.TALLA_NUMERICA }}
+                        </button>
+
+                        <button
+                          @click="
+                            tallaArt(
+                              articulo.tall_ropa,
+                              articulo.color,
+                              articulo.articulo,
+                              articulo.cantidad
+                            )
+                          "
+                          class="btnTallas"
+                          style="font-size: 16px; min-width: 40px"
+                          v-if="articulo.tall_ropa !== 'NA'"
+                        >
+                          {{ articulo.tall_ropa }}
+                        </button>
+                      </div>
                     </div>
                   </div>
                   <div
@@ -498,7 +535,7 @@ const iniciarTemporizadorV = () => {
                         -
                       </button>
                     </div>
-                    <div style="width: 70%">
+                    <div style="width: 70%; background-color: ">
                       <button
                         style="margin-top: 10px"
                         class="botnsEstF"
@@ -512,7 +549,8 @@ const iniciarTemporizadorV = () => {
                             productBanner.precio,
                             tallaArticulo,
                             colorArticulo
-                          )
+                          ),
+                            popupF()
                         "
                       >
                         <strong class="botnsP">AGREGAR AL CARRITO</strong>
@@ -544,7 +582,7 @@ const iniciarTemporizadorV = () => {
                   </div>
                 </div>
               </div>
-              <div style="width: 100%">
+              <div style="width: 100%; margin-top: 10px">
                 <div class="linea-horizontal"></div>
                 <p class="descArt">{{ productBanner.descripcion }}</p>
               </div>
@@ -719,6 +757,54 @@ s .fade-enter-active,
   position: relative; /* Añadido para posicionar el botón de cierre */
 }
 
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 1; /* Configuración de opacidad inicial */
+  transition: opacity 0.3s ease; /* Transición de opacidad */
+  pointer-events: auto; /* Habilitar interacción con el popup visible */
+}
+
+.hide {
+  opacity: 0; /* Opacidad a 0 para ocultar el popup */
+  pointer-events: none; /* Deshabilitar interacción con el popup oculto */
+}
+
+.popup-content {
+  background-color: white;
+  display: flex;
+  width: 55%;
+  height: 65%;
+  padding: 20px;
+  border-radius: 15px;
+  position: relative; /* Añadido para posicionar el botón de cierre */
+}
+.popup {
+  width: 100%;
+  padding: 20px;
+}
+
+.popup2 {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-wrap: wrap;
+}
+
+.popupIMG {
+  width: 40%;
+  display: flex;
+  align-items: center;
+}
+
 .close-button {
   position: absolute;
   top: -30px;
@@ -733,6 +819,18 @@ s .fade-enter-active,
   z-index: 1;
   font-size: 20px;
   color: white;
+}
+
+.btnTallas2:hover {
+  background-color: black;
+  color: white;
+  transition: 0.5s;
+}
+
+.btnTallas2 {
+  height: 40px;
+  margin-left: 5px;
+  background-color: #f7f8fa;
 }
 
 .close-button:hover {
@@ -807,13 +905,11 @@ input[type="number"] {
   margin-left: 5px;
   background-color: #f7f8fa;
 }
-
 .btnTallas:hover {
   background-color: black;
   color: white;
   transition: 0.5s;
 }
-
 .scroll {
   /* Estilo para el div que contendrá los botones de las tallas */
   display: flex;
@@ -830,7 +926,7 @@ input[type="number"] {
 
 .scroll button {
   /* Estilo para los botones de las tallas */
-  width: 40px; /* Establece el ancho deseado para los botones */
+  max-width: max-content; /* Establece el ancho deseado para los botones */
   flex-shrink: 0; /* Evita que los botones se reduzcan si hay muchos en una fila */
 }
 

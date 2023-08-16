@@ -275,11 +275,15 @@ const popupF = () => {
           Productos
         </p>
         <div class="lh"></div>
-        <v-row class="mt-3">
+        <v-row class="mt-3 d-flex">
           <v-col
+            class="d-flex justify-center"
             v-for="(producto, index) in productosConStock"
             :key="producto.id"
-            cols="4"
+            cols="12"
+            lg="4"
+            md="6"
+            sm="12"
           >
             <button
               style="width: 100%"
@@ -294,7 +298,7 @@ const popupF = () => {
               "
             >
               <v-card
-                class="d-flex flex-column tarjeta"
+                class="d-flex flex-column tarjeta pa-2"
                 @mouseover="setHovered(index, true)"
                 @mouseleave="setHovered(index, false)"
                 height="360"
@@ -333,18 +337,16 @@ const popupF = () => {
         "
       >
         <div class="popup-content" @click.stop>
-          <div style="width: 100%; padding: 20px">
-            <div
-              style="display: flex; width: 100%; height: 100%; flex-wrap: wrap"
-            >
+          <div class="popup">
+            <div class="popup2">
               <div style="width: 100%; display: flex">
-                <div style="width: 40%; display: flex; align-items: center">
+                <div class="popupIMG">
                   <img
                     :src="productBanner.imagen1"
                     alt=""
                     style="
-                      max-width: 250px;
-                      max-height: 250px;
+                      max-width: 225px;
+                      max-height: 225px;
                       border-radius: 20px;
                     "
                   />
@@ -683,7 +685,10 @@ s .fade-enter-active,
   border-radius: 15px;
   position: relative; /* Añadido para posicionar el botón de cierre */
 }
-
+.popup {
+  width: 100%;
+  padding: 20px;
+}
 .close-button {
   position: absolute;
   top: -30px;
@@ -698,6 +703,13 @@ s .fade-enter-active,
   z-index: 1;
   font-size: 20px;
   color: white;
+}
+
+.popup2 {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-wrap: wrap;
 }
 
 .close-button:hover {
@@ -736,6 +748,11 @@ s .fade-enter-active,
   color: white;
   background-color: black;
   transition: 0.5s;
+}
+.popupIMG {
+  width: 40%;
+  display: flex;
+  align-items: center;
 }
 .inpQA {
   width: 90px;
@@ -907,6 +924,24 @@ input[type="number"] {
   height: 5px;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 785px) {
+  .CTB {
+    font-size: 16px;
+    font-weight: bolder;
+  }
+  .CBB button {
+    font-size: 10px;
+    text-align: start;
+  }
+}
+
+@media (max-width: 544px) {
+  .CTB {
+    font-size: 13px;
+    font-weight: bolder;
+  }
+  .CBB {
+    font-size: 3px;
+  }
 }
 </style>
