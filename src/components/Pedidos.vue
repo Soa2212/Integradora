@@ -6,6 +6,7 @@ const Id = Idusr.IdLS;
 const showPopup = ref(false);
 
 let compra = ref([]);
+let detalle = ref([]);
 let objeto = ref({
   id: "",
   ordenid: "",
@@ -17,6 +18,17 @@ fetch("http://localhost/comprasusuario", {
 })
   .then((response) => response.json())
   .then((data) => (compra.value = data.data));
+
+  const detallecompra =(orden)=>{
+    objeto.value.ordenid=orden;
+    fetch("http://localhost/detallecompra", {
+  method: "POST",
+  body: JSON.stringify(objeto.value)
+})
+  .then((response) => response.json())
+  .then((data) => (detalle.value = data.data))
+.then(data=>console.log(data));
+  }
 </script>
 <template>
   <template v-if="compra.length === 0">
@@ -102,7 +114,7 @@ fetch("http://localhost/comprasusuario", {
                 <td style="text-align: center">{{ item.estado }}</td>
                 <td style="text-align: center">{{ item.total }}</td>
                 <td style="text-align: center">
-                  <v-btn icon="$vuetify" @click="showPopup = true">
+                  <v-btn icon="$vuetify" @click="showPopup = true , detallecompra(item.orden)">
                     <v-icon class="mdi-help">a</v-icon></v-btn
                   >
                 </td>
@@ -121,7 +133,39 @@ fetch("http://localhost/comprasusuario", {
     "
   >
     <div class="popup-content" @click.stop>
-      <div class="popup"></div>
+      <div class="popup">
+
+     
+        <v-table theme="width">
+            <thead>
+              <tr>
+                <th class="text-center">Producto</th>
+                <th class="text-center">Talla_N</th>
+                <th class="text-center">Talla_R</th>
+                <th class="text-center">Color</th>
+                <th class="text-center">Cantidad</th>
+                <th class="text-center">Precio unitario</th>
+                <th class="text-center">Total</th>
+              </tr>
+            </thead>
+            <tbody v-for="item in detalle" :key="item.orden">
+              <tr>
+                <td style="text-align: center">{{ item.producto }}</td>
+                <td style="text-align: center"><div v-if=" item.TALLA_NUMERICA != 'NA' ? item.TALLA_NUMERICA=item.TALLA_NUMERICA:item.TALLA_NUMERICA='-' ">{{ item.TALLA_NUMERICA }}</div></td>
+                <td style="text-align: center"><div v-if=" item.TALLA_ROPA != 'NA' ? item.TALLA_ROPA=item.TALLA_ROPA:item.TALLA_ROPA='-'">{{ item.TALLA_ROPA }}</div></td>
+                <td style="text-align: center"><div v-if=" item.color != 'NA' ? item.color=item.color:item.color='-' ">{{ item.color }}</div></td>
+                <td style="text-align: center">{{ item.cantidad }}</td>
+                <td style="text-align: center">{{ item.precio_unitario }}</td>
+                <td style="text-align: center">{{ item.total }}</td>
+                <td style="text-align: center">
+                </td>
+              </tr>
+            </tbody>
+          </v-table>
+
+
+
+      </div>
     </div>
   </div>
 </template>
