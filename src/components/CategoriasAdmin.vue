@@ -99,7 +99,7 @@ const inhabilitarCategoria = (event) => {
 
 <template>
   <v-row class="pa-5">
-    <v-col cols="auto">
+    <v-col cols="12" sm="6" md="4" lg="4">
       <v-dialog v-model="dialog" width="900">
         <template v-slot:activator="{ props }">
           <v-btn v-bind="props" block rounded="xl" size="large"
@@ -131,7 +131,7 @@ const inhabilitarCategoria = (event) => {
         </v-card>
       </v-dialog>
     </v-col>
-    <v-col cols="auto">
+    <v-col cols="12" sm="6" md="4" lg="4">
       <v-btn @click="eliminar = true" block rounded="xl" size="large"
         ><v-icon icon="mdi-cog" class="mr-2"></v-icon>Modificar
         categorias</v-btn

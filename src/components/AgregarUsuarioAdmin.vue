@@ -80,8 +80,8 @@ const submit = handleSubmit((values) => {
   <div class="ma-4">
     <h1 class="mb-2">Agregar usuario administrador</h1>
     <v-divider class="mb-5" thickness="2" color="black"></v-divider>
-    <div class="d-flex">
-      <div class="d-flex w-50">
+    <v-row>
+      <v-col cols="12" sm="12" md="6">
         <form class="mt-4" @submit.prevent="submit">
           <v-text-field
             v-model="name.value.value"
@@ -115,8 +115,8 @@ const submit = handleSubmit((values) => {
           ></v-checkbox>
           <v-btn class="me-4" type="submit"> Agregar usuario </v-btn>
         </form>
-      </div>
-      <div class="d-flex flex-column w-50">
+      </v-col>
+      <v-col cols="12" sm="12" md="6">
         <h2>Administradores actuales</h2>
         <v-table class="mr-5">
           <thead>
@@ -132,7 +132,7 @@ const submit = handleSubmit((values) => {
             </tr>
           </tbody>
         </v-table>
-      </div>
-    </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
