@@ -3,13 +3,7 @@ import { ref, onMounted } from "vue";
 
 // CODIGO ARANDA
 let reporteventatpo=ref([]);
-
 let detacant = ref({idart:'',cantidadart:''});
-
-const detalleCantidad=ref({});
-
-let detalleCantidadDos= [];
-
 const tipo=ref(['web','local','general','todo']);
 
 let objeto =ref({
@@ -111,6 +105,7 @@ objeto.value.tipo='';
 }
 //
 
+const dialogAceptada = ref(null);
 const tab = ref(null);
 const dialog = ref(null);
 const orden = ref({
@@ -415,8 +410,49 @@ const cancelarOrdenAceptada = (id) => {
                 <td class="text-center">{{ orden.FechaOrden }}</td>
                 <td class="text-center">{{ orden.Estado_Venta }}</td>
                 <td class="text-center d-flex justify-center align-center">
-                  <v-btn class="mr-3" @click="completarOrden(orden.id)">Completar</v-btn>
-                  <v-btn @click="cancelarOrdenAceptada(orden.id)">Cancelar</v-btn>
+                  <v-dialog
+                v-model="dialogAceptada"
+                width="auto"
+              >
+                <template v-slot:activator="{ props }">
+                  <v-btn
+                    class="mr-5"
+                    @click="mostrarDetalleOrden(orden.id)"
+                    color="primary"
+                    v-bind="props"
+                  >
+                    Ver detalle
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-table>
+                    <thead>
+                      <tr>
+                        <th class="text-center">ID articulo</th>
+                        <th class="text-center">Producto</th>
+                        <th class="text-center">Talla</th>
+                        <th class="text-center">Color</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Stock</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="orden in detalleOrden" :key="orden.id">
+                        <td class="text-center">{{ orden.id }}</td>
+                        <td class="text-center">{{ orden.nombre }}</td>
+                        <td class="text-center">{{ orden.talla }}</td>
+                        <td class="text-center">{{ orden.color }}</td>
+                        <td class="text-center">{{ orden.cantidad }}</td>
+                        <td class="text-center">{{ orden.stock }}</td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                  <v-card-actions class="d-flex justify-end">
+                    <v-btn @click="completarOrden(orden.id)" class="mt-5 mb-5">Completar orden</v-btn>
+                    <v-btn @click="cancelarOrdenAceptada(orden.id)" class="ma-5">Cancelar orden</v-btn>
+                  </v-card-actions>     
+                </v-card>
+              </v-dialog>
                 </td>
               </tr>
             </tbody>
