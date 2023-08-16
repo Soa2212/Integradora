@@ -138,8 +138,17 @@ onMounted(() => {
   mostrarOrdenesAceptadas()
 })
 
+const totalPedido = ref(0);
+
+const calcularTotal = (id) => {
+  fetch(`http://localhost/detalleOrdenTotal/${id}`)
+  .then((res) => res.json())
+  .then((datos) => (totalPedido.value = datos.data[0].Total));
+}
+
 const mostrarDetalleOrden = (id) => {
   orden.value.orden = id;
+  calcularTotal(id)
   fetch(`http://localhost/detalleOrden/${id}`)
   .then((res) => res.json())
   .then((datos) => (detalleOrden.value = datos.data));
@@ -203,6 +212,8 @@ const cancelarOrdenAceptada = (id) => {
     });
   setTimeout(mostrarOrdenesAceptadas, 500);
 }
+
+
 </script>
 
 <template>
@@ -266,6 +277,7 @@ const cancelarOrdenAceptada = (id) => {
                         <th class="text-center">Color</th>
                         <th class="text-center">Cantidad</th>
                         <th class="text-center">Stock</th>
+                        <th class="text-center">Costo</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -277,9 +289,11 @@ const cancelarOrdenAceptada = (id) => {
                         <td class="text-center">{{ orden.color }}</td>
                         <td class="text-center">{{ orden.cantidad }}</td>
                         <td class="text-center">{{ orden.stock }}</td>
+                        <td class="text-center">{{ orden.Total }}</td>
                       </tr>
                     </tbody>
                   </v-table>
+                  <v-card-text>Total de la compra: ${{ totalPedido }}</v-card-text>
                   <v-card-actions class="d-flex justify-end">
                     <v-btn @click="aceptarOrden()" class="mt-5 mb-5">Aceptar orden</v-btn>
                     <v-btn @click="cancelarOrden()" class="ma-5">Cancelar orden</v-btn>
@@ -445,6 +459,7 @@ const cancelarOrdenAceptada = (id) => {
                         <th class="text-center">Color</th>
                         <th class="text-center">Cantidad</th>
                         <th class="text-center">Stock</th>
+                        <th class="text-center">Costo</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -456,12 +471,14 @@ const cancelarOrdenAceptada = (id) => {
                         <td class="text-center">{{ orden.color }}</td>
                         <td class="text-center">{{ orden.cantidad }}</td>
                         <td class="text-center">{{ orden.stock }}</td>
+                        <td class="text-center">{{ orden.Total }}</td>
                       </tr>
                     </tbody>
                   </v-table>
+                  <v-card-text class="mt-4 font-weight-black">Total de la compra: ${{ totalPedido }}</v-card-text>
                   <v-card-actions class="d-flex justify-end">
-                    <v-btn @click="completarOrden(orden.id)" class="mt-5 mb-5">Completar orden</v-btn>
-                    <v-btn @click="cancelarOrdenAceptada(orden.id)" class="ma-5">Cancelar orden</v-btn>
+                    <v-btn @click="completarOrden(orden.id)" class="mb-5">Completar orden</v-btn>
+                    <v-btn @click="cancelarOrdenAceptada(orden.id)" class="mb-5 mr-5">Cancelar orden</v-btn>
                   </v-card-actions>     
                 </v-card>
               </v-dialog>
