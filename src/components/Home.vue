@@ -5,7 +5,7 @@ import { ref, computed } from "vue";
 const isHovered = ref([]);
 
 const productos = ref([]);
-fetch("http://localhost/categoriasp/2") //Me consigue todos los productos para mostrar en el catalogo
+fetch("http://localhost/categoriasp/4") //Me consigue todos los productos para mostrar en el catalogo
   .then((res) => res.json())
   .then((datos) => {
     productos.value = datos.data;
@@ -30,17 +30,8 @@ const productosConStock = computed(() => {
   <div style="width: 100%; height: 100%">
     <header class="header">
       <section class="textos-header">
-        <h1
-          style="
-            width: 50%;
-            font-size: 25px;
-            margin-block-end: 15px;
-            color: rgb(255, 255, 255);
-          "
-        >
-          Equipo de Protección Personal para el Trabajo
-        </h1>
-        <h2 style="width: 50%; font-size: 20px; color: rgb(255, 255, 255)">
+        <h1 class="titulo1">Equipo de Protección Personal para el Trabajo</h1>
+        <h2 class="titulo2">
           Somos proveedores de Equipo de protección personal para Industria,
           contratistas, talleres y particulares. Encuentra el Equipo que
           necesitas para tus proyectos teniendo como prioridad el cuidado de tu
@@ -89,12 +80,12 @@ const productosConStock = computed(() => {
             :key="producto.id"
             cols="12"
             lg="3"
-            md="6"
+            md="4"
             sm="12"
           >
             <router-link
               to="/ProductosView"
-              style="text-decoration: none; color: black"
+              style="text-decoration: none; color: black; width: 100%"
             >
               <v-card
                 @mouseover="setHovered(index, true)"
@@ -503,14 +494,18 @@ input[type="number"] {
   background-repeat: no-repeat;
   position: relative;
 }
-
-.tarjeta {
-  border-radius: 15px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.5s;
+.titulo1 {
+  width: 50%;
+  font-size: 25px;
+  margin-block-end: 15px;
+  color: rgb(255, 255, 255);
 }
 
+.titulo2 {
+  width: 50%;
+  font-size: 20px;
+  color: rgb(255, 255, 255);
+}
 .vista {
   display: flex;
   width: 90%;
@@ -574,5 +569,29 @@ input[type="number"] {
   font-size: 24px;
   margin-top: 20px;
   color: #9e9797;
+}
+
+@media (max-width: 1155px) {
+  .titulo2 {
+    font-size: 15px;
+  }
+  .titulo1 {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 593px) {
+  .titulo2 {
+    font-size: 11px;
+  }
+  .titulo1 {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 338px) {
+  .titulo1 {
+    margin-top: 40px;
+  }
 }
 </style>
