@@ -55,7 +55,9 @@ const finalizarCompra = () => {
     .catch((error) => {
       console.error("Error en la solicitud:", error);
     });
-  location.reload();
+    setTimeout(() => {
+      location.reload();
+    }, 500)
 };
 
 //Las tres primeras variables son para el popup cuando se agrega un producto al carrito o como yo le digo menu individual

@@ -147,6 +147,7 @@ const mostrarDetalleOrden = (id) => {
 
 const aceptarOrden = () => {
   dialog.value = false
+  dialogAceptada.value = false;
   orden.value.estado = 'Aceptada'
   fetch("http://localhost/estadoOrden", {
       method: "POST",
@@ -157,6 +158,7 @@ const aceptarOrden = () => {
 
 const cancelarOrden = () => {
   dialog.value = false
+  dialogAceptada.value = false;
   orden.value.estado = 'cancelada'
   fetch("http://localhost/estadoOrden", {
       method: "POST",
@@ -169,6 +171,7 @@ const completarOrden = (id) => {
   mostrarDetalleOrden(id)
   descontarcant()
   dialog.value = false
+  dialogAceptada.value = false;
   orden.value.orden = id
   orden.value.estado = 'Completada'
   fetch("http://localhost/estadoOrden", {
@@ -191,6 +194,7 @@ body: JSON.stringify(detacant.value)
 
 const cancelarOrdenAceptada = (id) => {
   dialog.value = false
+  dialogAceptada.value = false;
   orden.value.orden = id
   orden.value.estado = 'cancelada'
   fetch("http://localhost/estadoOrden", {
@@ -223,6 +227,7 @@ const cancelarOrdenAceptada = (id) => {
           <tr>
             <th class="text-center">Orden</th>
             <th class="text-center">Fecha</th>
+            <th class="text-center">Cliente</th>
             <th class="text-center">Estado de venta</th>
             <th class="text-center">Tipo de orden</th>
             <th class="text-center"></th>
@@ -232,6 +237,7 @@ const cancelarOrdenAceptada = (id) => {
           <tr v-for="orden in ordenesEnProceso" :key="orden.id">
             <td class="text-center">{{ orden.id }}</td>
             <td class="text-center">{{ orden.FechaOrden }}</td>
+            <td class="text-center">{{ orden.nombre }}</td>
             <td class="text-center">{{ orden.Estado_Venta }}</td>
             <td class="text-center">{{ orden.tipo_orden }}</td>
             <td class="text-center">
@@ -396,6 +402,7 @@ const cancelarOrdenAceptada = (id) => {
             <thead>
               <tr>
                 <th class="text-center">ID orden</th>
+                <th class="text-center">Cliente</th>
                 <th class="text-center">Fecha de orden</th>
                 <th class="text-center">Estado de venta</th>
                 <th class="text-center"></th>
@@ -407,6 +414,7 @@ const cancelarOrdenAceptada = (id) => {
                 :key="orden.id"
               >
                 <td class="text-center">{{ orden.id }}</td>
+                <td class="text-center">{{ orden.nombre }}</td>
                 <td class="text-center">{{ orden.FechaOrden }}</td>
                 <td class="text-center">{{ orden.Estado_Venta }}</td>
                 <td class="text-center d-flex justify-center align-center">
