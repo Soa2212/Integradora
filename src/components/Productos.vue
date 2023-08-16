@@ -311,17 +311,13 @@ const popupF = () => {
                   cover
                 ></v-img>
                 <div class="informacion" :class="{ hovered: isHovered[index] }">
-                  <p style="font-size: 15px; text-align: center">
+                  <p class="infoprod">
                     {{ producto.categoria }}
                   </p>
-                  <h3
-                    style="cursor: pointer; font-size: 15px; text-align: center"
-                  >
+                  <h3 class="infoprod1">
                     {{ producto.nombre }}
                   </h3>
-                  <h2 style="font-size: 15px; text-align: center">
-                    $ {{ producto.precio }}
-                  </h2>
+                  <h2 class="infoprod">$ {{ producto.precio }}</h2>
                 </div>
               </v-card>
             </button>
@@ -588,6 +584,10 @@ const popupF = () => {
   justify-content: center;
   margin-top: 25px;
 }
+.infoprod {
+  font-size: 15px;
+  text-align: center;
+}
 
 .CTB:hover {
   /* Sombras al hacer hover */
@@ -616,6 +616,11 @@ const popupF = () => {
   border-bottom-right-radius: 20px; /* Radio de esquina inferior derecha */
   border-bottom-left-radius: 20px;
   padding: 2em 1em;
+}
+.infoprod1 {
+  cursor: pointer;
+  font-size: 15px;
+  text-align: center;
 }
 
 .tarjeta {
@@ -937,11 +942,30 @@ input[type="number"] {
 
 @media (max-width: 544px) {
   .CTB {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: bolder;
   }
-  .CBB {
-    font-size: 3px;
+}
+
+@media (max-width: 422px) {
+  .CTB {
+    font-size: 8px;
+    margin-right: 20px;
   }
+  .CBB button {
+    font-size: 7px;
+  }
+
+  .BannerNP {
+    font-size: 10px;
+  }
+
+  .infoprod  {
+    font-size: 9px;
+  }
+  .infoprod1 {
+    font-size: 9px;
+  }
+
 }
 </style>

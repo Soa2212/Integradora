@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useIdStore } from "@/stores/IdUSR";
 const Idusr = useIdStore();
 const Id = Idusr.IdLS;
-
+const showPopup = ref(false);
 
 let compra = ref([]);
 let objeto = ref({
@@ -101,8 +101,11 @@ fetch("http://localhost/comprasusuario", {
                 </td>
                 <td style="text-align: center">{{ item.estado }}</td>
                 <td style="text-align: center">{{ item.total }}</td>
-                <td style="text-align: center"><v-btn icon="$vuetify">
-  <v-icon class="mdi-help">a</v-icon></v-btn></td>
+                <td style="text-align: center">
+                  <v-btn icon="$vuetify" @click="showPopup = true">
+                    <v-icon class="mdi-help">a</v-icon></v-btn
+                  >
+                </td>
               </tr>
             </tbody>
           </v-table>
@@ -110,6 +113,17 @@ fetch("http://localhost/comprasusuario", {
       </div>
     </div>
   </template>
+  <div
+    :class="['popup-container', { hide: !showPopup }]"
+    @click="
+      showPopup = false;
+      defArticulo();
+    "
+  >
+    <div class="popup-content" @click.stop>
+      <div class="popup"></div>
+    </div>
+  </div>
 </template>
 <style scoped>
 * {
@@ -150,5 +164,40 @@ fetch("http://localhost/comprasusuario", {
   height: 100%;
   width: 100%;
   height: min-content;
+}
+
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 1; /* Configuración de opacidad inicial */
+  transition: opacity 0.3s ease; /* Transición de opacidad */
+  pointer-events: auto; /* Habilitar interacción con el popup visible */
+}
+
+.hide {
+  opacity: 0; /* Opacidad a 0 para ocultar el popup */
+  pointer-events: none; /* Deshabilitar interacción con el popup oculto */
+}
+
+.popup-content {
+  background-color: white;
+  display: flex;
+  width: 55%;
+  height: 65%;
+  padding: 20px;
+  border-radius: 15px;
+  position: relative; /* Añadido para posicionar el botón de cierre */
+}
+.popup {
+  width: 100%;
+  padding: 20px;
 }
 </style>
