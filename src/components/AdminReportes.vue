@@ -261,7 +261,8 @@ const cancelarOrdenAceptada = (id) => {
                       <tr>
                         <th class="text-center">ID articulo</th>
                         <th class="text-center">Producto</th>
-                        <th class="text-center">Talla</th>
+                        <th class="text-center">Talla Num</th>
+                        <th class="text-center">Talla Ropa</th>
                         <th class="text-center">Color</th>
                         <th class="text-center">Cantidad</th>
                         <th class="text-center">Stock</th>
@@ -271,7 +272,8 @@ const cancelarOrdenAceptada = (id) => {
                       <tr v-for="orden in detalleOrden" :key="orden.id">
                         <td class="text-center">{{ orden.id }}</td>
                         <td class="text-center">{{ orden.nombre }}</td>
-                        <td class="text-center">{{ orden.talla }}</td>
+                        <td class="text-center">{{ orden.Talla_numerica }}</td>
+                        <td class="text-center">{{ orden.Talla_ropa }}</td>
                         <td class="text-center">{{ orden.color }}</td>
                         <td class="text-center">{{ orden.cantidad }}</td>
                         <td class="text-center">{{ orden.stock }}</td>
@@ -438,7 +440,8 @@ const cancelarOrdenAceptada = (id) => {
                       <tr>
                         <th class="text-center">ID articulo</th>
                         <th class="text-center">Producto</th>
-                        <th class="text-center">Talla</th>
+                        <th class="text-center">Talla Num</th>
+                        <th class="text-center">Talla Ropa</th>
                         <th class="text-center">Color</th>
                         <th class="text-center">Cantidad</th>
                         <th class="text-center">Stock</th>
@@ -448,7 +451,8 @@ const cancelarOrdenAceptada = (id) => {
                       <tr v-for="orden in detalleOrden" :key="orden.id">
                         <td class="text-center">{{ orden.id }}</td>
                         <td class="text-center">{{ orden.nombre }}</td>
-                        <td class="text-center">{{ orden.talla }}</td>
+                        <td class="text-center">{{ orden.Talla_numerica }}</td>
+                        <td class="text-center">{{ orden.Talla_ropa }}</td>
                         <td class="text-center">{{ orden.color }}</td>
                         <td class="text-center">{{ orden.cantidad }}</td>
                         <td class="text-center">{{ orden.stock }}</td>
