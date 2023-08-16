@@ -5,7 +5,7 @@ import { useField, useForm } from "vee-validate";
 const usuario = ref({
   nombre: "",
   email: "",
-  password: "",
+  contrasena: "",
   tipo: "normal",
 });
 
