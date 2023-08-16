@@ -249,11 +249,11 @@ const iniciarTemporizador = () => {
           </div>
           <div style="width: 30%; display: flex; flex-direction: column">
             <div class="IA">{{ item.nombre }}</div>
-            <div v-if="item.talla != 'No seleccionada'" class="IAB">
+            <div v-if="item.talla != 'NA' && item.talla != 'No seleccionada' " class="IAB">
               Tamaño: {{ item.talla }}
             </div>
             <div
-              v-if="item.color != '0' && item.color != 'No tiene'"
+              v-if="item.color != '0' && item.color != 'NA'"
               class="IAB"
             >
               Color: {{ item.color }}

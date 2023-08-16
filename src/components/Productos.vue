@@ -43,7 +43,6 @@ const Articulos = (id) => {
         colorArticulo.value = ArticulosProd.value[0].color;
       }
     });
-    console.log(ArticulosProd)
 };
 
 const categorias = ref([]);
@@ -400,7 +399,7 @@ const popupF = () => {
                             )
                           "
                           class="btnTallas2"
-                          style="font-size: 12px; min-width: 40px;"
+                          style="font-size: 12px; min-width: 40px"
                           v-if="articulo.color !== 'NA'"
                         >
                           {{ articulo.color }}
@@ -417,11 +416,12 @@ const popupF = () => {
                             )
                           "
                           class="btnTallas"
-                          style="font-size: 16px; min-width: 40px;"
+                          style="font-size: 16px; min-width: 40px"
                           v-if="articulo.TALLA_NUMERICA !== 'NA'"
                         >
                           {{ articulo.TALLA_NUMERICA }}
                         </button>
+
                         <button
                           @click="
                             tallaArt(
@@ -432,7 +432,7 @@ const popupF = () => {
                             )
                           "
                           class="btnTallas"
-                          style="font-size: 16px; min-width: 40px;"
+                          style="font-size: 16px; min-width: 40px"
                           v-if="articulo.tall_ropa !== 'NA'"
                         >
                           {{ articulo.tall_ropa }}
@@ -804,7 +804,6 @@ input[type="number"] {
   height: 40px;
   margin-left: 5px;
   background-color: #f7f8fa;
-  
 }
 
 .btnTallas2:hover {
