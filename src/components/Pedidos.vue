@@ -101,6 +101,8 @@ fetch("http://localhost/comprasusuario", {
                 </td>
                 <td style="text-align: center">{{ item.estado }}</td>
                 <td style="text-align: center">{{ item.total }}</td>
+                <td style="text-align: center"><v-btn icon="$vuetify">
+  <v-icon class="mdi-help">a</v-icon></v-btn></td>
               </tr>
             </tbody>
           </v-table>
