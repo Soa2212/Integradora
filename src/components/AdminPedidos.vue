@@ -33,8 +33,8 @@ const finalizarCompra = () => {
           orden: Orden.value,
           usuario: id,
         };
-       
-        fetch("http://localhost/detallar", {
+
+        fetch("http://localhost/detallarL", {
           method: "POST",
           body: JSON.stringify(objCar),
         })

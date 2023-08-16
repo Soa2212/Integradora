@@ -1,6 +1,6 @@
 <script setup>
-import { ref,onMounted} from "vue";
-import { useField, useForm } from 'vee-validate'
+import { ref, onMounted } from "vue";
+import { useField, useForm } from "vee-validate";
 
 const productos = ref({});
 const productosInactivos = ref({});
@@ -18,14 +18,14 @@ const seleccionarCat = ref(false);
 const agregarTallaNum = ref(true);
 const agregarTallaRopa = ref(false);
 const agregarColor = ref(false);
-const aviso = ref('');
+const aviso = ref("");
 
 const idProducto = ref({
-  id: ''
-})
+  id: "",
+});
 
 const producto = ref({
-  nombre: ''
+  nombre: "",
 });
 
 const seleccionarColor = ref(false);
@@ -42,12 +42,12 @@ const seleccionados = ref([]);
 
 const cancelarDetalle = () => {
   detallar.value = false;
-  nuevoArticulo.value.producto = '';
-  nuevoArticulo.value.cantidad = '';
-  nuevoArticulo.value.talla_numerica = '33';
-  nuevoArticulo.value.talla_ropa = '7';
-  nuevoArticulo.value.color = '17';
-}
+  nuevoArticulo.value.producto = "";
+  nuevoArticulo.value.cantidad = "";
+  nuevoArticulo.value.talla_numerica = "33";
+  nuevoArticulo.value.talla_ropa = "7";
+  nuevoArticulo.value.color = "17";
+};
 
 const nuevoProducto = ref({
   nombre: "",
@@ -63,8 +63,8 @@ const nuevoArticulo = ref({
   cantidad: "",
   talla_numerica: "33",
   talla_ropa: "7",
-  color: "17"
-})
+  color: "17",
+});
 
 const handleFileChange = () => {
   selectedImage.value = fileInput.value.files[0];
@@ -72,62 +72,62 @@ const handleFileChange = () => {
 
 const mostrarProductos = () => {
   fetch("http://localhost/productos")
-  .then((res) => res.json())
-  .then((datos) => (productos.value = datos.data));
-}
+    .then((res) => res.json())
+    .then((datos) => (productos.value = datos.data));
+};
 
 const mostrarProductosInactivos = () => {
   fetch("http://localhost/productosInactivos")
-  .then((res) => res.json())
-  .then((datos) => (productosInactivos.value = datos.data));
-}
+    .then((res) => res.json())
+    .then((datos) => (productosInactivos.value = datos.data));
+};
 
-const mostrarCategorias = () =>{
+const mostrarCategorias = () => {
   fetch("http://localhost/categorias")
-  .then((res) => res.json())
-  .then((datos) => (categorias.value = datos.data));
-}
+    .then((res) => res.json())
+    .then((datos) => (categorias.value = datos.data));
+};
 
 const mostrarColores = () => {
   fetch("http://localhost/colores")
-  .then((res) => res.json())
-  .then((datos) => (colores.value = datos.data));
-}
+    .then((res) => res.json())
+    .then((datos) => (colores.value = datos.data));
+};
 
 const mostrarTallasNumericas = () => {
   fetch("http://localhost/tallasNum")
-  .then((res) => res.json())
-  .then((datos) => (tallaNum.value = datos.data));
-}
+    .then((res) => res.json())
+    .then((datos) => (tallaNum.value = datos.data));
+};
 
 const mostrarTallasRopa = () => {
   fetch("http://localhost/tallasRopa")
-  .then((res) => res.json())
-  .then((datos) => (tallaRopa.value = datos.data));
-}
+    .then((res) => res.json())
+    .then((datos) => (tallaRopa.value = datos.data));
+};
 
 const cancelarSeleccion = () => {
   eliminar.value = false;
   seleccionados.value = [];
-}
+};
 
 const borrarDatosArticulo = () => {
   crearNuevoArticulo.value = false;
-  nuevoArticulo.value.producto = '';
-  nuevoArticulo.value.cantidad = '';
-  nuevoArticulo.value.talla_numerica = '33';
-  nuevoArticulo.value.talla_ropa = '7';
-  nuevoArticulo.value.color = '17';
+  nuevoArticulo.value.producto = "";
+  nuevoArticulo.value.cantidad = "";
+  nuevoArticulo.value.talla_numerica = "33";
+  nuevoArticulo.value.talla_ropa = "7";
+  nuevoArticulo.value.color = "17";
   borrarDatosProducto();
-}
+};
 
 const borrarDatosProducto = () => {
-  nuevoProducto.value.nombre = '',
-  nuevoProducto.value.descripcion = '',
-  nuevoProducto.value.categoria = '',
-  nuevoProducto.value.precio = '',
-  nuevoProducto.value.imagen1 = ''
-}
+  (nuevoProducto.value.nombre = ""),
+    (nuevoProducto.value.descripcion = ""),
+    (nuevoProducto.value.categoria = ""),
+    (nuevoProducto.value.precio = ""),
+    (nuevoProducto.value.imagen1 = "");
+};
 
 const agregarNuevoArticulo = () => {
   crearNuevoArticulo.value = false;
@@ -135,22 +135,22 @@ const agregarNuevoArticulo = () => {
   agregarTallaRopa.value = false;
   agregarColor.value = false;
   detallar.value = true;
-  nuevoArticulo.value.cantidad = '';
-  nuevoArticulo.value.talla_numerica = '33';
-  nuevoArticulo.value.talla_ropa = '7';
-  nuevoArticulo.value.color = '17';
+  nuevoArticulo.value.cantidad = "";
+  nuevoArticulo.value.talla_numerica = "33";
+  nuevoArticulo.value.talla_ropa = "7";
+  nuevoArticulo.value.color = "17";
   borrarDatosProducto();
-}
+};
 
 const activarProducto = (id) => {
-  fetch("http://localhost/habilitarProd/"+id, {
-      method: "POST",
-    });
-    setTimeout(() => {
-      mostrarProductos();
-      mostrarProductosInactivos();
-    }, 500)
-}
+  fetch("http://localhost/habilitarProd/" + id, {
+    method: "POST",
+  });
+  setTimeout(() => {
+    mostrarProductos();
+    mostrarProductosInactivos();
+  }, 500);
+};
 
 onMounted(() => {
   mostrarProductos();
@@ -169,7 +169,7 @@ const eliminarProducto = () => {
     setTimeout(() => {
       mostrarProductos();
       mostrarProductosInactivos();
-    }, 500)
+    }, 500);
   } else {
     alerta.value = true;
     dialogDel.value = false;
@@ -186,108 +186,107 @@ const agregarProducto = () => {
       nuevoProducto.value.imagen1 = "data:image/jpeg;base64," + base64String;
       fetch("http://localhost/insertarProd", {
         method: "POST",
-        body: JSON.stringify(nuevoProducto.value)});
-    }}
-    detallar.value = true;
-    mostrarColores();
-    mostrarTallasNumericas();
-    mostrarTallasRopa();
-      dialog.value = false;
-      setTimeout(() => {
-        mostrarProductos();
-        fetch("http://localhost/obtenerId", {
-          method: "POST",
-          body: JSON.stringify(producto.value),
-        })
-          .then((res) => res.json())
-          .then((datos) => {
-            nuevoArticulo.value.producto = datos.data[0].id;
-          });
-      }, 1000);
+        body: JSON.stringify(nuevoProducto.value),
+      });
+    };
+  }
+  detallar.value = true;
+  mostrarColores();
+  mostrarTallasNumericas();
+  mostrarTallasRopa();
+  dialog.value = false;
+  setTimeout(() => {
+    mostrarProductos();
+    fetch("http://localhost/obtenerId", {
+      method: "POST",
+      body: JSON.stringify(producto.value),
+    })
+      .then((res) => res.json())
+      .then((datos) => {
+        nuevoArticulo.value.producto = datos.data[0].id;
+      });
+  }, 1000);
 };
 
 const verificarArticuloTallaNum = (id) => {
   if (id == 33) {
     agregarColor.value = true;
-    nuevoArticulo.value.color = '17'
+    nuevoArticulo.value.color = "17";
     agregarTallaRopa.value = true;
-  }
-  else if (id !== 33) {
+  } else if (id !== 33) {
     agregarTallaRopa.value = false;
     agregarColor.value = true;
-    aviso.value = '';
+    aviso.value = "";
   }
-}
+};
 
 const verificarArticuloTallaRopa = (id) => {
   if (id == 7 && nuevoArticulo.value.talla_numerica !== 33) {
     agregarColor.value = true;
     agregarTallaNum.value = true;
-    aviso.value = '';
-  }
-  else if (id !== 7) {
+    aviso.value = "";
+  } else if (id !== 7) {
     agregarTallaNum.value = false;
     agregarColor.value = true;
-    aviso.value = '';
-  }
-  else if (id == 7 && nuevoArticulo.value.talla_numerica == 33){
+    aviso.value = "";
+  } else if (id == 7 && nuevoArticulo.value.talla_numerica == 33) {
     agregarTallaNum.value = true;
     agregarTallaRopa.value = true;
     agregarColor.value = true;
-    aviso.value = 'AVISO: Su artículo actualmente no tiene talla';
+    aviso.value = "AVISO: Su artículo actualmente no tiene talla";
   }
-}
-
+};
 
 // VALIDACION DE FORMULARIO
 const agregarArticulo = () => {
   fetch("http://localhost/insertarArticulo", {
     method: "POST",
-    body: JSON.stringify(nuevoArticulo.value)
-  })
+    body: JSON.stringify(nuevoArticulo.value),
+  });
   detallar.value = false;
   crearNuevoArticulo.value = true;
-}
+};
 
-  const { handleSubmit, handleReset } = useForm({
-    validationSchema: {
-      name (value) {
-        if (value?.length >= 2) {
-            nuevoProducto.value.nombre = value;
-            return true}
+const { handleSubmit, handleReset } = useForm({
+  validationSchema: {
+    name(value) {
+      if (value?.length >= 2) {
+        nuevoProducto.value.nombre = value;
+        return true;
+      }
 
-        return 'Ingrese al menos 2 caracteres'
-      },
-      precio (value) {
-        if (letras.test(value) || value?.length <= 2) 
-          return 'Use solamente numeros'
-        else {
-            nuevoProducto.value.precio = value;
-            return true}
-      },
-      descripcion (value) {
-        if (value?.length >= 5) {
-          nuevoProducto.value.descripcion = value;
-          return true
-        }
-
-        return 'Ingrese al menos 5 caracteres'
+      return "Ingrese al menos 2 caracteres";
+    },
+    precio(value) {
+      if (letras.test(value) || value?.length <= 2)
+        return "Use solamente numeros";
+      else {
+        nuevoProducto.value.precio = value;
+        return true;
       }
     },
-  })
-  const name = useField('name')
-  const precio = useField('precio')
-  const descripcion = useField('descripcion')
+    descripcion(value) {
+      if (value?.length >= 5) {
+        nuevoProducto.value.descripcion = value;
+        return true;
+      }
 
-  const submit = handleSubmit(values => {
-    agregarProducto()
-    handleReset();
-  });
+      return "Ingrese al menos 5 caracteres";
+    },
+  },
+});
+const name = useField("name");
+const precio = useField("precio");
+const descripcion = useField("descripcion");
 
+const submit = handleSubmit((values) => {
+  agregarProducto();
+  handleReset();
+});
 </script>
 
 <template>
-  {{ nuevoProducto }} <br>
+  {{ nuevoProducto }} <br />
   {{ nuevoArticulo }}
   <div class="botones">
     <v-col cols="auto">
@@ -300,174 +299,179 @@ const agregarArticulo = () => {
         </template>
         <v-card>
           <form @submit.prevent="submit">
-          <v-card-title>Agregar producto</v-card-title>
-          <v-card-text>
-            <v-container>
+            <v-card-title>Agregar producto</v-card-title>
+            <v-card-text>
+              <v-container>
                 <v-row>
-                <v-col cols="12" sm="12" md="12">
-                  <v-text-field v-model="name.value.value" 
-                  :error-messages="name.errorMessage.value" label="Nombre*"></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="12" md="12">
-                  <v-text-field v-model="precio.value.value"
-                  :error-messages="precio.errorMessage.value"
-                    label="Precio"
-                    hint="Utilice solo 2 decimales"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <div>
-                    <input type="file" ref="fileInput" @change="handleFileChange"/>
-                  </div>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field v-model="descripcion.value.value"
-                  :error-messages="descripcion.errorMessage.value"
-                    label="Descripcion del producto"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="12">
-                  <div class="text-left">
-                    <v-btn
-                      color="primary"
-                      @click="seleccionarCat = true"
-                    >
-                      Seleccionar categoria
-                    </v-btn>
+                  <v-col cols="12" sm="12" md="12">
+                    <v-text-field
+                      v-model="name.value.value"
+                      :error-messages="name.errorMessage.value"
+                      label="Nombre*"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="12" md="12">
+                    <v-text-field
+                      v-model="precio.value.value"
+                      :error-messages="precio.errorMessage.value"
+                      label="Precio"
+                      hint="Utilice solo 2 decimales"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <div>
+                      <input
+                        type="file"
+                        ref="fileInput"
+                        @change="handleFileChange"
+                      />
+                    </div>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="descripcion.value.value"
+                      :error-messages="descripcion.errorMessage.value"
+                      label="Descripcion del producto"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="12">
+                    <div class="text-left">
+                      <v-btn color="primary" @click="seleccionarCat = true">
+                        Seleccionar categoria
+                      </v-btn>
 
-                    <v-dialog
-                      v-model="seleccionarCat"
-                      width="auto"
-                    >
-                      <v-card class="pa-7">
-                        <v-row v-for="cat in categorias">
-                          <v-card-text><v-checkbox @click="seleccionarCat=false" v-model="nuevoProducto.categoria" :value="cat.id" :label="cat.categoria"></v-checkbox></v-card-text>
-                        </v-row>
-                      </v-card>
-                    </v-dialog>
-                  </div>
+                      <v-dialog v-model="seleccionarCat" width="auto">
+                        <v-card class="pa-7">
+                          <v-row v-for="cat in categorias">
+                            <v-card-text
+                              ><v-checkbox
+                                @click="seleccionarCat = false"
+                                v-model="nuevoProducto.categoria"
+                                :value="cat.id"
+                                :label="cat.categoria"
+                              ></v-checkbox
+                            ></v-card-text>
+                          </v-row>
+                        </v-card>
+                      </v-dialog>
+                    </div>
                   </v-col>
                   <v-col class="d-flex justify-end">
-                    <v-btn type="submit" >Continuar</v-btn>
+                    <v-btn type="submit">Continuar</v-btn>
                     <v-btn @click="dialog = false" class="ml-3">Cancelar</v-btn>
                   </v-col>
                 </v-row>
-            </v-container>
-            <small>* Indica que es un campo requerido</small>
-          </v-card-text>
-        </form>
+              </v-container>
+              <small>* Indica que es un campo requerido</small>
+            </v-card-text>
+          </form>
         </v-card>
       </v-dialog>
     </v-col>
-    <v-dialog
-        v-model="detallar"
-        width="auto"
-      >
-        <v-card>
-          <v-card-title>
-            Detalle su producto
-          </v-card-title>
-          <div class="d-flex pa-5 flex-column">
-            <div class="text-left mb-3">
-                    <v-btn
-                      v-if="agregarTallaNum"
-                      color="primary"
-                      @click="seleccionarTallaNum = true"
-                    >
-                      Seleccionar talla numerica
-                    </v-btn>
-
-                    <v-dialog
-                      v-model="seleccionarTallaNum"
-                      width="auto"
-                    >
-                      <v-card class="pa-7">
-                        <v-row v-for="talla in tallaNum">
-                          <v-card-text><v-checkbox @click="verificarArticuloTallaNum(talla.id)" v-model="nuevoArticulo.talla_numerica" :value="talla.id" :label="talla.talla"></v-checkbox></v-card-text>
-                        </v-row>
-                      </v-card>
-                    </v-dialog>
-                  </div>
-                  <div class="text-left mb-3">
-                    <v-btn
-                      v-if="agregarTallaRopa"
-                      color="primary"
-                      @click="seleccionarTallaRopa = true"
-                    >
-                      Seleccionar talla ropa
-                    </v-btn>
-
-                    <v-dialog
-                      v-model="seleccionarTallaRopa"
-                      width="auto"
-                    >
-                      <v-card class="pa-7">
-                        <v-row v-for="talla in tallaRopa">
-                          <v-card-text><v-checkbox @click="verificarArticuloTallaRopa(talla.id)" v-model="nuevoArticulo.talla_ropa" :value="talla.id" :label="talla.talla"></v-checkbox></v-card-text>
-                        </v-row>
-                      </v-card>
-                    </v-dialog>
-                  </div>
-            <div class="text-left mb-3">
-                    <v-btn
-                      v-if="agregarColor"
-                      color="primary"
-                      @click="seleccionarColor = true"
-                    >
-                      Seleccionar color
-                    </v-btn>
-                    <v-dialog
-                      v-model="seleccionarColor"
-                      width="auto"
-                    >
-                      <v-card class="pa-7">
-                        <v-row v-for="col in colores">
-                          <v-card-text><v-checkbox v-model="nuevoArticulo.color" :value="col.id" :label="col.color"></v-checkbox></v-card-text>
-                        </v-row>
-                      </v-card>
-                    </v-dialog>
-                  </div>
-                  <v-card-text style="color: rgb(177,0,0);">
-                    {{ aviso }}
-                  </v-card-text>
-                  <v-text-field
-                      v-model="nuevoArticulo.cantidad"
-                      label="Existencias"
-                      required
-                    ></v-text-field>
-          <v-card-actions>
+    <v-dialog v-model="detallar" width="auto">
+      <v-card>
+        <v-card-title> Detalle su producto </v-card-title>
+        <div class="d-flex pa-5 flex-column">
+          <div class="text-left mb-3">
             <v-btn
+              v-if="agregarTallaNum"
               color="primary"
-              variant="text"
-              @click="cancelarDetalle"
+              @click="seleccionarTallaNum = true"
             >
+              Seleccionar talla numerica
+            </v-btn>
+
+            <v-dialog v-model="seleccionarTallaNum" width="auto">
+              <v-card class="pa-7">
+                <v-row v-for="talla in tallaNum">
+                  <v-card-text
+                    ><v-checkbox
+                      @click="verificarArticuloTallaNum(talla.id)"
+                      v-model="nuevoArticulo.talla_numerica"
+                      :value="talla.id"
+                      :label="talla.talla"
+                    ></v-checkbox
+                  ></v-card-text>
+                </v-row>
+              </v-card>
+            </v-dialog>
+          </div>
+          <div class="text-left mb-3">
+            <v-btn
+              v-if="agregarTallaRopa"
+              color="primary"
+              @click="seleccionarTallaRopa = true"
+            >
+              Seleccionar talla ropa
+            </v-btn>
+
+            <v-dialog v-model="seleccionarTallaRopa" width="auto">
+              <v-card class="pa-7">
+                <v-row v-for="talla in tallaRopa">
+                  <v-card-text
+                    ><v-checkbox
+                      @click="verificarArticuloTallaRopa(talla.id)"
+                      v-model="nuevoArticulo.talla_ropa"
+                      :value="talla.id"
+                      :label="talla.talla"
+                    ></v-checkbox
+                  ></v-card-text>
+                </v-row>
+              </v-card>
+            </v-dialog>
+          </div>
+          <div class="text-left mb-3">
+            <v-btn
+              v-if="agregarColor"
+              color="primary"
+              @click="seleccionarColor = true"
+            >
+              Seleccionar color
+            </v-btn>
+            <v-dialog v-model="seleccionarColor" width="auto">
+              <v-card class="pa-7">
+                <v-row v-for="col in colores">
+                  <v-card-text
+                    ><v-checkbox
+                      v-model="nuevoArticulo.color"
+                      :value="col.id"
+                      :label="col.color"
+                    ></v-checkbox
+                  ></v-card-text>
+                </v-row>
+              </v-card>
+            </v-dialog>
+          </div>
+          <v-card-text style="color: rgb(177, 0, 0)">
+            {{ aviso }}
+          </v-card-text>
+          <v-text-field
+            v-model="nuevoArticulo.cantidad"
+            label="Existencias"
+            required
+          ></v-text-field>
+          <v-card-actions>
+            <v-btn color="primary" variant="text" @click="cancelarDetalle">
               Cerrar
             </v-btn>
-            <v-btn
-              color="primary"
-              variant="text"
-              @click="agregarArticulo"
-            >
+            <v-btn color="primary" variant="text" @click="agregarArticulo">
               Agregar
             </v-btn>
           </v-card-actions>
-          </div>
-        </v-card>
-      </v-dialog>
-      <v-dialog
-                      v-model="crearNuevoArticulo"
-                      width="auto"
-                    >
-                      <v-card class="pa-7">
-                          <v-card-text class="mb-6">
-                            ¿Desea crear un nuevo articulo?
-                          </v-card-text>
-                          <v-row class="d-flex justify-end">
-                            <v-btn @click="agregarNuevoArticulo" class="mr-3">Aceptar</v-btn>
-                          <v-btn @click="borrarDatosArticulo">Cancelar</v-btn>
-                          </v-row>
-                      </v-card>
-                    </v-dialog>
+        </div>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="crearNuevoArticulo" width="auto">
+      <v-card class="pa-7">
+        <v-card-text class="mb-6">
+          ¿Desea crear un nuevo articulo?
+        </v-card-text>
+        <v-row class="d-flex justify-end">
+          <v-btn @click="agregarNuevoArticulo" class="mr-3">Aceptar</v-btn>
+          <v-btn @click="borrarDatosArticulo">Cancelar</v-btn>
+        </v-row>
+      </v-card>
+    </v-dialog>
     <v-col cols="auto">
       <v-btn @click="eliminar = true" block rounded="xl" size="large"
         ><v-icon icon="mdi-minus-circle" class="mr-2"></v-icon>Eliminar
@@ -550,7 +554,13 @@ const agregarArticulo = () => {
     <h1 class="mt-5">Productos inactivos</h1>
     <v-divider class="mb-5" thickness="2" color="black"></v-divider>
     <div class="productosInactivos">
-      <v-col v-for="producto in productosInactivos" cols="12" sm="12" md="6" lg="4">
+      <v-col
+        v-for="producto in productosInactivos"
+        cols="12"
+        sm="12"
+        md="6"
+        lg="4"
+      >
         <v-card
           class="d-flex flex-column justify-center align-center pa-3"
           style="height: 15em"
@@ -561,9 +571,10 @@ const agregarArticulo = () => {
           }}</v-card-text>
           <div class="d-flex align-center">
             <p>Precio: ${{ producto.precio }}</p>
-            <v-btn @click="activarProducto(producto.id)" class="ml-5 mb-2">Activar</v-btn>
+            <v-btn @click="activarProducto(producto.id)" class="ml-5 mb-2"
+              >Activar</v-btn
+            >
           </div>
-           
         </v-card>
       </v-col>
     </div>
@@ -572,7 +583,8 @@ const agregarArticulo = () => {
 
 <style scoped>
 .botones,
-.productos, .productosInactivos {
+.productos,
+.productosInactivos {
   display: flex;
   flex-wrap: wrap;
 }
@@ -584,5 +596,3 @@ const agregarArticulo = () => {
   justify-content: flex-end;
 }
 </style>
-
-
