@@ -82,11 +82,15 @@ const productosConStock = computed(() => {
         <div style="display: flex; justify-content: center">
           <div class="lh"></div>
         </div>
-        <v-row class="mt-5">
+        <v-row class="mt-3 d-flex">
           <v-col
+            class="d-flex justify-center"
             v-for="(producto, index) in productosConStock.slice(0, 12)"
             :key="producto.id"
-            cols="3"
+            cols="12"
+            lg="3"
+            md="6"
+            sm="12"
           >
             <router-link
               to="/ProductosView"
@@ -96,7 +100,7 @@ const productosConStock = computed(() => {
                 @mouseover="setHovered(index, true)"
                 @mouseleave="setHovered(index, false)"
                 height="360"
-                class="d-flex flex-column tarjeta"
+                class="d-flex flex-column tarjeta pa-2"
                 style="box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 2.9)"
               >
                 <v-img
@@ -201,11 +205,11 @@ const productosConStock = computed(() => {
 
 .tarjeta {
   border-radius: 15px;
+  width: 100%;
   position: relative;
   overflow: hidden;
   transition: transform 0.5s;
 }
-
 .informacion {
   transition: transform 0.5s;
   background-color: white;
