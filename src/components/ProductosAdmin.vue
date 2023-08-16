@@ -14,6 +14,7 @@ const selectedImage = ref(null);
 const detallar = ref(false);
 const crearNuevoArticulo = ref(false);
 const seleccionarCat = ref(false);
+const agregar = ref(true);
 
 const agregarTallaNum = ref(true);
 const agregarTallaRopa = ref(false);
@@ -108,6 +109,7 @@ const mostrarTallasRopa = () => {
 
 const cancelarSeleccion = () => {
   eliminar.value = false;
+  agregar.value = true;
   seleccionados.value = [];
 };
 
@@ -158,6 +160,11 @@ onMounted(() => {
   mostrarCategorias();
 });
 
+const activarEliminar = () => {
+  eliminar.value = true;
+  agregar.value = false;
+}
+
 const eliminarProducto = () => {
   if (seleccionados.value[0] != undefined) {
     fetch("http://localhost/inhabilitarProd", {
@@ -207,6 +214,15 @@ const agregarProducto = () => {
       });
   }, 1000);
 };
+
+const agregarArticuloProducto = (id) => {
+  detallar.value = true;
+  mostrarColores();
+  mostrarTallasNumericas();
+  mostrarTallasRopa();
+  dialog.value = false;
+  nuevoArticulo.value.producto = id;
+}
 
 const verificarArticuloTallaNum = (id) => {
   if (id == 33) {
@@ -286,8 +302,6 @@ const submit = handleSubmit((values) => {
 </script>
 
 <template>
-  {{ nuevoProducto }} <br />
-  {{ nuevoArticulo }}
   <div class="botones">
     <v-col cols="auto">
       <v-dialog v-model="dialog" width="auto">
@@ -473,7 +487,7 @@ const submit = handleSubmit((values) => {
       </v-card>
     </v-dialog>
     <v-col cols="auto">
-      <v-btn @click="eliminar = true" block rounded="xl" size="large"
+      <v-btn @click="activarEliminar" block rounded="xl" size="large"
         ><v-icon icon="mdi-minus-circle" class="mr-2"></v-icon>Eliminar
         producto</v-btn
       >
@@ -537,7 +551,11 @@ const submit = handleSubmit((values) => {
           <v-card-text style="text-align: center">{{
             producto.nombre
           }}</v-card-text>
-          <v-card-text>Precio: ${{ producto.precio }}</v-card-text>
+          <div class="d-flex align-center">
+            <v-card-text>Precio: ${{ producto.precio }}</v-card-text>
+          <v-btn v-if="agregar" @click="agregarArticuloProducto(producto.id)">Agregar articulo</v-btn>
+          </div>
+          
         </v-card>
         <v-card class="d-flex justify-center align-center">
           <v-checkbox

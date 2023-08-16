@@ -148,9 +148,6 @@ const mostrarDetalleOrden = (id) => {
   fetch(`http://localhost/detalleOrden/${id}`)
   .then((res) => res.json())
   .then((datos) => (detalleOrden.value = datos.data));
-  fetch(`http://localhost/detalleOrden/${id}`)
-  .then((res) => res.json())
-  .then((datos) => (cantidadArticulo.value = datos.data));
 }
 
 const aceptarOrden = () => {

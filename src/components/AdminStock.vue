@@ -84,7 +84,7 @@ onMounted(() => {
     </v-row>
       </v-card>
     </v-dialog>
-    <v-table>
+    <v-table class="mt-5">
     <thead>
       <tr>
         <th class="text-center">Producto</th>
