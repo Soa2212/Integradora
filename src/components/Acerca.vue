@@ -19,10 +19,13 @@ onMounted(initMap);
   <div class="container">
     <div class="card">
       <div class="Nos">
-        <p style="margin-top: 20px">Sobre Nosotros.</p>
+        <p style="margin-top: 20px" class="Ttl">Sobre Nosotros.</p>
       </div>
-      <p style="margin-top: 20px">Quienes somos</p>
-      <h6 style="margin-top: 30px; width: 70%; text-align: justify">
+      <p style="margin-top: 20px" class="Ttl1">Quienes somos</p>
+      <h6
+        style="margin-top: 30px; width: 70%; text-align: justify"
+        class="ttl2"
+      >
         En ACTIVIDAD SEGURA no sólo encontrará lo que necesita, sino también
         calidad y buen precio. Experiencia en la industria nos dan una
         especialización para proporcionar productos y servicio con los que los
@@ -34,6 +37,7 @@ onMounted(initMap);
       </h6>
       <div class="video">
         <iframe
+          class="tutus"
           width="660"
           height="355"
           src="https://www.youtube.com/embed/UsHccXFV-60"
@@ -45,12 +49,14 @@ onMounted(initMap);
 
     <div class="card2">
       <div class="Nos">
-        <p style="margin-top: 20px">Contáctenos.</p>
+        <p style="margin-top: 20px" class="Ttl">Contáctenos.</p>
       </div>
-      <p style="margin-top: 25px">Av. Cruz del Sur no. 5000 local 5e</p>
-      <p>Col. Las Águilas. Zapopan, Jal.</p>
-      <p>ventasgdl@actividadsegura.com</p>
-      <p>#3326413741</p>
+      <p style="margin-top: 25px" class="Ttl12">
+        Av. Cruz del Sur no. 5000 local 5e
+      </p>
+      <p class="Ttl12">Col. Las Águilas. Zapopan, Jal.</p>
+      <p class="Ttl12">ventasgdl@actividadsegura.com</p>
+      <p class="Ttl12">#3326413741</p>
       <div
         style="
           display: flex;
@@ -60,6 +66,7 @@ onMounted(initMap);
         "
       >
         <a
+          class="yutu"
           href="https://www.youtube.com/channel/UCLE1Kol1YywJmaJRYD0Nobw"
           target="_blank"
           ><img src="../assets/logo1.jpg" alt=""
@@ -128,5 +135,46 @@ onMounted(initMap);
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width: 513px) {
+  .Ttl {
+    font-size: 20px;
+  }
+  .ttl2{
+    font-size: 10px;
+  }
+  .Ttl1{
+    font-size: 17px;
+  }
+  .Ttl12{
+    font-size: 17px;
+  }
+
+}
+
+@media (max-width: 414px) {
+  .video {
+    width: 270px ;
+    height: 190px;
+  }
+  .tutus{
+    width: 220px;
+    height: 150px;
+  }
+  .Ttl12{
+    font-size: 13px;
+  }
+}
+@media (max-width: 320px) {
+  .video {
+    width: 220px ;
+    height: 150px;
+  }
+  .tutus{
+    width: 190px;
+    height: 100px;
+  }
+
 }
 </style>
