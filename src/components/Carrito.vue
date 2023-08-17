@@ -16,7 +16,7 @@ const id = IdUsr.IdLS; // Acceder a la variable IdLS desde el store
 //Variable que contiene la id es la id de arriba
 
 const carritoStore = useCarritoStore();
-const mostrarModal = ref(true);
+const mostrarModal = ref(false);
 let temporizador = null;
 const tiempoVisible = 4000; // Tiempo en milisegundos
 
