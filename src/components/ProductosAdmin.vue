@@ -32,12 +32,15 @@ const producto = ref({
 const seleccionarColor = ref(false);
 const seleccionarTallaNum = ref(false);
 const seleccionarTallaRopa = ref(false);
+const avisoCategoria = ref('');
+const avisoImagen = ref('');
+const avisoExistencias = ref('');
 
 const tallaNum = ref({});
 const tallaRopa = ref({});
 const colores = ref({});
 
-let letras = /[a-zA-Z]/;
+let letras = /^[0-9]+(\.[0-9]+)?$/;
 
 const seleccionados = ref([]);
 
@@ -196,7 +199,7 @@ const agregarProducto = () => {
         body: JSON.stringify(nuevoProducto.value),
       });
     };
-  }
+  } 
   detallar.value = true;
   mostrarColores();
   mostrarTallasNumericas();
@@ -255,12 +258,17 @@ const verificarArticuloTallaRopa = (id) => {
 
 // VALIDACION DE FORMULARIO
 const agregarArticulo = () => {
-  fetch("http://localhost/insertarArticulo", {
+  if (nuevoArticulo.value.cantidad == "") {
+    avisoExistencias.value = 'Ingrese una cantidad';
+  } else {
+    avisoExistencias.value = '';
+    fetch("http://localhost/insertarArticulo", {
     method: "POST",
     body: JSON.stringify(nuevoArticulo.value),
-  });
-  detallar.value = false;
-  crearNuevoArticulo.value = true;
+    });
+    detallar.value = false;
+    crearNuevoArticulo.value = true;
+  }
 };
 
 const { handleSubmit, handleReset } = useForm({
@@ -274,8 +282,8 @@ const { handleSubmit, handleReset } = useForm({
       return "Ingrese al menos 2 caracteres";
     },
     precio(value) {
-      if (letras.test(value) || value?.length <= 2)
-        return "Use solamente numeros";
+      if (!letras.test(value))
+        return "Ingrese un precio valido";
       else {
         nuevoProducto.value.precio = value;
         return true;
@@ -289,16 +297,27 @@ const { handleSubmit, handleReset } = useForm({
 
       return "Ingrese al menos 5 caracteres";
     },
+    categoria(value) {
+      if (value != null) {
+        nuevoProducto.value.categoria = value;
+        avisoCategoria.value = "";
+        return true;
+      }
+
+      avisoCategoria.value = "No ha seleccionado ninguna categoria";
+    }
   },
 });
 const name = useField("name");
 const precio = useField("precio");
 const descripcion = useField("descripcion");
+const categoria = useField("categoria");
 
 const submit = handleSubmit((values) => {
   agregarProducto();
   handleReset();
 });
+
 </script>
 
 <template>
@@ -329,7 +348,6 @@ const submit = handleSubmit((values) => {
                       v-model="precio.value.value"
                       :error-messages="precio.errorMessage.value"
                       label="Precio"
-                      hint="Utilice solo 2 decimales"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
@@ -337,8 +355,10 @@ const submit = handleSubmit((values) => {
                       <input
                         type="file"
                         ref="fileInput"
+                        required
                         @change="handleFileChange"
                       />
+                      <p>{{ avisoImagen }}</p>
                     </div>
                   </v-col>
                   <v-col cols="12">
@@ -360,7 +380,7 @@ const submit = handleSubmit((values) => {
                             <v-card-text
                               ><v-checkbox
                                 @click="seleccionarCat = false"
-                                v-model="nuevoProducto.categoria"
+                                v-model="categoria.value.value"
                                 :value="cat.id"
                                 :label="cat.categoria"
                               ></v-checkbox
@@ -368,6 +388,7 @@ const submit = handleSubmit((values) => {
                           </v-row>
                         </v-card>
                       </v-dialog>
+                      <p class="mt-3" style="color: rgb(177, 0, 0);">{{ avisoCategoria }}</p>
                     </div>
                   </v-col>
                   <v-col class="d-flex justify-end">
@@ -464,6 +485,7 @@ const submit = handleSubmit((values) => {
             label="Existencias"
             required
           ></v-text-field>
+          <p style="color: rgb(177, 0, 0);">{{ avisoExistencias }}</p>
           <v-card-actions>
             <v-btn color="primary" variant="text" @click="cancelarDetalle">
               Cerrar
