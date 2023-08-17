@@ -53,7 +53,6 @@ onMounted(() => {
 </script>
 
 <template>
-  {{ articulos }}
     <v-app class="pa-5">
         <h1 class="mb-3">Actualizar stock</h1>
         <v-dialog
