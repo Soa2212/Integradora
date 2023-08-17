@@ -9,6 +9,12 @@ const nuevoAdmin = ref({
   tipo: "admin",
 });
 
+const avisoEmail = ref('');
+
+const correoExiste = ref({
+  bcorreo: ''
+});
+
 const administradores = ref({});
 
 const mostrarAdministradores = () => {
@@ -69,8 +75,20 @@ const submit = handleSubmit((values) => {
   fetch("http://3.136.87.82/agregarAdmin", {
     method: "POST",
     body: JSON.stringify(nuevoAdmin.value),
-  });
-  handleReset();
+  })
+  .then(res => res.json())
+  .then(data => {
+    correoExiste.value.bcorreo = data.data[0].bcorreo
+    if (correoExiste.value.bcorreo == 1) {
+      avisoEmail.value = 'El correo utilizado ya está registrado. Por favor use otro*';
+    } else if (correoExiste.value.bcorreo == 0){
+      fetch("http://localhost/agregarAdmin", {
+      method: "POST",
+      body: JSON.stringify(nuevoAdmin.value),
+      })
+      avisoEmail.value = '';
+      handleReset();
+    }})
   setTimeout(() => {
     mostrarAdministradores();
   }, 500);
@@ -113,7 +131,8 @@ const submit = handleSubmit((values) => {
             label="Acepto y me hago responsable por la creacion de este nuevo usuario"
             type="checkbox"
           ></v-checkbox>
-          <v-btn class="me-4" type="submit"> Agregar usuario </v-btn>
+          <v-card-text v-if="avisoEmail != ''" style="color: rgb(177, 0, 0);">{{ avisoEmail }}</v-card-text>
+          <v-btn class="ma-4" type="submit"> Agregar usuario </v-btn>
         </form>
       </v-col>
       <v-col cols="12" sm="12" md="6">

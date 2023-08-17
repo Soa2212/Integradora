@@ -5,7 +5,7 @@ const dialog = ref(null);
 const dialogStock = ref(null);
 const productos = ref({});
 const articulosProducto = ref({});
-const idArticulo = ref(null);
+const avisoCantidad = ref('')
 
 const articulos = ref({
     producto: '',
@@ -28,6 +28,7 @@ fetch(`http://3.136.87.82/articulosStock/${id}`)
 }
 
 const actualizarStock = (id) => {
+  if(articulos.value.cantidad != '' && /^[0-9]+$/.test(articulos.value.cantidad)){
     articulos.value.id = id;
     fetch("http://3.136.87.82/actualizarStock", {
     method: "POST",
@@ -37,6 +38,13 @@ const actualizarStock = (id) => {
       mostrarArticulos(articulos.value.producto)
     }, 500)
     articulos.value.cantidad = '';
+    avisoCantidad.value = '';
+  } else if (articulos.value.cantidad == '') {
+    avisoCantidad.value = 'Por favor, ingrese una cantidad'
+  }
+  else if (!/^[0-9]+$/.test(articulos.value.cantidad)){
+    avisoCantidad.value = 'Por favor, utilice solo numeros'
+  }
 }
 
 onMounted(() => {
@@ -45,6 +53,7 @@ onMounted(() => {
 </script>
 
 <template>
+  {{ articulos }}
     <v-app class="pa-5">
         <h1 class="mb-3">Actualizar stock</h1>
         <v-dialog
@@ -111,6 +120,7 @@ onMounted(() => {
   <v-row class="d-flex justify-end mt-2">
     <v-col cols="6" lg="2" md="4" sm="6">
       <v-text-field label="Ingrese nueva cantidad" v-model="articulos.cantidad"></v-text-field>
+      <p style="color: rgb(177, 0, 0);">{{ avisoCantidad }}</p>
     </v-col>
   </v-row>
     </v-app>

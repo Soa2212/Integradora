@@ -150,7 +150,7 @@ fetch("http://3.136.87.82/comprasusuario", {
             </thead>
             <tbody v-for="item in detalle" :key="item.orden">
               <tr>
-                <td style="text-align: center">{{ item.producto }}</td>
+                <td style="text-align: center">-{{ item.producto }}</td>
                 <td style="text-align: center"><div v-if=" item.TALLA_NUMERICA != 'NA' ? item.TALLA_NUMERICA=item.TALLA_NUMERICA:item.TALLA_NUMERICA='-' ">{{ item.TALLA_NUMERICA }}</div></td>
                 <td style="text-align: center"><div v-if=" item.TALLA_ROPA != 'NA' ? item.TALLA_ROPA=item.TALLA_ROPA:item.TALLA_ROPA='-'">{{ item.TALLA_ROPA }}</div></td>
                 <td style="text-align: center"><div v-if=" item.color != 'NA' ? item.color=item.color:item.color='-' ">{{ item.color }}</div></td>
@@ -234,7 +234,7 @@ fetch("http://3.136.87.82/comprasusuario", {
 .popup-content {
   background-color: white;
   display: flex;
-  width: 55%;
+  width: 75%;
   height: 65%;
   padding: 20px;
   border-radius: 15px;
@@ -243,5 +243,7 @@ fetch("http://3.136.87.82/comprasusuario", {
 .popup {
   width: 100%;
   padding: 20px;
+  overflow-y: auto;
+
 }
 </style>
