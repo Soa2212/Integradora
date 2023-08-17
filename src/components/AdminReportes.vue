@@ -29,7 +29,7 @@ reporteventatpo.value=[];
 objeto.value.fecha_ini=fecha_ini.value;
 objeto.value.tipo=tip.value;
 
-    fetch('http://localhost/reporteventatpo',{
+    fetch('http://3.136.87.82/reporteventatpo',{
     method: 'POST',
     body: JSON.stringify(objeto.value)
 })
@@ -42,7 +42,7 @@ objeto2.value.fecha_fin=fecha_fin.value;
 objeto2.value.fecha_ini=fecha_ini.value;
 
 
-fetch('http://localhost/reporteventatodo',{
+fetch('http://3.136.87.82/reporteventatodo',{
 method: 'POST',
 body: JSON.stringify(objeto2.value)
 })
@@ -52,7 +52,7 @@ body: JSON.stringify(objeto2.value)
 }
 else if(tip.value == 'todo'){
 
-  fetch('http://localhost/reportevengeneral')
+  fetch('http://3.136.87.82/reportevengeneral')
 .then((response)=>response.json())
 .then(data=>reporteventatpo.value=data.data)
 }
@@ -71,7 +71,7 @@ reporteventatpo.value=[];
 objeto.value.fecha_ini=fecha_ini.value;
 objeto.value.tipo=tip.value;
 
-    fetch('http://localhost/novendidostipo',{
+    fetch('http://3.136.87.82/novendidostipo',{
     method: 'POST',
     body: JSON.stringify(objeto.value)
 })
@@ -84,7 +84,7 @@ objeto2.value.fecha_fin=fecha_fin.value;
 objeto2.value.fecha_ini=fecha_ini.value;
 
 
-fetch('http://localhost/novendidosfecha',{
+fetch('http://3.136.87.82/novendidosfecha',{
 method: 'POST',
 body: JSON.stringify(objeto2.value)
 })
@@ -94,7 +94,7 @@ body: JSON.stringify(objeto2.value)
 }
 else if(tip.value == 'todo'){
 
-  fetch('http://localhost/novendidosall')
+  fetch('http://3.136.87.82/novendidosall')
 .then((response)=>response.json())
 .then(data=>reporteventatpo.value=data.data)
 }
@@ -122,13 +122,13 @@ const cantidadArticulo = ref({
 })
 
 const mostrarOrdenesProceso = () => {
-  fetch("http://localhost/ordenesEnProceso")
+  fetch("http://3.136.87.82/ordenesEnProceso")
 .then((res) => res.json())
 .then((datos) => (ordenesEnProceso.value = datos.data));
 }
 
 const mostrarOrdenesAceptadas = () => {
-  fetch("http://localhost/ordenesAceptadas")
+  fetch("http://3.136.87.82/ordenesAceptadas")
 .then((res) => res.json())
 .then((datos) => (ordenesAceptadas.value = datos.data));
 }
@@ -141,7 +141,7 @@ onMounted(() => {
 const totalPedido = ref(0);
 
 const calcularTotal = (id) => {
-  fetch(`http://localhost/detalleOrdenTotal/${id}`)
+  fetch(`http://3.136.87.82/detalleOrdenTotal/${id}`)
   .then((res) => res.json())
   .then((datos) => (totalPedido.value = datos.data[0].Total));
 }
@@ -149,7 +149,7 @@ const calcularTotal = (id) => {
 const mostrarDetalleOrden = (id) => {
   orden.value.orden = id;
   calcularTotal(id)
-  fetch(`http://localhost/detalleOrden/${id}`)
+  fetch(`http://3.136.87.82/detalleOrden/${id}`)
   .then((res) => res.json())
   .then((datos) => (detalleOrden.value = datos.data));
 }
@@ -158,7 +158,7 @@ const aceptarOrden = () => {
   dialog.value = false
   dialogAceptada.value = false;
   orden.value.estado = 'Aceptada'
-  fetch("http://localhost/estadoOrden", {
+  fetch("http://3.136.87.82/estadoOrden", {
       method: "POST",
       body: JSON.stringify(orden.value)
     });
@@ -169,7 +169,7 @@ const cancelarOrden = () => {
   dialog.value = false
   dialogAceptada.value = false;
   orden.value.estado = 'cancelada'
-  fetch("http://localhost/estadoOrden", {
+  fetch("http://3.136.87.82/estadoOrden", {
       method: "POST",
       body: JSON.stringify(orden.value)
     });
@@ -183,7 +183,7 @@ const completarOrden = (id) => {
   dialogAceptada.value = false;
   orden.value.orden = id
   orden.value.estado = 'Completada'
-  fetch("http://localhost/estadoOrden", {
+  fetch("http://3.136.87.82/estadoOrden", {
       method: "POST",
       body: JSON.stringify(orden.value)
     });
@@ -194,7 +194,7 @@ const descontarcant=()=>{
   for (let i = 0; i < detalleOrden.value.length; i++) {
 detacant.value.idart=detalleOrden.value[i].id;
 detacant.value.cantidadart=detalleOrden.value[i].cantidad;
-fetch('http://localhost/dlcant',{
+fetch('http://3.136.87.82/dlcant',{
 method: 'POST',
 body: JSON.stringify(detacant.value)
 })
@@ -206,7 +206,7 @@ const cancelarOrdenAceptada = (id) => {
   dialogAceptada.value = false;
   orden.value.orden = id
   orden.value.estado = 'cancelada'
-  fetch("http://localhost/estadoOrden", {
+  fetch("http://3.136.87.82/estadoOrden", {
       method: "POST",
       body: JSON.stringify(orden.value)
     });

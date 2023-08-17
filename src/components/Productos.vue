@@ -15,7 +15,7 @@ const productoPP = (id) => {
 };
 
 const productos = ref([]);
-fetch("http://localhost/prodcat") //Me consigue todos los productos para mostrar en el catalogo
+fetch("http://3.136.87.82/prodcat") //Me consigue todos los productos para mostrar en el catalogo
   .then((res) => res.json())
   .then((datos) => {
     productos.value = datos.data;
@@ -24,7 +24,7 @@ fetch("http://localhost/prodcat") //Me consigue todos los productos para mostrar
 const ArticulosProd = ref([]);
 
 const Articulos = (id) => {
-  fetch("http://localhost/articulos/" + id)
+  fetch("http://3.136.87.82/articulos/" + id)
     .then((res) => res.json())
     .then((datos) => {
       ArticulosProd.value = datos.data;
@@ -46,7 +46,7 @@ const Articulos = (id) => {
 };
 
 const categorias = ref([]);
-fetch("http://localhost/categorias") //Me consigue todas las categorias para mostrar en la pagina
+fetch("http://3.136.87.82/categorias") //Me consigue todas las categorias para mostrar en la pagina
   .then((res) => res.json())
   .then((datos) => {
     categorias.value = datos.data;
@@ -230,7 +230,7 @@ const iniciarTemporizadorV = () => {
 };
 
 const prodCategoria = (id) => {
-  fetch("http://localhost/categoriasp/" + id) //Me consigue todos los productos de una categoria en especifico para mostrar en el catalogo
+  fetch("http://3.136.87.82/categoriasp/" + id) //Me consigue todos los productos de una categoria en especifico para mostrar en el catalogo
     .then((res) => res.json())
     .then((datos) => {
       productos.value = datos.data;
@@ -238,7 +238,7 @@ const prodCategoria = (id) => {
 };
 
 const prodCategoriaDEF = (id) => {
-  fetch("http://localhost/prodcat") //Me consigue todos los productos para mostrar en el catalogo
+  fetch("http://3.136.87.82/prodcat") //Me consigue todos los productos para mostrar en el catalogo
     .then((res) => res.json())
     .then((datos) => {
       productos.value = datos.data;

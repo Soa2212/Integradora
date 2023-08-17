@@ -24,7 +24,7 @@ onBeforeUnmount(() => {
 });
 
 const categorias = ref([]);
-fetch("http://localhost/categorias") //Me consigue todas las categorias para mostrar en la pagina
+fetch("http://3.136.87.82/categorias") //Me consigue todas las categorias para mostrar en la pagina
   .then((res) => res.json())
   .then((datos) => {
     categorias.value = datos.data;

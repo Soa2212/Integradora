@@ -16,7 +16,7 @@ const objCar = ref({
 const finalizarCompra = () => {
   const copiaCarritoP = [...carritoP.value];
 
-  fetch("http://localhost/ordenUSL/" + id)
+  fetch("http://3.136.87.82/ordenUSL/" + id)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Hubo un problema con la solicitud.");
@@ -34,7 +34,7 @@ const finalizarCompra = () => {
           usuario: id,
         };
 
-        fetch("http://localhost/detallarL", {
+        fetch("http://3.136.87.82/detallarL", {
           method: "POST",
           body: JSON.stringify(objCar),
         })
@@ -104,7 +104,7 @@ const productoPP = (id) => {
 };
 
 const productos = ref([]);
-fetch("http://localhost/prodcat") //Me consigue todos los productos para mostrar en el catalogo
+fetch("http://3.136.87.82/prodcat") //Me consigue todos los productos para mostrar en el catalogo
   .then((res) => res.json())
   .then((datos) => {
     productos.value = datos.data;
@@ -113,7 +113,7 @@ fetch("http://localhost/prodcat") //Me consigue todos los productos para mostrar
 const ArticulosProd = ref([]);
 
 const Articulos = (id) => {
-  fetch("http://localhost/articulos/" + id)
+  fetch("http://3.136.87.82/articulos/" + id)
     .then((res) => res.json())
     .then((datos) => {
       ArticulosProd.value = datos.data;
@@ -135,7 +135,7 @@ const Articulos = (id) => {
 };
 
 const categorias = ref([]);
-fetch("http://localhost/categorias") //Me consigue todas las categorias para mostrar en la pagina
+fetch("http://3.136.87.82/categorias") //Me consigue todas las categorias para mostrar en la pagina
   .then((res) => res.json())
   .then((datos) => {
     categorias.value = datos.data;

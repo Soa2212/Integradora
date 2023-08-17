@@ -8,7 +8,7 @@ const dialog = ref(false);
 const dialogInh = ref(false);
 const alerta = ref(false);
 const timestamp = Date.now();
-const url = `http://localhost/inhabilitarCat?timestamp=${timestamp}`;
+const url = `http://3.136.87.82/inhabilitarCat?timestamp=${timestamp}`;
 
 const seleccionados = ref([]);
 const seleccionadosActivar = ref([]);
@@ -19,13 +19,13 @@ const categoriaNueva = ref({
 });
 
 const mostrarCategorias = () => {
-  fetch("http://localhost/categorias")
+  fetch("http://3.136.87.82/categorias")
     .then((res) => res.json())
     .then((data) => (categorias.value = data.data));
 };
 
 const mostrarCategoriasInactivas = () => {
-  fetch("http://localhost/categoriasInactivas")
+  fetch("http://3.136.87.82/categoriasInactivas")
     .then((res) => res.json())
     .then((data) => (categoriasInactivas.value = data.data));
 };
@@ -44,7 +44,7 @@ const cancelar = () => {
 const agregarCategoria = (event) => {
   event.preventDefault();
   dialog.value = false;
-  fetch("http://localhost/insertarCat", {
+  fetch("http://3.136.87.82/insertarCat", {
     method: "POST",
     body: JSON.stringify(categoriaNueva.value),
   });
@@ -59,7 +59,7 @@ const habilitarCategoria = (event) => {
     event.preventDefault();
     dialogInh.value = false;
     alerta.value = false;
-    fetch("http://localhost/habilitarCat", {
+    fetch("http://3.136.87.82/habilitarCat", {
       method: "POST",
       body: JSON.stringify(seleccionadosActivar.value),
     });

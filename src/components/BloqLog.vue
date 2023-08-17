@@ -1,4 +1,5 @@
 <template>
+  
   <div class="overlay">
     <div class="centered-message">
       <div class="warning-icon">⚠️</div>

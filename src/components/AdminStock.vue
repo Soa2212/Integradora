@@ -14,7 +14,7 @@ const articulos = ref({
 })
 
 const mostrarProductos = () => {
-fetch("http://localhost/productos")
+fetch("http://3.136.87.82/productos")
   .then((res) => res.json())
   .then((datos) => (productos.value = datos.data));
 }
@@ -22,14 +22,14 @@ fetch("http://localhost/productos")
 const mostrarArticulos = (id) => {
     articulos.value.producto = id;
 dialog.value = false;
-fetch(`http://localhost/articulosStock/${id}`)
+fetch(`http://3.136.87.82/articulosStock/${id}`)
   .then((res) => res.json())
   .then((datos) => (articulosProducto.value = datos.data));
 }
 
 const actualizarStock = (id) => {
     articulos.value.id = id;
-    fetch("http://localhost/actualizarStock", {
+    fetch("http://3.136.87.82/actualizarStock", {
     method: "POST",
     body: JSON.stringify(articulos.value)
     })

@@ -59,7 +59,7 @@ const correoExiste = ref({
 });
 
 const submit = handleSubmit((values) => {
-  fetch("http://localhost/verificarEmail", {
+  fetch("http://3.136.87.82/verificarEmail", {
     method: "POST",
     body: JSON.stringify(usuario.value),
   })
@@ -69,7 +69,7 @@ const submit = handleSubmit((values) => {
     if (correoExiste.value.bcorreo == 1) {
       avisoEmail.value = 'El correo utilizado ya está registrado. Por favor use otro*';
     } else if (correoExiste.value.bcorreo == 0){
-      fetch("http://localhost/agregarUser", {
+      fetch("http://3.136.87.82/agregarUser", {
       method: "POST",
       body: JSON.stringify(usuario.value),
       })

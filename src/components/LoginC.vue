@@ -29,7 +29,7 @@ function login() {
   data.value.contrasena = contrasena.value;
   data.value.email = mail.value;
 
-  fetch("http://localhost/logear", {
+  fetch("http://3.136.87.82/logear", {
     method: "POST",
     body: JSON.stringify(data.value),
   })

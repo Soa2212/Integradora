@@ -1,4 +1,5 @@
 <script setup>
+
 defineProps({
   mostrar: {
     type: Boolean,

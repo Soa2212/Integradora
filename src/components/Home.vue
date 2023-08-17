@@ -5,14 +5,14 @@ import { ref, computed } from "vue";
 const isHovered = ref([]);
 
 const productos = ref([]);
-fetch("http://localhost/categoriasp/4") //Me consigue todos los productos para mostrar en el catalogo
+fetch("http://3.136.87.82/categoriasp/4") //Me consigue todos los productos para mostrar en el catalogo
   .then((res) => res.json())
   .then((datos) => {
     productos.value = datos.data;
   });
 
 const categorias = ref([]);
-fetch("http://localhost/categorias") //Me consigue todas las categorias para mostrar en la pagina
+fetch("http://3.136.87.82/categorias") //Me consigue todas las categorias para mostrar en la pagina
   .then((res) => res.json())
   .then((datos) => {
     categorias.value = datos.data;

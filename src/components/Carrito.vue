@@ -1,4 +1,5 @@
 <script setup>
+
 import { ref, computed, watch } from "vue";
 import { useCarritoStore } from "@/stores/carrito";
 import { RouterLink } from "vue-router";
@@ -113,7 +114,7 @@ const finalizarCompra = () => {
   }));
   objCar.value.usuario = id;
 
-  fetch("http://localhost/ordenUS/" + objCar.value.usuario)
+  fetch("http://3.136.87.82/ordenUS/" + objCar.value.usuario)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Hubo un problema con la solicitud.");
@@ -129,7 +130,7 @@ const finalizarCompra = () => {
         objCar.value.cantidad = carritoParaCompra[i].cantidad;
         objCar.value.orden = Orden.value;
 
-        fetch("http://localhost/detallar", {
+        fetch("http://3.136.87.82/detallar", {
           method: "POST",
           body: JSON.stringify(objCar.value),
         })

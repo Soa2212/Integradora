@@ -12,7 +12,7 @@ let objeto = ref({
   ordenid: "",
 });
 objeto.value.id = Id;
-fetch("http://localhost/comprasusuario", {
+fetch("http://3.136.87.82/comprasusuario", {
   method: "POST",
   body: JSON.stringify(objeto.value),
 })
@@ -21,7 +21,7 @@ fetch("http://localhost/comprasusuario", {
 
   const detallecompra =(orden)=>{
     objeto.value.ordenid=orden;
-    fetch("http://localhost/detallecompra", {
+    fetch("http://3.136.87.82/detallecompra", {
   method: "POST",
   body: JSON.stringify(objeto.value)
 })

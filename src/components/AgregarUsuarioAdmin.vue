@@ -12,7 +12,7 @@ const nuevoAdmin = ref({
 const administradores = ref({});
 
 const mostrarAdministradores = () => {
-  fetch("http://localhost/administradores")
+  fetch("http://3.136.87.82/administradores")
     .then((res) => res.json())
     .then((data) => (administradores.value = data.data));
 };
@@ -66,7 +66,7 @@ const confirmPasswd = useField("confirmPasswd");
 const checkbox = useField("checkbox");
 
 const submit = handleSubmit((values) => {
-  fetch("http://localhost/agregarAdmin", {
+  fetch("http://3.136.87.82/agregarAdmin", {
     method: "POST",
     body: JSON.stringify(nuevoAdmin.value),
   });
