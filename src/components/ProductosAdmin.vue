@@ -265,7 +265,7 @@ const agregarArticulo = () => {
     detallar.value = false;
     crearNuevoArticulo.value = true;
   }
-};
+
 
 const { handleSubmit, handleReset } = useForm({
   validationSchema: {
