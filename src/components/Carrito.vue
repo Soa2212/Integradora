@@ -16,7 +16,7 @@ const id = IdUsr.IdLS; // Acceder a la variable IdLS desde el store
 //Variable que contiene la id es la id de arriba
 
 const carritoStore = useCarritoStore();
-const mostrarModal = ref(false);
+const mostrarModal = ref(true);
 let temporizador = null;
 const tiempoVisible = 4000; // Tiempo en milisegundos
 
@@ -560,12 +560,11 @@ input[type="number"] {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 45%;
 }
 .modal-contenido2 {
   background-color: green;
   color: white;
-  margin-top: -510px;
   padding: 10px;
   border-radius: 8px;
 }
