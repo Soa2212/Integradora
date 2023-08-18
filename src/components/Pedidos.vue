@@ -181,12 +181,14 @@ fetch("http://3.136.87.82/comprasusuario", {
   display: flex;
   justify-content: center;
   align-items: center;
+  
 }
 .tarjeta {
   background-color: white;
   width: 90%;
   height: 90%;
   border-radius: 20px;
+  overflow-y: auto;
 }
 .carritoV {
   display: flex;
