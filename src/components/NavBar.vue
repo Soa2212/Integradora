@@ -70,7 +70,7 @@ const tieneToken = tokenStore.tieneToken;
               </RouterLink>
             </li>
               <li><RouterLink to="LoginView" v-if="!tieneToken">Iniciar Sesion</RouterLink>
-                <a @click="logout()"  v-else>Cerrar Sesion</a>
+                <RouterLink @click="logout()" to="HomeView" v-else>Cerrar Sesion</RouterLink>
                 </li>
               
           </ul>
