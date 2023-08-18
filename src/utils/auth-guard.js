@@ -14,3 +14,4 @@ export function isAdmin(to, from, next) {
     next("/HomeView");
   }
 }
+
