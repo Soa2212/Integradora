@@ -9,6 +9,11 @@ const nuevoAdmin = ref({
   tipo: "admin",
 });
 
+const eliminarAdmin = (id) => {
+  fetch("http://3.136.87.82/eliminarAdmin/"+id)
+  mostrarAdministradores();
+}
+
 const avisoEmail = ref('');
 
 const correoExiste = ref({
@@ -142,12 +147,14 @@ const submit = handleSubmit((values) => {
             <tr>
               <th class="text-left">Nombre</th>
               <th class="text-left">Email</th>
+              <th class="text-left"></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="admin in administradores" :key="admin.id">
               <td>{{ admin.nombre }}</td>
               <td>{{ admin.email }}</td>
+              <td><v-btn @click="eliminarAdmin(admin.id)">Eliminar</v-btn></td>
             </tr>
           </tbody>
         </v-table>

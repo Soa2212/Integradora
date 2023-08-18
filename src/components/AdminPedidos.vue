@@ -958,7 +958,7 @@ input[type="number"] {
   color: white;
   top: 50%;
   left: 50%;
-  margin-top: -680px;
+  margin-top: -500px;
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);

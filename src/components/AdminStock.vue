@@ -106,9 +106,9 @@ onMounted(() => {
     <tbody>
       <tr v-for="art in articulosProducto" key="art.id_art">
         <td class="text-center">{{ art.producto }}</td>
-        <td class="text-center">{{ art.TALLA_ROPA }}</td>
-        <td class="text-center">{{ art.TALLA_NUMERICA }}</td>
-        <td class="text-center">{{ art.color }}</td>
+        <td class="text-center" v-if=" art.TALLA_ROPA != 'NA' ? art.TALLA_ROPA=art.TALLA_ROPA:art.TALLA_ROPA='-' ">{{ art.TALLA_ROPA }}</td>
+        <td class="text-center" v-if=" art.TALLA_NUMERICA != 'NA' ? art.TALLA_NUMERICA=art.TALLA_NUMERICA:art.TALLA_NUMERICA='-' ">{{ art.TALLA_NUMERICA }}</td>
+        <td class="text-center" v-if=" art.color != 'NA' ? art.color=art.color:art.color='-' ">{{ art.color }}</td>
         <td class="text-center">{{ art.cantidad }}</td>
         <td class="text-center pa-5"> 
           <v-btn @click="actualizarStock(art.id_art)" class="ml-3">Actualizar</v-btn>

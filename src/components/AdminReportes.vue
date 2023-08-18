@@ -6,6 +6,16 @@ let reporteventatpo=ref([]);
 let detacant = ref({idart:'',cantidadart:''});
 const tipo=ref(['web','local','general','todo']);
 
+let reportesoli=ref();
+
+const solisitado=()=>{
+  fetch('http://3.136.87.82/reportesoli')
+.then((response)=>response.json())
+.then(data=>reportesoli.value=data.data)
+.then(data=>console.log(data))
+}
+
+
 let objeto =ref({
 tipo :'',
 fecha_ini :'',
@@ -228,6 +238,7 @@ const cancelarOrdenAceptada = (id) => {
       <v-tab value="two">Ventas</v-tab>
       <v-tab value="three">Articulos no vendidos</v-tab>
       <v-tab @click="mostrarOrdenesAceptadas" value="four">Ordenes por completar</v-tab>
+      <v-tab @click="solisitado" value="five">Cantidad solicitada</v-tab>
     </v-tabs>
 
     <v-card-text>
@@ -284,9 +295,9 @@ const cancelarOrdenAceptada = (id) => {
                       <tr v-for="orden in detalleOrden" :key="orden.id">
                         <td class="text-center">{{ orden.id }}</td>
                         <td class="text-center">{{ orden.nombre }}</td>
-                        <td class="text-center">{{ orden.Talla_numerica }}</td>
-                        <td class="text-center">{{ orden.Talla_ropa }}</td>
-                        <td class="text-center">{{ orden.color }}</td>
+                        <td class="text-center" v-if=" orden.Talla_numerica != 'NA' ? orden.Talla_numerica=orden.Talla_numerica:orden.Talla_numerica='-' ">{{ orden.Talla_numerica }}</td>
+                        <td class="text-center" v-if=" orden.Talla_ropa != 'NA' ? orden.Talla_ropa=orden.Talla_ropa:orden.Talla_ropa='-' ">{{ orden.Talla_ropa }}</td>
+                        <td class="text-center" v-if=" orden.color != 'NA' ? orden.color=orden.color:orden.color='-' ">{{ orden.color }}</td>
                         <td class="text-center">{{ orden.cantidad }}</td>
                         <td class="text-center">{{ orden.stock }}</td>
                         <td class="text-center">{{ orden.Total }}</td>
@@ -466,9 +477,9 @@ const cancelarOrdenAceptada = (id) => {
                       <tr v-for="orden in detalleOrden" :key="orden.id">
                         <td class="text-center">{{ orden.id }}</td>
                         <td class="text-center">{{ orden.nombre }}</td>
-                        <td class="text-center">{{ orden.Talla_numerica }}</td>
-                        <td class="text-center">{{ orden.Talla_ropa }}</td>
-                        <td class="text-center">{{ orden.color }}</td>
+                        <td class="text-center" v-if=" orden.Talla_numerica != 'NA' ? orden.Talla_numerica=orden.Talla_numerica:orden.Talla_numerica='-' ">{{ orden.Talla_numerica }}</td>
+                        <td class="text-center" v-if=" orden.Talla_ropa != 'NA' ? orden.Talla_ropa=orden.Talla_ropa:orden.Talla_ropa='-' ">{{ orden.Talla_ropa }}</td>
+                        <td class="text-center" v-if=" orden.color != 'NA' ? orden.color=orden.color:orden.color='-' ">{{ orden.color }}</td>
                         <td class="text-center">{{ orden.cantidad }}</td>
                         <td class="text-center">{{ orden.stock }}</td>
                         <td class="text-center">{{ orden.Total }}</td>
@@ -486,6 +497,50 @@ const cancelarOrdenAceptada = (id) => {
               </tr>
             </tbody>
           </v-table>
+        </v-window-item>
+        <v-window-item value="five">
+          <div> <v-table theme="width">
+      <thead>
+        <tr>
+          <th class="text-center">
+            Producto
+          </th>
+          <th class="text-center">
+            Talla
+          </th>
+          <th class="text-center">
+            Talla
+          </th>
+          <th class="text-center">
+            Color
+          </th>
+          <th class="text-center">
+            Stock
+          </th>
+          <th class="text-center">
+            Cantidad solicitada
+          </th>
+          <th class="text-center">
+            Diferencia
+          </th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="item in reportesoli"
+          :key="item.producto"
+        >
+        <td>{{ item.producto }}</td>
+          <td class="text-center" v-if=" item.TALLA_NUMERICA != 'NA' ? item.TALLA_NUMERICA=item.TALLA_NUMERICA:item.TALLA_NUMERICA='-' ">{{ item.TALLA_NUMERICA }}</td>
+          <td class="text-center" v-if=" item.TALLA_ROPA != 'NA' ? item.TALLA_ROPA=item.TALLA_ROPA:item.TALLA_ROPA='-'">{{ item.TALLA_ROPA }}</td>
+          <td class="text-center" v-if=" item.color != 'NA' ? item.color=item.color:item.color='-' ">{{ item.color }}</td>
+          <td class="text-center">{{ item.cantidad }}</td>
+          <td class="text-center">{{ item.cantidad_soli }}</td>
+          <td class="text-center"><p style="width: 50%;" :style="item.cantidad-item.cantidad_soli <= 0 ? 'background-color: red;font-size: x-large;':'background-color:null;'">{{ item.cantidad-item.cantidad_soli }}</p></td>
+        </tr>
+      </tbody>
+    </v-table></div>
         </v-window-item>
       </v-window>
     </v-card-text>
