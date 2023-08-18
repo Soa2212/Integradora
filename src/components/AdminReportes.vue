@@ -258,11 +258,11 @@ const fecha_hasta = ref('');
       v-model="tab"
       bg-color="primary"
     >
+      <v-tab @click="solisitado" value="five">Cantidad solicitada</v-tab>
       <v-tab value="one">Ventas por cancelar/aprobar</v-tab>
+      <v-tab @click="mostrarOrdenesAceptadas" value="four">Ordenes por completar</v-tab>
       <v-tab value="two">Ventas</v-tab>
       <v-tab value="three">Articulos no vendidos</v-tab>
-      <v-tab @click="mostrarOrdenesAceptadas" value="four">Ordenes por completar</v-tab>
-      <v-tab @click="solisitado" value="five">Cantidad solicitada</v-tab>
     </v-tabs>
 
     <v-card-text>
