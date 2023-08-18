@@ -1,6 +1,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 
+const dialogFechas = ref(null);
+const fecha = ref(false);
+
 // CODIGO ARANDA
 let reporteventatpo=ref([]);
 let detacant = ref({idart:'',cantidadart:''});
@@ -120,7 +123,9 @@ const tab = ref(null);
 const dialog = ref(null);
 const orden = ref({
   estado: '',
-  orden: ''
+  orden: '',
+  fecha_de: '',
+  fecha_hasta: ''
 });
 
 const ordenesEnProceso = ref({});
@@ -157,6 +162,9 @@ const calcularTotal = (id) => {
 }
 
 const mostrarDetalleOrden = (id) => {
+  fecha.value = false;
+  fecha_de.value = '';
+  fecha_hasta.value = '';
   orden.value.orden = id;
   calcularTotal(id)
   fetch(`http://3.136.87.82/detalleOrden/${id}`)
@@ -165,6 +173,8 @@ const mostrarDetalleOrden = (id) => {
 }
 
 const aceptarOrden = () => {
+  orden.value.fecha_de = fecha_de.value;
+  orden.value.fecha_hasta = fecha_hasta.value;
   dialog.value = false
   dialogAceptada.value = false;
   orden.value.estado = 'Aceptada'
@@ -223,7 +233,21 @@ const cancelarOrdenAceptada = (id) => {
   setTimeout(mostrarOrdenesAceptadas, 500);
 }
 
+const avisoFecha = ref('');
 
+const activarAceptarOrden = () => {
+  if (fecha_de.value != '' && fecha_hasta.value != ''){
+    dialogFechas.value = false;
+    fecha.value = true;
+    avisoFecha.value = ''
+  } else {
+    avisoFecha.value = 'Ingrese las fechas'
+  }
+  
+}
+
+const fecha_de = ref('');
+const fecha_hasta = ref('');
 </script>
 
 <template>
@@ -304,9 +328,37 @@ const cancelarOrdenAceptada = (id) => {
                       </tr>
                     </tbody>
                   </v-table>
-                  <v-card-text>Total de la compra: ${{ totalPedido }}</v-card-text>
+                  <v-card-text class="font-weight-black">Total de la compra: ${{ totalPedido }}</v-card-text>
                   <v-card-actions class="d-flex justify-end">
-                    <v-btn @click="aceptarOrden()" class="mt-5 mb-5">Aceptar orden</v-btn>
+                    <div class="text-center">
+    <v-dialog
+      v-model="dialogFechas"
+      width="auto"
+    >
+      <template v-slot:activator="{ props }">
+        <v-btn
+          color="primary"
+          v-bind="props"
+          class="mr-5"
+        >
+          Ingrese fecha de entrega
+        </v-btn>
+      </template>
+
+      <v-card class="pa-5">
+        <h3 class="mb-2">Periodo de entrega</h3>
+        <p class="mb-2">De:</p>
+        <input v-model="fecha_de" type="date">
+        <p class="mb-2 mt-2">Hasta:</p>
+        <input v-model="fecha_hasta" type="date">
+        <p class="mt-2" style="color: rgb(177, 0, 0);">{{ avisoFecha }}</p>
+        <v-card-actions>
+          <v-btn color="primary" block @click="activarAceptarOrden">Cerrar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+                    <v-btn v-if="fecha" @click="aceptarOrden()" class="mt-5 mb-5">Aceptar orden</v-btn>
                     <v-btn @click="cancelarOrden()" class="ma-5">Cancelar orden</v-btn>
                   </v-card-actions>     
                 </v-card>
