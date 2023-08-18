@@ -256,15 +256,24 @@ const verificarArticuloTallaRopa = (id) => {
   }
 };
 
+const patron = /[a-zA-Z]|[^\w\s]/;
+
 // VALIDACION DE FORMULARIO
 const agregarArticulo = () => {
-  fetch("http://3.136.87.82/insertarArticulo", {
+  if (nuevoArticulo.value.cantidad != "" && !patron.test(nuevoArticulo.value.cantidad)){
+    console.log(nuevoArticulo.value.cantidad)
+    fetch("http://3.136.87.82/insertarArticulo", {
     method: "POST",
     body: JSON.stringify(nuevoArticulo.value),
     });
     detallar.value = false;
     crearNuevoArticulo.value = true;
+    avisoExistencias.value = '';
+  } else {
+    avisoExistencias.value = 'Por favor, ingrese una cantidad. Recuerde no usar letras'
   }
+  }
+
 
 
 const { handleSubmit, handleReset } = useForm({
